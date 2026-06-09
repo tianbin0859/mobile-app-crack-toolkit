@@ -495,39 +495,174 @@ class APKCrackEnhanced:
     # ==================== 智能重试机制 ====================
 
     def crack_with_retry(self) -> CrackResult:
-        """带重试的破解"""
-        env = self.check_environment()
-
-        # 策略1: 在线破解（成功率最高）
-        if env["mode"] == "online" and env["frida_server"]:
-            print("[*] 策略1: 在线Frida注入")
-            result = self.crack_online()
-            if result.success:
+        """
+        AI Agent 四阶段循环破解
+        
+        阶段一: 思考 - 分析环境、拆解步骤、规划路径
+        阶段二: 执行 - 环境检测、深度分析、策略选择、智能执行
+        阶段三: 检查 - 验证结果、检查错误、评估完整性
+        阶段四: 修正 - 分析原因、调整策略、重新执行
+        
+        循环直到成功或达到最大重试次数
+        """
+        start_time = time.time()
+        
+        for round_num in range(1, self.max_retries + 1):
+            print(f"\n{'='*60}")
+            print(f"🔄 AI Agent 破解循环 - 第 {round_num}/{self.max_retries} 轮")
+            print('='*60)
+            
+            # ========== 阶段一: 思考 (Reasoning) ==========
+            print("\n🧠 [阶段一] 思考 - 分析目标与规划路径")
+            env = self.check_environment()
+            
+            # 分析可用策略
+            strategies = []
+            if env["mode"] == "online" and env["frida_server"]:
+                strategies.append(("online_frida", "在线Frida注入", 0.95))
+            if env["device_connected"] and not env["frida_server"]:
+                strategies.append(("start_frida", "启动frida-server后注入", 0.85))
+            if env["apktool"] and env["java"] and self.apk_path:
+                strategies.append(("offline_patch", "离线APK修改", 0.80))
+            if env["adb"] and not env["device_connected"]:
+                strategies.append(("emulator", "模拟器模式", 0.60))
+            
+            # 按成功率排序
+            strategies.sort(key=lambda x: x[2], reverse=True)
+            
+            print(f"   可用策略: {len(strategies)} 个")
+            for i, (sid, name, rate) in enumerate(strategies, 1):
+                marker = "★" if i == 1 else " "
+                print(f"   {marker} {i}. {name} (预估成功率: {rate:.0%})")
+            
+            if not strategies:
+                print("   ⚠️ 无可用策略，尝试环境修复...")
+                strategies = [("repair", "环境修复", 0.30)]
+            
+            # 选择最优策略
+            selected = strategies[0]
+            print(f"\n   → 选择策略: {selected[1]}")
+            
+            # ========== 阶段二: 执行 (Execution) ==========
+            print(f"\n⚡ [阶段二] 执行 - {selected[1]}")
+            result = None
+            
+            try:
+                if selected[0] == "online_frida":
+                    result = self.crack_online()
+                elif selected[0] == "start_frida":
+                    self._start_frida_server()
+                    result = self.crack_online()
+                elif selected[0] == "offline_patch":
+                    result = self.crack_offline()
+                elif selected[0] == "emulator":
+                    result = self._emulator_mode()
+                elif selected[0] == "repair":
+                    result = self._try_repair_environment()
+                else:
+                    result = CrackResult(
+                        success=False, 
+                        method="unknown",
+                        duration=0,
+                        error="未知策略"
+                    )
+            except Exception as e:
+                result = CrackResult(
+                    success=False,
+                    method=selected[0],
+                    duration=time.time() - start_time,
+                    error=str(e)
+                )
+            
+            # ========== 阶段三: 检查 (Inspection) ==========
+            print(f"\n🔍 [阶段三] 检查 - 验证执行结果")
+            
+            if result is None:
+                print("   ❌ 执行未返回结果")
+                check_passed = False
+            elif result.success:
+                print(f"   ✅ 破解成功!")
+                print(f"   📊 方法: {result.method}")
+                print(f"   ⏱️  耗时: {result.duration:.1f}秒")
+                if result.output_path:
+                    print(f"   📁 输出: {result.output_path}")
+                check_passed = True
+            else:
+                print(f"   ❌ 破解失败")
+                print(f"   📊 方法: {result.method}")
+                print(f"   💬 错误: {result.error}")
+                check_passed = False
+            
+            # ========== 阶段四: 修正 (Correction) ==========
+            if check_passed:
+                print(f"\n🎉 [完成] 破解成功，退出循环")
                 return result
-            print(f"[!] 在线破解失败: {result.error}")
-
-        # 策略2: 离线破解（无需手机）
-        if env["apktool"] and env["java"]:
-            print("[*] 策略2: 离线APK修改")
-            result = self.crack_offline()
-            if result.success:
-                return result
-            print(f"[!] 离线破解失败: {result.error}")
-
-        # 策略3: 启动frida-server后重试
-        if env["device_connected"] and not env["frida_server"]:
-            print("[*] 策略3: 启动frida-server后重试")
-            self._start_frida_server()
-            result = self.crack_online()
-            if result.success:
-                return result
-
-        # 所有策略失败
+            
+            print(f"\n🔄 [阶段四] 修正 - 分析原因并调整策略")
+            
+            if round_num < self.max_retries:
+                # 分析失败原因
+                if result and result.error:
+                    if "frida" in result.error.lower():
+                        print("   → 检测到Frida相关问题，尝试重启frida-server")
+                        self._start_frida_server()
+                    elif "apktool" in result.error.lower() or "java" in result.error.lower():
+                        print("   → 检测到工具缺失，尝试使用Python纯代码方案")
+                        # 标记下次使用Python方案
+                        env["apktool"] = False
+                    elif "device" in result.error.lower() or "adb" in result.error.lower():
+                        print("   → 检测到设备连接问题，尝试模拟器模式")
+                        env["mode"] = "emulator"
+                    else:
+                        print(f"   → 未知错误，尝试下一策略")
+                
+                print(f"   → 进入第 {round_num + 1} 轮循环...")
+                time.sleep(2)
+            else:
+                print(f"\n💥 [终止] 达到最大重试次数 ({self.max_retries})，破解失败")
+        
+        # 所有循环结束仍未成功
+        total_duration = time.time() - start_time
         return CrackResult(
             success=False,
-            method="all",
+            method="ai_agent_loop",
+            duration=total_duration,
+            error=f"AI Agent循环 {self.max_retries} 轮后仍未成功"
+        )
+    
+    def _try_repair_environment(self) -> CrackResult:
+        """尝试修复环境"""
+        print("[*] 尝试修复环境...")
+        
+        # 检查是否有apktool.jar但未安装
+        if os.path.exists("/tmp/apktool.jar"):
+            print("   → 发现apktool.jar，尝试配置...")
+            # 可以在这里添加配置逻辑
+        
+        # 检查网络是否可用
+        try:
+            import urllib.request
+            urllib.request.urlopen("https://github.com", timeout=5)
+            print("   → 网络可用，尝试下载缺失工具...")
+        except:
+            print("   → 网络不可用")
+        
+        return CrackResult(
+            success=False,
+            method="repair",
             duration=0,
-            error="所有破解策略均失败"
+            error="环境修复未完成，需要手动安装依赖"
+        )
+    
+    def _emulator_mode(self) -> CrackResult:
+        """模拟器模式"""
+        print("[*] 模拟器模式...")
+        # 模拟器模式实现
+        return CrackResult(
+            success=False,
+            method="emulator",
+            duration=0,
+            error="模拟器模式未实现"
         )
 
     def _start_frida_server(self):

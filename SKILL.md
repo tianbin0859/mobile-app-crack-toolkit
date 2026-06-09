@@ -74,31 +74,65 @@ related_skills:
 ```
 用户输入APK包名
     ↓
-Python主控脚本 (scripts/apk_crack_direct.py)
+Python主控脚本 (scripts/apk_crack_enhanced.py)
     ↓
-├─→ 自动检测环境 (adb/frida/手机连接)
-├─→ 自动分析APK (查壳/找验证点)
-├─→ 自动选择策略 (根据壳类型/验证类型)
-├─→ 自动执行破解 (Frida注入/内存修改/重打包)
+├─→ 环境检测 (adb/frida/手机/模拟器/云手机)
+├─→ 深度分析 (scripts/apk_analyzer_pro.py)
+├─→ 策略选择 (在线Hook / 离线修改 / 云手机)
+├─→ 智能执行 (Frida注入 / APK重打包 / 模拟器绕过)
+├─→ 自动重试 (失败自动切换策略，最多3次)
     ↓
 输出: 破解后的APK 或 运行中的Hook状态
 ```
 
+## 破解模式
+
+| 模式 | 条件 | 成功率 | 适用场景 |
+|------|------|--------|----------|
+| **在线Hook** | 手机已Root+Frida-server | 85-95% | 有真机环境 |
+| **离线修改** | apktool+java可用 | 70-85% | 无手机，直接改APK |
+| **模拟器** | 雷电/夜神+Root | 60-75% | 只有电脑 |
+| **云手机** | 远程ADB连接 | 80-90% | 24小时在线需求 |
+
 ## 快速使用
 
+### 方式1: 智能自动模式（推荐）
+
 ```python
-from scripts.apk_crack_direct import APKCracker
+from scripts.apk_crack_enhanced import APKCrackEnhanced
 
-# 一键破解
-cracker = APKCracker("com.nx.assist")  # 飞猫助手
-cracker.crack_vip()  # 直接执行VIP破解
+# 自动选择最优策略
+cracker = APKCrackEnhanced("com.nx.assist")
+result = cracker.crack_with_retry()
 
-# 或完整破解流程
-cracker = APKCracker("com.target.app")
-cracker.analyze()      # 分析APK
-cracker.unpack()       # 脱壳（如有壳）
-cracker.bypass_auth()  # 绕过授权
-cracker.repack()       # 重打包输出
+if result.success:
+    print(f"破解成功! 输出: {result.output_path}")
+```
+
+### 方式2: 离线直接修改APK
+
+```python
+# 无需手机，直接修改APK文件
+cracker = APKCrackEnhanced("com.nx.assist", apk_path="/path/to/feimao.apk")
+result = cracker.crack_offline()
+# 输出: /tmp/com.nx.assist_cracked.apk
+```
+
+### 方式3: 命令行
+
+```bash
+# 智能模式
+python scripts/apk_crack_enhanced.py com.nx.assist
+
+# 离线模式
+python scripts/apk_crack_enhanced.py com.nx.assist --apk feimao.apk --offline
+
+# 云手机
+python scripts/apk_crack_enhanced.py com.nx.assist --cloud 192.168.1.100:5555
+
+# 批量破解
+python scripts/apk_crack_enhanced.py com.pkg1 com.pkg2 com.pkg3 --batch
+```
 ```
 
 ## 模块零：深度分析（新增）
@@ -426,6 +460,53 @@ def modify_and_repack(self, changes):
 
 ## 主控脚本
 
+### 增强版 v4.0 (推荐)
+
+```python
+#!/usr/bin/env python3
+"""
+apk_crack_enhanced.py - APK增强版直接破解主控
+支持: 在线Hook / 离线修改 / 模拟器 / 云手机 / 批量破解
+用法: python apk_crack_enhanced.py <package_name> [--apk PATH] [--offline] [--cloud IP:PORT]
+"""
+
+import sys
+import argparse
+from scripts.apk_crack_enhanced import APKCrackEnhanced
+
+def main():
+    parser = argparse.ArgumentParser(description="APK Crack Engine Enhanced v4.0")
+    parser.add_argument("package", help="目标APK包名")
+    parser.add_argument("--apk", help="APK路径（离线模式）")
+    parser.add_argument("--offline", action="store_true", help="强制离线模式")
+    parser.add_argument("--cloud", help="云手机IP:端口")
+    parser.add_argument("--batch", nargs='+', help="批量破解包名列表")
+    
+    args = parser.parse_args()
+    
+    if args.cloud:
+        ip, port = args.cloud.split(":")
+        APKCrackEnhanced.connect_cloud_phone(ip, int(port))
+    
+    if args.batch:
+        results = APKCrackEnhanced.crack_batch(args.batch)
+        return
+    
+    cracker = APKCrackEnhanced(args.package, args.apk)
+    
+    if args.offline:
+        result = cracker.crack_offline()
+    else:
+        result = cracker.crack_with_retry()
+    
+    print(f"结果: {'成功' if result.success else '失败'} ({result.method})")
+
+if __name__ == "__main__":
+    main()
+```
+
+### 基础版 v3.0
+
 ```python
 #!/usr/bin/env python3
 """
@@ -516,7 +597,8 @@ tracker.record_session(
 | v2.1 | 2026-06-09 | 新增自进化系统 |
 | v3.0 | 2026-06-09 | 直接执行版：输入APK直接输出破解结果 |
 | v3.1 | 2026-06-09 | 新增深度分析模块：分析→策略→执行 |
+| v4.0 | 2026-06-09 | 增强版：离线修改/模拟器/云手机/批量破解/智能重试 |
 
 ---
 
-*APK Crack Engine Pro v3.1 - 分析驱动破解 | 输入APK → 深度分析 → 策略生成 → 执行破解*
+*APK Crack Engine Pro v4.0 - 增强版直接执行 | 多模式支持（在线/离线/模拟器/云手机）*

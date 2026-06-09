@@ -101,6 +101,72 @@ cracker.bypass_auth()  # 绕过授权
 cracker.repack()       # 重打包输出
 ```
 
+## 模块零：深度分析（新增）
+
+所有破解操作前**必须**执行深度分析：
+
+```python
+from scripts.apk_analyzer_pro import APKAnalyzerPro
+from scripts.apk_crack_direct import APKCracker
+
+# 1. 分析
+analyzer = APKAnalyzerPro("com.nx.assist")
+report = analyzer.full_analysis()
+
+# 2. 根据报告选择策略
+print(f"建议策略: {report.suggested_strategy}")
+print(f"预估成功率: {report.success_rate_estimate:.0%}")
+
+# 3. 执行破解
+cracker = APKCracker("com.nx.assist")
+if report.success_rate_estimate > 0.7:
+    cracker.crack_vip()
+```
+
+### 分析内容
+
+| 分析项 | 说明 |
+|--------|------|
+| 壳检测 | 360/梆梆/爱加密/腾讯等 |
+| 混淆检测 | ProGuard/R8/Allatori/DashO |
+| 反调试 | Debug/TracerPid/ptrace/inotify |
+| 反Hook | Xposed/Frida/Substrate检测 |
+| Root检测 | su/Magisk/debuggable检测 |
+| 验证点 | Java/Native/Network/SharedPrefs |
+| 策略生成 | 自动计算最优破解路径 |
+
+### 分析报告示例
+
+```
+============================================================
+APK深度分析报告
+============================================================
+包名: com.nx.assist
+版本: 2.1.0
+SDK: min=21, target=30
+
+保护措施:
+  壳: none
+  混淆: ProGuard (中度混淆)
+  反调试: 无
+  反Hook: 无
+  Root检测: su二进制检测
+  网络安全: 标准配置
+
+验证点 (8个):
+  1. [java] com.nx.main.VipManager.isVip
+     描述: isVip检查
+     策略: Hook com.nx.main.VipManager.isVip强制返回true
+  2. [shared_prefs] com.nx.main.PrefHelper
+     描述: SharedPreferences含vip关键字
+     策略: Hook SharedPreferences.getBoolean强制返回true
+  ...
+
+建议策略: Java层Hook (3个验证点) → SharedPreferences伪造 (2个)
+预估成功率: 85%
+============================================================
+```
+
 ## 模块一：直接脱壳执行
 
 ### 自动查壳 + 脱壳
@@ -448,8 +514,9 @@ tracker.record_session(
 | v1.0 | 2026-06-09 | 基础版：生成脚本 |
 | v2.0 | 2026-06-09 | Pro版：8大功能模块 |
 | v2.1 | 2026-06-09 | 新增自进化系统 |
-| v3.0 | 2026-06-09 | **直接执行版**：输入APK直接输出破解结果 |
+| v3.0 | 2026-06-09 | 直接执行版：输入APK直接输出破解结果 |
+| v3.1 | 2026-06-09 | 新增深度分析模块：分析→策略→执行 |
 
 ---
 
-*APK Crack Engine Pro v3.0 - 直接执行版 | 输入APK → 自动破解 → 输出结果*
+*APK Crack Engine Pro v3.1 - 分析驱动破解 | 输入APK → 深度分析 → 策略生成 → 执行破解*

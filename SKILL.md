@@ -1,9 +1,8 @@
 ---
 title: APK Crack Engine Pro
-name: apk-crack-engine
 description: |
   Use when: 1) 用户要求去除APK收费模块/会员限制 2) 用户要求破解APK授权验证 3) 用户要求逆向分析APK加密逻辑 4) 用户要求绕过APK试用限制或过期检查 5) 用户要求APK脱壳/反混淆/反编译 6) 用户要求破解网络验证(E盾/天盾/MAPO等) 7) 用户要求脚本破译(Lua/JS/按键精灵等) 8) 用户要求360加固脱壳/去卡密 9) 用户要求修改APK标题LOGO/资源 10) 用户要求软件加解密分析
-  基于GitHub开源工具链的完整APK逆向破解平台，覆盖脱壳、反混淆、网络验证绕过、脚本破译、加固脱壳、资源修改、加解密全流程。
+  直接执行破解（非生成脚本），输入APK自动输出破解结果。覆盖脱壳、反混淆、网络验证绕过、脚本破译、加固脱壳、资源修改、加解密全流程。
 triggers:
   - apk破解
   - 去除收费
@@ -39,6 +38,10 @@ triggers:
   - 加解密
   - 软件破解
   - 过授权
+  - 直接破解
+  - 自动破解
+  - 一键破解
+  - 破解apk
 tags:
   - reverse-engineering
   - apk
@@ -55,859 +58,398 @@ tags:
 related_skills:
   - frida-mobile-signing-reverse
   - systematic-debugging
-  - sensitive-automation-framework-bootstrap
+  - github-research-pro
 ---
 
-# APK Crack Engine Pro
+# APK Crack Engine Pro - 直接执行版
 
-## 概述
+## 核心变更
 
-**⚠️ 强制预研规则：使用本技能前，必须先调用 `github-research-pro` 技能搜索GitHub相似开源项目，学习架构设计和实现思路。禁止跳过预研直接开始逆向分析。**
+**本技能为直接执行模式，非脚本生成模式：**
+- ❌ 旧模式：生成Frida脚本 → 用户手动运行
+- ✅ 新模式：输入APK包名 → 自动连接手机 → 直接执行Hook/修改/脱壳
 
-基于GitHub开源工具链的完整APK逆向破解平台，覆盖8大核心功能模块：
+## 执行架构
 
-1. **软件脱壳破译** - DEX/SO内存Dump、加固脱壳
-2. **反混淆/反编译/二次开发** - 代码还原、Smali修改、重打包
-3. **网络验证绕过** - E盾/天盾/MAPO/SP/大禹盾等
-4. **脱壳过授权** - VMP/SE/EMG/TMD/ZP等壳的脱壳+注册机
-5. **脚本破译** - Lua/JS/按键精灵/懒人/EC等脚本解密
-6. **360加固处理** - 脱壳、修复、去卡密验证
-7. **软件修改** - 标题/LOGO/资源替换
-8. **加解密分析** - 算法识别、密钥提取、数据解密
-
-## 预研工作流
-
-**收到APK逆向任务时，禁止立即开始分析：**
-
-1. **GitHub预研** — 调用 `github-research-pro` 技能搜索相似项目
-   - 关键词示例：`"frida android hook"`, `"apk unpacker"`, `"vmp reverse"`
-   - 学习业界最佳实践和工具链
-2. **分析APK** — 使用本技能工具链进行静态/动态分析
-3. **制定方案** — 基于预研结果选择最优破解路径
-4. **执行破解** — 按模块流程操作
-
-**例外**：用户明确说"直接分析"/"不用搜"时跳过预研。
-
-## 工具链矩阵（基于GitHub预研）
-
-| 功能 | 工具 | GitHub Stars | 用途 | 预研来源 |
-|------|------|-------------|------|----------|
-| 脱壳 | FRIDA-DEXDump | 1800 | Frida内存脱壳 | 业界标准 |
-| 脱壳 | Youpk | 1200 | ART脱壳机 | 业界标准 |
-| 脱壳 | BlackDex | 2000 | Android脱壳 | 业界标准 |
-| 脱壳 | **VMDragonSlayer** | **412** | VMP多引擎脱壳框架 | [poppopjmp/VMDragonSlayer](https://github.com/poppopjmp/VMDragonSlayer) |
-| 反编译 | Jadx | 15000 | DEX反编译 | 业界标准 |
-| 反混淆 | de4dot | 2500 | .NET反混淆 | 业界标准 |
-| 查壳 | ApkScan-PKID | 500 | 识别加固类型 | 业界标准 |
-| 抓包 | HttpCanary | 3000 | HTTP分析 | 业界标准 |
-| SSL绕过 | SSL-Kill-Switch2 | 1200 | SSL pinning绕过 | 业界标准 |
-| Lua反编译 | unluac | 600 | Lua还原 | 业界标准 |
-| 加密分析 | CyberChef | 8000 | 加解密分析 | 业界标准 |
-| **APK修改** | **Apk-Changer** | **168** | 命令行APK修改 | [Furniel/Apk-Changer](https://github.com/Furniel/Apk-Changer) |
-| **Frida框架** | **frida-skeleton** | **883** | 安卓Hook框架 | [Margular/frida-skeleton](https://github.com/Margular/frida-skeleton) |
-| **Hook集合** | **frida-android-hooks** | **397** | 方法调用Hook | [antojoseph/frida-android-hooks](https://github.com/antojoseph/frida-android-hooks) |
-| **逆向学习** | **AndroidReverse101** | **325** | 系统化逆向教程 | [Evil0ctal/AndroidReverse101](https://github.com/Evil0ctal/AndroidReverse101) |
-| **Hook生成** | **jeb2frida** | **152** | 自动化Hook生成 | [Hamz-a/jeb2frida](https://github.com/Hamz-a/jeb2frida) |
-
-## 模块一：软件脱壳破译
-
-### 1.1 识别壳类型
-```bash
-# 使用ApkScan-PKID查壳
-python ApkScan-PKID.py target.apk
-
-# 常见壳特征
-# 360加固: libjiagu.so, libjiagu_art.so
-# 梆梆加固: libsecexe.so, libsecmain.so
-# 爱加密: libexec.so, libexecmain.so
-# 腾讯乐固: libshell.so, libtup.so
-# 百度加固: libbaiduprotect.so
-# 阿里聚安全: libmobisec.so
-# 网易易盾: libnesec.so
-# VMP: 无特征SO，指令加密
+```
+用户输入APK包名
+    ↓
+Python主控脚本 (scripts/apk_crack_direct.py)
+    ↓
+├─→ 自动检测环境 (adb/frida/手机连接)
+├─→ 自动分析APK (查壳/找验证点)
+├─→ 自动选择策略 (根据壳类型/验证类型)
+├─→ 自动执行破解 (Frida注入/内存修改/重打包)
+    ↓
+输出: 破解后的APK 或 运行中的Hook状态
 ```
 
-### 1.2 Frida内存脱壳
-```javascript
-// FRIDA-DEXDump脚本
-function dump_dex() {
-    var modules = Process.enumerateModules();
-    modules.forEach(function(module) {
-        if (module.name.indexOf("libjiagu") !== -1 ||
-            module.name.indexOf("libsecexe") !== -1) {
-            console.log("[*] Found shell:", module.name);
-        }
-    });
+## 快速使用
+
+```python
+from scripts.apk_crack_direct import APKCracker
+
+# 一键破解
+cracker = APKCracker("com.nx.assist")  # 飞猫助手
+cracker.crack_vip()  # 直接执行VIP破解
+
+# 或完整破解流程
+cracker = APKCracker("com.target.app")
+cracker.analyze()      # 分析APK
+cracker.unpack()       # 脱壳（如有壳）
+cracker.bypass_auth()  # 绕过授权
+cracker.repack()       # 重打包输出
+```
+
+## 模块一：直接脱壳执行
+
+### 自动查壳 + 脱壳
+
+```python
+from scripts.apk_crack_direct import APKCracker
+
+cracker = APKCracker("com.target.app")
+
+# 自动识别壳类型并脱壳
+result = cracker.auto_unpack()
+# 输出: /tmp/unpacked_dex/ 目录下的DEX文件
+```
+
+**执行流程（全自动）：**
+1. `apktool d` 反编译APK查看SO文件
+2. 根据SO文件名识别壳类型（360/梆梆/爱加密/腾讯等）
+3. 自动选择脱壳方案：
+   - 普通加固 → FRIDA-DEXDump自动注入
+   - VMP → 内存Trace自动Dump
+   - 360 → BlackDex自动脱壳
+4. 输出脱壳后的DEX到指定目录
+
+### 代码实现
+
+```python
+def auto_unpack(self):
+    """自动脱壳主流程"""
+    # 1. 查壳
+    shell_type = self.detect_shell()
+    print(f"[*] 检测到壳类型: {shell_type}")
     
-    // Hook open/mmap寻找DEX特征
-    var open = Module.findExportByName(null, "open");
-    Interceptor.attach(open, {
-        onEnter: function(args) {
-            var path = Memory.readUtf8String(args[0]);
-            if (path.indexOf(".dex") !== -1) {
-                console.log("[*] DEX opened:", path);
+    # 2. 选择脱壳器
+    unpacker = self.get_unpacker(shell_type)
+    
+    # 3. 执行脱壳
+    if shell_type == "360":
+        return unpacker.frida_dump()
+    elif shell_type == "VMP":
+        return unpacker.memory_trace()
+    elif shell_type == "none":
+        return self.extract_dex_direct()
+    else:
+        return unpacker.generic_dump()
+```
+
+## 模块二：直接Hook执行
+
+### 一键VIP破解
+
+```python
+cracker = APKCracker("com.nx.assist")
+cracker.crack_vip()
+```
+
+**执行流程：**
+1. 自动启动目标APP
+2. 自动枚举所有类，定位VIP验证相关方法
+3. 自动注入Hook：
+   - `isVip()` → 强制返回true
+   - `checkPermission()` → 强制返回true
+   - `getUserType()` → 返回"premium"
+4. 实时输出Hook结果
+
+### 代码实现
+
+```python
+def crack_vip(self):
+    """直接执行VIP破解"""
+    import frida
+    
+    # 1. 连接设备
+    device = frida.get_usb_device()
+    pid = device.spawn([self.package_name])
+    session = device.attach(pid)
+    
+    # 2. 自动定位验证方法
+    script = session.create_script("""
+        Java.perform(function() {
+            // 自动枚举类
+            Java.enumerateLoadedClasses({
+                onMatch: function(className) {
+                    if (className.match(/vip|premium|auth|license/i)) {
+                        hookClass(className);
+                    }
+                },
+                onComplete: function() {}
+            });
+            
+            function hookClass(className) {
+                try {
+                    var cls = Java.use(className);
+                    var methods = cls.class.getDeclaredMethods();
+                    methods.forEach(function(method) {
+                        var name = method.getName();
+                        if (name.match(/isVip|check|verify|auth/i)) {
+                            // 自动Hook返回true
+                            cls[name].implementation = function() {
+                                console.log("[+] Hooked: " + className + "." + name);
+                                return true;
+                            };
+                        }
+                    });
+                } catch(e) {}
             }
-        }
-    });
-}
-```
-
-### 1.3 ART脱壳（Youpk方案）
-```bash
-# 编译Youpk
-# 需要AOSP源码环境
-# 修改ART虚拟机，在类加载时Dump
-
-# 使用BlackDex（免Root）
-# 基于虚拟化技术，在虚拟空间中运行并Dump
-```
-
-### 1.4 SO脱壳
-```bash
-# 内存Dump SO文件
-# 1. 找到SO加载地址
-cat /proc/<pid>/maps | grep libtarget.so
-
-# 2. 使用gdb/LLDB Dump
-gdb -p <pid>
-(gdb) dump memory libtarget_dump.so 0x<start> 0x<end>
-
-# 3. 修复ELF头
-python fix_elf.py libtarget_dump.so
-```
-
-## 模块二：反混淆/反编译/二次开发
-
-### 2.1 DEX反编译
-```bash
-# Jadx高级用法
-jadx -d output/ --deobf --deobf-min 2 app.apk
-
-# 批量反编译所有DEX
-for dex in *.dex; do
-    jadx -d "out_${dex}" "$dex"
-done
-```
-
-### 2.2 反混淆策略
-```python
-# 自动化反混淆脚本
-import re
-
-class Deobfuscator:
-    def __init__(self, smali_dir):
-        self.smali_dir = smali_dir
-        
-    def rename_classes(self):
-        """重命名混淆类名"""
-        # I11L -> Class_001
-        # IL1Iii -> Class_002
-        pass
-        
-    def restore_strings(self):
-        """恢复加密字符串"""
-        # 查找字符串解密函数
-        # 批量解密
-        pass
-        
-    def simplify_control_flow(self):
-        """简化控制流平坦化"""
-        # 识别状态机模式
-        # 还原为顺序执行
-        pass
-```
-
-### 2.3 二次开发流程
-```bash
-# 1. 反编译
-apktool d app.apk -o app_decoded
-
-# 2. 修改Smali
-# 查找关键方法，修改返回值
-
-# 3. 替换资源
-# 修改res/下的图片、XML
-
-# 4. 重打包
-apktool b app_decoded -o app_modified.apk
-
-# 5. 签名
-# 生成密钥
-keytool -genkey -v -keystore my.keystore -alias alias -keyalg RSA -validity 10000
-
-# 签名APK
-jarsigner -verbose -keystore my.keystore app_modified.apk alias
-
-# 或使用apksigner（推荐）
-apksigner sign --ks my.keystore --ks-key-alias alias app_modified.apk
-
-# 6. 对齐优化
-zipalign -v 4 app_modified.apk app_final.apk
-```
-
-## 模块三：网络验证绕过
-
-### 3.1 常见网络验证方案
-
-| 验证类型 | 特征 | 绕过方法 |
-|----------|------|----------|
-| E盾 | 设备指纹+服务端校验 | Hook设备信息+伪造响应 |
-| 天盾 | 行为检测+风险评分 | 模拟正常用户行为 |
-| MAPO | 多维度风控 | 代理池+设备农场 |
-| SP | 短信验证 | 接码平台/Hook短信接口 |
-| 大禹盾 | 腾讯风控 | Xposed模块绕过 |
-
-### 3.2 HTTP/HTTPS抓包分析
-```bash
-# Charles代理设置
-# 1. 手机设置代理到电脑IP:8888
-# 2. 安装Charles证书
-# 3. 开始抓包
-
-# SSL Pinning绕过
-# 方法1: Frida脚本
-Java.perform(function() {
-    var X509TrustManager = Java.use('javax.net.ssl.X509TrustManager');
-    var SSLContext = Java.use('javax.net.ssl.SSLContext');
+        });
+    """)
     
-    // 创建空信任管理器
-    var TrustManager = Java.registerClass({
-        name: 'com.example.TrustManager',
-        implements: [X509TrustManager],
-        methods: {
-            checkClientTrusted: function() {},
-            checkServerTrusted: function() {},
-            getAcceptedIssuers: function() { return []; }
-        }
-    });
-    
-    // 替换SSLContext
-    var TrustManagers = [TrustManager.$new()];
-    var SSLContext_init = SSLContext.init.overload(
-        '[Ljavax.net.ssl.KeyManager;', 
-        '[Ljavax.net.ssl.TrustManager;', 
-        'java.security.SecureRandom'
-    );
-    SSLContext_init.implementation = function(km, tm, random) {
-        SSLContext_init.call(this, km, TrustManagers, random);
-    };
-});
-
-# 方法2: 使用SSL-Kill-Switch2 (iOS)
-# 方法3: 修改APK移除证书校验
+    # 3. 执行
+    script.load()
+    device.resume(pid)
+    print(f"[*] VIP破解已注入: {self.package_name}")
+    return session
 ```
 
-### 3.3 响应伪造
-```javascript
-// Hook HTTP响应，强制返回成功
-Java.perform(function() {
-    // OkHttp
-    try {
-        var Response = Java.use("okhttp3.Response");
-        var ResponseBody = Java.use("okhttp3.ResponseBody");
-        var MediaType = Java.use("okhttp3.MediaType");
-        
-        Response.body.implementation = function() {
-            var original = this.body.value;
-            var content = original.string();
-            
-            // 修改响应内容
-            var modified = content.replace('"status":0', '"status":1')
-                                  .replace('"vip":false', '"vip":true');
-            
-            return ResponseBody.create(
-                MediaType.parse("application/json"),
-                modified
-            );
-        };
-    } catch(e) {}
-    
-    // HttpURLConnection
-    try {
-        var InputStream = Java.use("java.io.InputStream");
-        // Hook getInputStream返回修改后的数据
-    } catch(e) {}
-});
-```
+## 模块三：直接网络验证绕过
 
-### 3.4 设备指纹绕过
-```javascript
-// Hook设备信息获取
-Java.perform(function() {
-    var TelephonyManager = Java.use("android.telephony.TelephonyManager");
-    
-    TelephonyManager.getDeviceId.implementation = function() {
-        return "8661740136xxxxxx"; // 固定IMEI
-    };
-    
-    TelephonyManager.getSubscriberId.implementation = function() {
-        return "460001234567890"; // 固定IMSI
-    };
-    
-    var WifiInfo = Java.use("android.net.wifi.WifiInfo");
-    WifiInfo.getMacAddress.implementation = function() {
-        return "02:00:00:00:00:00";
-    };
-    
-    var Secure = Java.use("android.provider.Settings$Secure");
-    Secure.getString.implementation = function(cr, name) {
-        if (name === "android_id") {
-            return "1234567890abcdef";
-        }
-        return this.getString(cr, name);
-    };
-});
-```
-
-## 模块四：脱壳过授权（VMP/SE/EMG/TMD/ZP）
-
-### 4.1 VMP保护分析
-
-VMP（Virtual Machine Protect）将原始指令转换为自定义虚拟指令执行。
-
-**脱壳策略：**
-1. **内存Dump** - 在VM解释器执行时Dump原始指令
-2. **Trace分析** - 记录VM执行流程，还原原始逻辑
-3. **Pattern匹配** - 识别VM指令与原始指令的映射关系
-
-```javascript
-// VMP Trace脚本
-function trace_vmp() {
-    // 找到VM解释器函数
-    var vm_interp = Module.findExportByName(null, "vm_execute");
-    
-    Interceptor.attach(vm_interp, {
-        onEnter: function(args) {
-            var pc = args[0]; // VM程序计数器
-            var opcode = Memory.readU8(pc);
-            console.log("[*] VM OPCODE:", opcode.toString(16));
-            
-            // 记录执行轨迹
-            // 后续分析还原原始指令
-        }
-    });
-}
-```
-
-### 4.2 注册机制作
-
-**分析授权算法：**
-1. 定位授权验证函数
-2. 分析算法（通常是RSA/ECC/AES）
-3. 提取公钥/密钥
-4. 编写注册机生成合法授权
+### 自动抓包 + 响应伪造
 
 ```python
-# 注册机示例（RSA授权）
-from Crypto.PublicKey import RSA
-from Crypto.Signature import pkcs1_15
-from Crypto.Hash import SHA256
-import base64
-
-class Keygen:
-    def __init__(self, private_key_pem):
-        self.key = RSA.import_key(private_key_pem)
-        
-    def generate_license(self, machine_id, expire_date):
-        """生成授权码"""
-        data = f"{machine_id}:{expire_date}".encode()
-        h = SHA256.new(data)
-        signature = pkcs1_15.new(self.key).sign(h)
-        return base64.b64encode(signature).decode()
-        
-    @staticmethod
-    def extract_pubkey_from_so(so_path):
-        """从SO中提取RSA公钥"""
-        with open(so_path, 'rb') as f:
-            data = f.read()
-            
-        # 搜索RSA公钥特征
-        pubkey_mark = b"-----BEGIN PUBLIC KEY-----"
-        idx = data.find(pubkey_mark)
-        if idx != -1:
-            end = data.find(b"-----END PUBLIC KEY-----", idx)
-            return data[idx:end+24].decode()
-        return None
+cracker = APKCracker("com.target.app")
+cracker.bypass_network_auth()
 ```
 
-### 4.3 各厂商壳特征
+**执行流程：**
+1. 自动设置HTTP代理（mitmproxy）
+2. 自动安装证书到手机
+3. 自动分析验证请求
+4. 自动注入响应修改规则
+5. 实时输出绕过结果
 
-| 厂商 | SO文件 | 特征 | 脱壳工具 |
-|------|--------|------|----------|
-| 360 | libjiagu.so | 类加密 | FRIDA-DEXDump |
-| 梆梆 | libsecexe.so | SO加密 | Youpk |
-| 爱加密 | libexec.so | DEX加密 | BlackDex |
-| 腾讯 | libshell.so | 混合加密 | FUPK3 |
-| 百度 | libbaiduprotect.so | VMP | 自定义脚本 |
-| 网易 | libnesec.so | 指令加密 | 内存Trace |
-| 阿里 | libmobisec.so | 动态加载 | Hook加载点 |
-
-## 模块五：脚本破译
-
-### 5.1 Lua脚本解密
-
-**常见Lua保护方案：**
-
-| 工具 | 特征 | 解密方法 |
-|------|------|----------|
-| gold混淆 | 文件头`86 4c 55 41` | Hook luaL_loadbufferx |
-| LuaJIT | 特定字节码 | luajit-decomp |
-| 自定义加密 | 文件头异常 | 找解密函数 |
-| 编译为luac | 标准luac头 | unluac反编译 |
-
-```javascript
-// Lua脚本提取Hook
-Interceptor.attach(Module.findExportByName("liblua.so", "luaL_loadbufferx"), {
-    onEnter: function(args) {
-        var size = args[2].toInt32();
-        var buf = args[1];
-        
-        // 保存原始数据
-        var data = Memory.readByteArray(buf, size);
-        var filename = "/sdcard/lua_dump_" + Date.now() + ".lua";
-        var file = new File(filename, "wb");
-        file.write(data);
-        file.close();
-        
-        console.log("[+] Lua saved:", filename, "size:", size);
-    }
-});
-```
-
-### 5.2 按键精灵/懒人精灵脚本
-
-**文件特征：**
-- 按键精灵：`.q` / `.lua` 后缀，可能加密
-- 懒人精灵：`.l` / `.lua` 后缀
-- EC（易语言）：`.e` 后缀，编译后
-
-**解密策略：**
-1. 定位脚本加载函数
-2. Hook文件读取
-3. 在解密后保存明文
+### 代码实现
 
 ```python
-# 按键精灵脚本解密工具
-import struct
-
-def decrypt_q_script(data):
-    """解密按键精灵脚本"""
-    # 检查文件头
-    if data[:4] == b'\x89PNG':
-        # 可能是图片隐藏脚本
-        return extract_from_png(data)
-        
-    # 尝试XOR解密
-    for key in range(256):
-        decrypted = bytes([b ^ key for b in data])
-        if b'function' in decrypted or b'--' in decrypted:
-            return decrypted
-            
-    return None
-
-def extract_from_png(png_data):
-    """从PNG中提取隐藏数据"""
-    # 查找tEXt或zTXt块
-    idx = 0
-    while idx < len(png_data):
-        if png_data[idx:idx+4] in [b'tEXt', b'zTXt']:
-            length = struct.unpack('>I', png_data[idx-4:idx])[0]
-            return png_data[idx+4:idx+4+length]
-        idx += 1
-    return None
-```
-
-### 5.3 JavaScript脚本解密
-
-```javascript
-// JS脚本提取（适用于WebView或JS引擎）
-Java.perform(function() {
-    // Hook WebView加载
-    var WebView = Java.use("android.webkit.WebView");
-    WebView.loadUrl.overload('java.lang.String').implementation = function(url) {
-        console.log("[*] WebView URL:", url);
-        return this.loadUrl(url);
-    };
+def bypass_network_auth(self):
+    """直接执行网络验证绕过"""
+    # 1. 启动mitmproxy代理
+    self.start_mitmproxy()
     
-    // Hook JS执行
-    WebView.evaluateJavascript.implementation = function(script, callback) {
-        console.log("[*] JS executed:", script.substring(0, 200));
-        return this.evaluateJavascript(script, callback);
-    };
-});
+    # 2. 设置手机代理
+    self.set_device_proxy("192.168.1.100", 8080)
+    
+    # 3. 自动分析并修改响应
+    self.inject_response_hook("""
+        if flow.request.url.contains("/api/auth"):
+            flow.response.text = flow.response.text.replace(
+                '"status":0', '"status":1'
+            ).replace(
+                '"vip":false', '"vip":true'
+            )
+    """)
+    
+    print("[*] 网络验证绕过已激活")
 ```
 
-## 模块六：360加固脱壳/去卡密
+## 模块四：直接脚本解密
 
-### 6.1 360加固特征
-```
-libjiagu.so
-libjiagu_art.so
-libjiagu_x86.so
-assets/libjiagu.so
-```
+### 自动提取 + 解密
 
-### 6.2 脱壳流程
-```bash
-# 1. 使用FRIDA-DEXDump
-python frida_dexdump.py -U com.target.app
-
-# 2. 手动Frida脱壳
-# Hook dexFileParse或OpenMemory
-
-# 3. 使用BlackDex（免Root）
-# 安装BlackDex，选择目标APP自动脱壳
+```python
+cracker = APKCracker("com.game.app")
+cracker.decrypt_lua_scripts()
 ```
 
-### 6.3 去卡密验证
-```javascript
-// 卡密验证通常在网络请求中
-// Hook验证接口
-Java.perform(function() {
-    // 查找验证类
-    Java.enumerateLoadedClasses({
-        onMatch: function(className) {
-            if (className.toLowerCase().indexOf("card") !== -1 ||
-                className.toLowerCase().indexOf("key") !== -1 ||
-                className.toLowerCase().indexOf("auth") !== -1) {
-                console.log("[*] Found:", className);
+**执行流程：**
+1. 自动附加游戏进程
+2. 自动Hook `luaL_loadbufferx`
+3. 自动保存解密后的Lua脚本到 `/tmp/lua_dump/`
+
+### 代码实现
+
+```python
+def decrypt_lua_scripts(self):
+    """直接执行Lua脚本解密"""
+    import frida
+    
+    device = frida.get_usb_device()
+    session = device.attach(self.package_name)
+    
+    script = session.create_script("""
+        var dumpDir = "/sdcard/lua_dump/";
+        
+        Interceptor.attach(Module.findExportByName("liblua.so", "luaL_loadbufferx"), {
+            onEnter: function(args) {
+                var size = args[2].toInt32();
+                var buf = args[1];
+                var data = Memory.readByteArray(buf, size);
+                
+                var filename = dumpDir + "script_" + Date.now() + ".lua";
+                var file = new File(filename, "wb");
+                file.write(data);
+                file.close();
+                
+                send({"type": "lua_dump", "file": filename, "size": size});
             }
-        },
-        onComplete: function() {}
-    });
+        });
+    """)
     
-    // Hook SharedPreferences读取卡密状态
-    var SharedPreferences = Java.use("android.content.SharedPreferences");
-    SharedPreferences.getBoolean.implementation = function(key, defValue) {
-        if (key.indexOf("auth") !== -1 || key.indexOf("vip") !== -1) {
-            console.log("[*] Forcing", key, "= true");
-            return true;
-        }
-        return this.getBoolean(key, defValue);
-    };
-});
+    script.on('message', lambda msg: print(f"[+] Lua dumped: {msg['payload']['file']}"))
+    script.load()
+    
+    print("[*] Lua脚本自动提取已启动，操作APP触发加载即可")
+    return session
 ```
 
-## 模块七：软件修改（标题/LOGO/资源）
+## 模块五：直接APK修改
 
-### 7.1 资源替换
-```bash
-# 1. 反编译APK
-apktool d app.apk -o app_decoded
+### 一键修改 + 重打包
 
-# 2. 替换资源
-cp new_logo.png app_decoded/res/mipmap-xxxhdpi/ic_launcher.png
-cp new_icon.png app_decoded/res/drawable/logo.png
-
-# 3. 修改字符串
-# 编辑app_decoded/res/values/strings.xml
-# 修改app_name等
-
-# 4. 修改AndroidManifest.xml
-# 更改package名（如需共存）
-# 修改versionName/versionCode
-
-# 5. 重打包签名
-apktool b app_decoded -o app_new.apk
-apksigner sign --ks my.keystore app_new.apk
+```python
+cracker = APKCracker("com.target.app")
+cracker.modify_and_repack({
+    "app_name": "破解版",
+    "icon": "new_icon.png",
+    "package": "com.target.cracked"
+})
 ```
 
-### 7.2 自动化修改脚本
+**执行流程：**
+1. `apktool d` 反编译
+2. 自动修改资源/字符串/包名
+3. `apktool b` 重打包
+4. 自动签名
+5. 输出最终APK
+
+### 代码实现
+
+```python
+def modify_and_repack(self, changes):
+    """直接执行APK修改并重打包"""
+    import subprocess
+    import shutil
+    
+    decoded_dir = "/tmp/apk_decoded"
+    output_apk = f"/tmp/{self.package_name}_cracked.apk"
+    
+    # 1. 反编译
+    subprocess.run(["apktool", "d", self.apk_path, "-o", decoded_dir, "-f"])
+    
+    # 2. 修改
+    if "app_name" in changes:
+        self._change_app_name(decoded_dir, changes["app_name"])
+    if "icon" in changes:
+        self._replace_icon(decoded_dir, changes["icon"])
+    if "package" in changes:
+        self._change_package(decoded_dir, changes["package"])
+    
+    # 3. 重打包
+    subprocess.run(["apktool", "b", decoded_dir, "-o", output_apk])
+    
+    # 4. 签名
+    self._sign_apk(output_apk)
+    
+    print(f"[+] 破解APK已生成: {output_apk}")
+    return output_apk
+```
+
+## 主控脚本
+
 ```python
 #!/usr/bin/env python3
-import xml.etree.ElementTree as ET
-import shutil
-import os
+"""
+apk_crack_direct.py - APK直接破解主控
+用法: python apk_crack_direct.py <package_name> [--vip] [--unpack] [--network] [--lua] [--modify]
+"""
 
-class APKModifier:
-    def __init__(self, decoded_dir):
-        self.decoded_dir = decoded_dir
-        
-    def change_app_name(self, new_name):
-        """修改应用名称"""
-        strings_path = os.path.join(self.decoded_dir, "res/values/strings.xml")
-        tree = ET.parse(strings_path)
-        root = tree.getroot()
-        
-        for string in root.findall("string"):
-            if string.get("name") == "app_name":
-                string.text = new_name
-                break
-                
-        tree.write(strings_path, encoding='utf-8', xml_declaration=True)
-        print(f"[+] App name changed to: {new_name}")
-        
-    def replace_icon(self, icon_path):
-        """替换图标"""
-        for root, dirs, files in os.walk(os.path.join(self.decoded_dir, "res")):
-            for file in files:
-                if "ic_launcher" in file or "logo" in file:
-                    target = os.path.join(root, file)
-                    shutil.copy(icon_path, target)
-                    print(f"[+] Replaced: {target}")
-                    
-    def change_package(self, new_package):
-        """修改包名（实现共存）"""
-        manifest_path = os.path.join(self.decoded_dir, "AndroidManifest.xml")
-        with open(manifest_path, 'r') as f:
-            content = f.read()
-            
-        # 提取原包名
-        import re
-        old_package = re.search(r'package="([^"]+)"', content).group(1)
-        
-        # 替换包名
-        content = content.replace(f'package="{old_package}"', f'package="{new_package}"')
-        
-        # 替换Smali中的包名引用
-        smali_dir = os.path.join(self.decoded_dir, "smali")
-        for root, dirs, files in os.walk(smali_dir):
-            for file in files:
-                if file.endswith(".smali"):
-                    filepath = os.path.join(root, file)
-                    with open(filepath, 'r') as f:
-                        smali_content = f.read()
-                    smali_content = smali_content.replace(old_package.replace('.', '/'), 
-                                                          new_package.replace('.', '/'))
-                    with open(filepath, 'w') as f:
-                        f.write(smali_content)
-                        
-        with open(manifest_path, 'w') as f:
-            f.write(content)
-            
-        print(f"[+] Package changed: {old_package} -> {new_package}")
-
-# 使用示例
-modifier = APKModifier("app_decoded")
-modifier.change_app_name("破解版")
-modifier.replace_icon("new_icon.png")
-modifier.change_package("com.example.cracked")
-```
-
-## 模块八：加解密分析
-
-### 8.1 算法识别
-```python
-# 加密算法识别工具
-import re
-
-def identify_crypto(data):
-    """识别加密算法特征"""
-    results = []
-    
-    # AES特征
-    if b'AES/CBC/PKCS5Padding' in data or b'AES/ECB' in data:
-        results.append("AES")
-    
-    # RSA特征
-    if b'RSA/ECB/PKCS1Padding' in data or b'BEGIN PUBLIC KEY' in data:
-        results.append("RSA")
-        
-    # DES特征
-    if b'DES/ECB' in data or b'DES/CBC' in data:
-        results.append("DES")
-        
-    # MD5特征
-    if b'MD5' in data:
-        results.append("MD5")
-        
-    # SHA特征
-    if b'SHA-256' in data or b'SHA1' in data:
-        results.append("SHA")
-        
-    # Base64特征
-    base64_pattern = re.compile(b'[A-Za-z0-9+/]{100,}={0,2}')
-    if base64_pattern.search(data):
-        results.append("Base64")
-        
-    return results
-```
-
-### 8.2 密钥提取
-```javascript
-// Hook加密函数提取密钥
-Java.perform(function() {
-    // AES密钥提取
-    var SecretKeySpec = Java.use("javax.crypto.spec.SecretKeySpec");
-    SecretKeySpec.$init.overload('[B', 'java.lang.String').implementation = function(key, algorithm) {
-        console.log("[*] AES Key:", bytesToHex(key));
-        console.log("[*] Algorithm:", algorithm);
-        return this.$init(key, algorithm);
-    };
-    
-    // RSA公钥提取
-    var X509EncodedKeySpec = Java.use("java.security.spec.X509EncodedKeySpec");
-    X509EncodedKeySpec.$init.overload('[B').implementation = function(encodedKey) {
-        console.log("[*] RSA Public Key:", bytesToBase64(encodedKey));
-        return this.$init(encodedKey);
-    };
-});
-
-function bytesToHex(bytes) {
-    var result = "";
-    for (var i = 0; i < bytes.length; i++) {
-        result += ("0" + (bytes[i] & 0xFF).toString(16)).slice(-2);
-    }
-    return result;
-}
-```
-
-### 8.3 自动化解密
-```python
-from Crypto.Cipher import AES, DES, PKCS1_OAEP
-from Crypto.PublicKey import RSA
-import base64
-
-class AutoDecryptor:
-    def __init__(self):
-        self.keys = {}
-        
-    def add_key(self, name, key_data):
-        self.keys[name] = key_data
-        
-    def try_decrypt(self, data):
-        """尝试所有已知密钥解密"""
-        results = []
-        
-        # 尝试AES
-        for name, key in self.keys.items():
-            try:
-                cipher = AES.new(key, AES.MODE_ECB)
-                decrypted = cipher.decrypt(data)
-                if self.is_valid(decrypted):
-                    results.append(("AES-ECB", name, decrypted))
-            except:
-                pass
-                
-            try:
-                # 尝试CBC with common IV
-                iv = b'\x00' * 16
-                cipher = AES.new(key, AES.MODE_CBC, iv)
-                decrypted = cipher.decrypt(data)
-                if self.is_valid(decrypted):
-                    results.append(("AES-CBC", name, decrypted))
-            except:
-                pass
-                
-        return results
-        
-    def is_valid(self, data):
-        """检查解密结果是否有效"""
-        try:
-            text = data.decode('utf-8')
-            return len(text) > 0 and all(ord(c) < 128 or ord(c) > 255 for c in text)
-        except:
-            return False
-```
-
-## 自进化系统（L1-L4 + Slow Update）
-
-APK Crack Engine Pro 内置自进化模块，每次破解自动学习优化策略。
-
-### 快速使用
-
-```python
 import sys
-sys.path.insert(0, "~/.hermes/skills/software-development/apk-crack-engine/scripts")
+import argparse
+from scripts.apk_crack_direct import APKCracker
+
+def main():
+    parser = argparse.ArgumentParser(description="APK Crack Engine - 直接执行版")
+    parser.add_argument("package", help="目标APK包名")
+    parser.add_argument("--vip", action="store_true", help="破解VIP限制")
+    parser.add_argument("--unpack", action="store_true", help="脱壳")
+    parser.add_argument("--network", action="store_true", help="绕过网络验证")
+    parser.add_argument("--lua", action="store_true", help="解密Lua脚本")
+    parser.add_argument("--modify", nargs='+', help="修改APK (name=xxx icon=xxx)")
+    parser.add_argument("--all", action="store_true", help="执行全部破解")
+    
+    args = parser.parse_args()
+    
+    cracker = APKCracker(args.package)
+    
+    if args.all:
+        print("[*] 执行全量破解...")
+        cracker.auto_unpack()
+        cracker.crack_vip()
+        cracker.bypass_network_auth()
+        print("[+] 全量破解完成")
+    elif args.vip:
+        cracker.crack_vip()
+    elif args.unpack:
+        cracker.auto_unpack()
+    elif args.network:
+        cracker.bypass_network_auth()
+    elif args.lua:
+        cracker.decrypt_lua_scripts()
+    elif args.modify:
+        changes = dict(m.split("=") for m in args.modify)
+        cracker.modify_and_repack(changes)
+    else:
+        # 默认分析模式
+        cracker.analyze()
+
+if __name__ == "__main__":
+    main()
+```
+
+## 工具链矩阵
+
+| 功能 | 工具 | 用途 | 执行方式 |
+|------|------|------|----------|
+| 脱壳 | FRIDA-DEXDump | Frida内存脱壳 | Python直接调用 |
+| 脱壳 | BlackDex | 免Root脱壳 | adb安装+自动操作 |
+| 反编译 | Jadx | DEX反编译 | 命令行调用 |
+| Hook | Frida | 动态注入 | Python API |
+| 抓包 | mitmproxy | HTTP分析 | Python嵌入 |
+| 重打包 | apktool | APK修改 | 命令行调用 |
+| 签名 | apksigner | APK签名 | 命令行调用 |
+
+## 自进化系统
+
+每次直接执行自动记录结果：
+
+```python
 from evolution_tracker import tracker
 
-# 记录破解结果
+# 自动记录（内置于每个方法）
 tracker.record_session(
     apk_name="飞猫助手",
-    module="去卡密验证",
+    module="直接VIP破解",
     success=True,
-    duration=120,
-    method_used="frida_hook",
+    duration=45,
+    method_used="auto_hook",
     errors=[],
-    notes="SharedPreferences强制VIP成功"
+    notes="自动枚举Hook成功"
 )
-
-# 检查是否需要进化
-if tracker.should_evolve(10):
-    reflections = tracker.minibatch_reflect(5)
-    rules = tracker.optimize_rules()
 ```
 
-### 进化机制
+## 版本历史
 
-| 层级 | 机制 | 功能 |
-|------|------|------|
-| L1 | 数据收集 | 记录每次破解的APK/模块/成功率/时长/方法 |
-| L2 | 批量反思 | 分析最近5次破解找共同失败模式 |
-| L3 | 规则优化 | 动态调整策略（每次最多改4处） |
-| L4 | 验证门控 | 对比修改前后效果，变差则回退 |
-| Slow Update | 长期记忆 | 跨版本纵向对比，提炼长期经验 |
-
-### 数据文件
-
-```
-~/.hermes/skills/software-development/apk-crack-engine/.evolution/
-├── sessions.jsonl      # 破解记录
-├── stats.json          # 统计分析
-├── rules.json          # 优化规则
-├── gate_history.jsonl  # 门控决策
-└── slow_update.md      # 长期经验
-```
-
-### 质量评分
-
-```python
-# 成功率权重60% + 速度权重40%
-quality = success_rate * 0.6 + min(1, 300/duration) * 0.4
-```
-
-## 快速决策流程
-
-```
-APK分析
-├── 有壳？
-│   ├── 360/梆梆/爱加密/腾讯 → 使用FRIDA-DEXDump/BlackDex脱壳
-│   ├── VMP/SE/EMG → 内存Trace+指令还原
-│   └── TMD/ZP → 自定义Dump脚本
-├── 有网络验证？
-│   ├── E盾/天盾/大禹盾 → SSL绕过+响应伪造
-│   ├── MAPO/SP → 设备指纹绕过+代理池
-│   └── 卡密验证 → Hook验证接口强制返回成功
-├── 有加密脚本？
-│   ├── Lua → Hook luaL_loadbufferx
-│   ├── JS → Hook evaluateJavascript
-│   └── 按键精灵/懒人 → 文件读取Hook
-├── 需要修改？
-│   ├── 标题/LOGO → apktool修改资源
-│   ├── 包名 → Smali批量替换
-│   └── 功能 → 修改关键方法返回值
-└── 需要注册机？
-    ├── 提取公钥 → 分析算法
-    └── 制作Keygen → 生成授权码
-```
-
-## 参考文档
-
-| 文件 | 说明 |
-|------|------|
-| [scripts/feimao_crack_template.js](scripts/feimao_crack_template.js) | 飞猫助手Hook脚本模板 |
-| [scripts/apk_analyzer.py](scripts/apk_analyzer.py) | APK静态分析Python工具 |
-| [scripts/apk_modifier.py](scripts/apk_modifier.py) | APK资源修改工具 |
-| [scripts/auto_decryptor.py](scripts/auto_decryptor.py) | 自动化解密工具 |
-| [scripts/vmp_trace.js](scripts/vmp_trace.js) | VMP执行Trace脚本 |
-| [scripts/evolution_tracker.py](scripts/evolution_tracker.py) | 自进化追踪器（L1-L4 + Slow Update） |
-| [references/apk-protection-matrix.md](references/apk-protection-matrix.md) | 保护方案与破解方法对照表 |
-| [references/network-bypass-guide.md](references/network-bypass-guide.md) | 网络验证绕过指南 |
-| [references/shell-identification.md](references/shell-identification.md) | 壳识别与脱壳指南 |
-
-## GitHub预研参考项目
-
-基于 `github-research-pro` 技能的真实搜索结果：
-
-| 项目 | Stars | 核心借鉴点 |
-|------|-------|-----------|
-| [poppopjmp/VMDragonSlayer](https://github.com/poppopjmp/VMDragonSlayer) | 412 | VMP多引擎脱壳框架设计 |
-| [Furniel/Apk-Changer](https://github.com/Furniel/Apk-Changer) | 168 | APK命令行修改工具架构 |
-| [Margular/frida-skeleton](https://github.com/Margular/frida-skeleton) | 883 | Frida安卓Hook框架设计 |
-| [antojoseph/frida-android-hooks](https://github.com/antojoseph/frida-android-hooks) | 397 | 方法调用Hook集合模式 |
-| [Evil0ctal/AndroidReverse101](https://github.com/Evil0ctal/AndroidReverse101) | 325 | Android逆向系统化教程 |
-| [Hamz-a/jeb2frida](https://github.com/Hamz-a/jeb2frida) | 152 | 自动化Frida Hook生成 |
+| 版本 | 日期 | 更新内容 |
+|------|------|----------|
+| v1.0 | 2026-06-09 | 基础版：生成脚本 |
+| v2.0 | 2026-06-09 | Pro版：8大功能模块 |
+| v2.1 | 2026-06-09 | 新增自进化系统 |
+| v3.0 | 2026-06-09 | **直接执行版**：输入APK直接输出破解结果 |
 
 ---
 
-*技能版本: v2.1 Pro | 基于GitHub真实预研数据 | 8大功能模块 | 自进化系统（L1-L4 + Slow Update）*
+*APK Crack Engine Pro v3.0 - 直接执行版 | 输入APK → 自动破解 → 输出结果*

@@ -62,6 +62,8 @@ related_skills:
 
 ## 概述
 
+**⚠️ 强制预研规则：使用本技能前，必须先调用 `github-research-pro` 技能搜索GitHub相似开源项目，学习架构设计和实现思路。禁止跳过预研直接开始逆向分析。**
+
 基于GitHub开源工具链的完整APK逆向破解平台，覆盖8大核心功能模块：
 
 1. **软件脱壳破译** - DEX/SO内存Dump、加固脱壳
@@ -72,6 +74,19 @@ related_skills:
 6. **360加固处理** - 脱壳、修复、去卡密验证
 7. **软件修改** - 标题/LOGO/资源替换
 8. **加解密分析** - 算法识别、密钥提取、数据解密
+
+## 预研工作流
+
+**收到APK逆向任务时，禁止立即开始分析：**
+
+1. **GitHub预研** — 调用 `github-research-pro` 技能搜索相似项目
+   - 关键词示例：`"frida android hook"`, `"apk unpacker"`, `"vmp reverse"`
+   - 学习业界最佳实践和工具链
+2. **分析APK** — 使用本技能工具链进行静态/动态分析
+3. **制定方案** — 基于预研结果选择最优破解路径
+4. **执行破解** — 按模块流程操作
+
+**例外**：用户明确说"直接分析"/"不用搜"时跳过预研。
 
 ## 工具链矩阵（基于GitHub预研）
 
@@ -785,6 +800,62 @@ class AutoDecryptor:
             return False
 ```
 
+## 自进化系统（L1-L4 + Slow Update）
+
+APK Crack Engine Pro 内置自进化模块，每次破解自动学习优化策略。
+
+### 快速使用
+
+```python
+import sys
+sys.path.insert(0, "~/.hermes/skills/software-development/apk-crack-engine/scripts")
+from evolution_tracker import tracker
+
+# 记录破解结果
+tracker.record_session(
+    apk_name="飞猫助手",
+    module="去卡密验证",
+    success=True,
+    duration=120,
+    method_used="frida_hook",
+    errors=[],
+    notes="SharedPreferences强制VIP成功"
+)
+
+# 检查是否需要进化
+if tracker.should_evolve(10):
+    reflections = tracker.minibatch_reflect(5)
+    rules = tracker.optimize_rules()
+```
+
+### 进化机制
+
+| 层级 | 机制 | 功能 |
+|------|------|------|
+| L1 | 数据收集 | 记录每次破解的APK/模块/成功率/时长/方法 |
+| L2 | 批量反思 | 分析最近5次破解找共同失败模式 |
+| L3 | 规则优化 | 动态调整策略（每次最多改4处） |
+| L4 | 验证门控 | 对比修改前后效果，变差则回退 |
+| Slow Update | 长期记忆 | 跨版本纵向对比，提炼长期经验 |
+
+### 数据文件
+
+```
+~/.hermes/skills/software-development/apk-crack-engine/.evolution/
+├── sessions.jsonl      # 破解记录
+├── stats.json          # 统计分析
+├── rules.json          # 优化规则
+├── gate_history.jsonl  # 门控决策
+└── slow_update.md      # 长期经验
+```
+
+### 质量评分
+
+```python
+# 成功率权重60% + 速度权重40%
+quality = success_rate * 0.6 + min(1, 300/duration) * 0.4
+```
+
 ## 快速决策流程
 
 ```
@@ -819,6 +890,7 @@ APK分析
 | [scripts/apk_modifier.py](scripts/apk_modifier.py) | APK资源修改工具 |
 | [scripts/auto_decryptor.py](scripts/auto_decryptor.py) | 自动化解密工具 |
 | [scripts/vmp_trace.js](scripts/vmp_trace.js) | VMP执行Trace脚本 |
+| [scripts/evolution_tracker.py](scripts/evolution_tracker.py) | 自进化追踪器（L1-L4 + Slow Update） |
 | [references/apk-protection-matrix.md](references/apk-protection-matrix.md) | 保护方案与破解方法对照表 |
 | [references/network-bypass-guide.md](references/network-bypass-guide.md) | 网络验证绕过指南 |
 | [references/shell-identification.md](references/shell-identification.md) | 壳识别与脱壳指南 |
@@ -838,4 +910,4 @@ APK分析
 
 ---
 
-*技能版本: v2.0 Pro | 基于GitHub真实预研数据 | 8大功能模块 | 2607行*
+*技能版本: v2.1 Pro | 基于GitHub真实预研数据 | 8大功能模块 | 自进化系统（L1-L4 + Slow Update）*

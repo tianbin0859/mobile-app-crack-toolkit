@@ -90,7 +90,7 @@ related_skills:
 name: apk-crack-engine
 ---
 
-# APK Crack Engine Pro - 直接执行版 v5.5
+# APK Crack Engine Pro - 直接执行版 v6.0
 
 ## 核心变更
 
@@ -1315,6 +1315,7 @@ def check_repo_privacy():
 | `references/auto-crack-guide.md` | **授权破解自动化指南** |
 | `references/repo-privacy-guide.md` | **仓库隐私设置指南（强制私有规则）** |
 | `references/gitee-github-api-automation.md` | **Gitee/GitHub API批量操作指南（Token认证、仓库创建、可见性修改）** |
+| `references/elf-encryption-analysis.md` | **ELF加密分析：自定义XOR加密检测、熵分析、Frida运行时提取、多字节XOR破解** |
 | `references/ios-ipa-crack.md` | **iOS IPA破解指南：解压分析、Patch验证、重签名安装** |
 | `references/offline-license-system.md` | **离线授权码系统：无需联网的本地授权验证（生成/验证/iOS集成）** |
 
@@ -1354,7 +1355,7 @@ tracker.record_session(
 | v5.3 | 2026-06-09 | AI Agent五阶段循环(新增感知阶段)；智能环境诊断与自动修复；批量并行破解；破解报告自动生成；常见错误自动修复 |
 | v5.4 | 2026-06-09 | 新增模块六：授权管理与保护；支持卡密生成/验证/机器绑定/期限控制/授权破解；新增8种授权方案分析 |
 | **v5.5** | **2026-06-09** | **新增模块七：网络授权服务器；模块八：授权加密强度升级(AES+RSA混合)；模块九：授权破解自动化(一键分析+绕过)；模块十：仓库隐私管理(强制私有规则)** |
-| **v6.0** | **2026-06-10** | **新增模块十一：iOS IPA破解；模块十二：离线授权码系统；新增ELF/SO库Patch技术；新增批量卡密生成+二维码导出；适用范围扩展至iOS/离线授权** |
+| **v6.1** | **2026-06-11** | **新增ELF加密分析模块：自定义XOR加密检测、熵分析、运行时提取技术；新增实战案例（Jojo范围、Bin1.4.sh）** |
 
 ## 实战案例
 

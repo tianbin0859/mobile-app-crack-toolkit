@@ -1,8 +1,8 @@
 ---
 title: APK Crack Engine Pro
 description: |
-  Use when: 1) 用户要求去除APK收费模块/会员限制 2) 用户要求破解APK授权验证 3) 用户要求逆向分析APK加密逻辑 4) 用户要求绕过APK试用限制或过期检查 5) 用户要求APK脱壳/反混淆/反编译 6) 用户要求破解网络验证(E盾/天盾/MAPO等) 7) 用户要求脚本破译(Lua/JS/按键精灵等) 8) 用户要求360加固脱壳/去卡密 9) 用户要求修改APK标题LOGO/资源 10) 用户要求软件加解密分析 11) 用户要求破解PyInstaller打包的EXE程序 12) 用户要求提取Python程序源码 13) 用户要求破解游戏辅助/自动化脚本
-  直接执行破解（非生成脚本），输入目标自动输出破解结果。覆盖APK、PyInstaller EXE、压缩包内嵌软件、游戏辅助脚本等。支持脱壳、反混淆、网络验证绕过、脚本破译、加固脱壳、资源修改、加解密、授权绕过全流程。
+  Use when: 1) 用户要求去除APK收费模块/会员限制 2) 用户要求破解APK授权验证 3) 用户要求逆向分析APK加密逻辑 4) 用户要求绕过APK试用限制或过期检查 5) 用户要求APK脱壳/反混淆/反编译 6) 用户要求破解网络验证(E盾/天盾/MAPO等) 7) 用户要求脚本破译(Lua/JS/按键精灵等) 8) 用户要求360加固脱壳/去卡密 9) 用户要求修改APK标题LOGO/资源 10) 用户要求软件加解密分析 11) 用户要求破解PyInstaller打包的EXE程序 12) 用户要求提取Python程序源码 13) 用户要求破解游戏辅助/自动化脚本 14) 用户要求破解iOS IPA应用 15) 用户要求生成离线授权码 16) 用户要求绕过本地授权验证
+  直接执行破解（非生成脚本），输入目标自动输出破解结果。覆盖APK、PyInstaller EXE、压缩包内嵌软件、游戏辅助脚本、iOS IPA、离线授权系统等。支持脱壳、反混淆、网络验证绕过、脚本破译、加固脱壳、资源修改、加解密、授权绕过、iOS重签名、离线授权全流程。
 triggers:
   - apk破解
   - 去除收费
@@ -64,7 +64,12 @@ triggers:
   - 破解工具
   - 破解技能
   - 破解方案
-  - 破解教程
+  - ios破解
+  - ipa破解
+  - 离线授权
+  - 授权码生成
+  - 本地验证
+  - 卡密系统
 tags:
   - reverse-engineering
   - apk
@@ -85,7 +90,7 @@ related_skills:
 name: apk-crack-engine
 ---
 
-# APK Crack Engine Pro - 直接执行版 v5.3
+# APK Crack Engine Pro - 直接执行版 v5.5
 
 ## 核心变更
 
@@ -93,12 +98,150 @@ name: apk-crack-engine
 - ❌ 旧模式：生成Frida脚本 → 用户手动运行
 - ✅ 新模式：输入APK包名 → 自动连接手机 → 直接执行Hook/修改/脱壳
 
+**仓库隐私强制规则：**
+- 🔒 涉及破解/逆向/游戏自动化的项目，**必须设为私有仓库**
+- 详见模块十：仓库隐私管理
+
 **适用范围扩展：**
 - ✅ Android APK (主要目标)
 - ✅ PyInstaller打包的EXE (Python程序逆向)
 - ✅ 压缩包内的脚本/程序 (ZIP/RAR内嵌软件)
 - ✅ 游戏辅助/自动化脚本 (按键精灵/易语言/Auto.js等)
-- ❌ 原生C/C++程序 (需额外工具链)
+- ✅ **Windows原生程序/安装包** (PE/NSIS/Installer/VMP加壳)
+- ✅ **Android ELF共享库** (SO注入型外挂/游戏辅助)
+- ✅ **自解压脚本** (Shell包装层 + gzip压缩ELF)
+- ✅ **iOS IPA应用** (iOS应用安装包破解、重签名)
+- ✅ **离线授权码系统** (无需联网的本地授权验证)
+- ⚠️ 强壳程序 (VMProtect/Themida/Enigma，需脱壳)
+
+**Windows程序处理流程：**
+收到.exe/.msi安装包时：
+1. 识别安装包类型: `file xxx.exe` → PE32/NSIS/Installer
+2. 提取内容: `7z x xxx.exe` 或 `strings xxx.exe | grep`
+3. 分析提取出的主程序
+4. 根据类型选择工具: x64dbg/IDA/dnSpy
+
+**NSIS安装包特征：**
+- `PE32 executable (GUI) Intel 80386, for MS Windows, Nullsoft Installer self-extracting archive`
+- 包含安装脚本和压缩数据
+- 提取后可见 `$PLUGINSDIR`、`$_OUTDIR` 等NSIS目录
+
+**NSIS提取命令：**
+```bash
+# 使用7z提取
+7z x setup.exe -oextracted/
+
+# 或使用unzip (部分NSIS包可用)
+unzip setup.exe -d extracted/
+
+# 查看字符串
+strings setup.exe | grep -i "license\|key\|reg\|serial\|vip\|pro\|premium\|activate"
+```
+
+**自解压脚本分析 (Shell + Gzip ELF)：**
+```bash
+# 识别自解压脚本
+file script.sh
+# 输出: a /system/bin/sh script executable (binary data)
+
+# 提取gzip部分
+# 方法1: 找到gzip魔数(0x1f8b)位置并提取
+tail -c +<offset> script.sh | gzip -cd > extracted_elf
+
+# 方法2: Python提取
+python3 -c "
+import gzip, os
+with open('script.sh', 'rb') as f:
+    data = f.read()
+pos = data.find(b'\x1f\x8b')
+if pos != -1:
+    with open('elf', 'wb') as o:
+        o.write(gzip.decompress(data[pos:]))
+"
+
+# 分析提取的ELF
+file extracted_elf
+# 输出: ELF 64-bit LSB shared object, ARM aarch64
+```
+
+**自解压脚本典型结构：**
+```bash
+#!/system/bin/sh
+# 1. 随机选择可写目录
+folders=($(find /data/ -maxdepth 1 -type d))
+random_folder="${folders[$RANDOM % ${#folders[@]}]}"
+
+# 2. 生成随机文件名
+wenjmz=$(printf "%s_%s" "$(date +%s)" "$$" | sha256sum | head -c 32)
+
+# 3. 提取并解压ELF (从脚本自身提取gzip数据)
+sed -n "$((LINENO+1)),$ p" < "$0" | gzip -cd > "${random_folder}/${wenjmz}"
+
+# 4. 执行ELF
+chmod 700 "$elf_path"
+exec "$elf_path"
+
+# 5. 退出清理 (删除痕迹)
+trap 'rm -f "$elf_path" 2>/dev/null' EXIT
+
+# [GZIP压缩的ELF数据...]
+```
+
+**ELF注入型外挂分析流程：**
+1. 提取ELF文件 (从gzip解压)
+2. 分析ELF头 (readelf/file命令)
+3. 搜索关键字符串 (strings + grep)
+4. 识别注入机制 (ptrace/mmap/mprotect)
+5. 识别游戏Hook点 (OpenGL ES/Vulkan/UE4)
+6. 定位网络验证API
+7. Patch验证逻辑
+
+**ELF Patch方法：**
+```python
+# 修改ELF中的字符串 (如服务器地址)
+with open('extracted_elf', 'rb') as f:
+    data = bytearray(f.read())
+
+# 查找并替换服务器地址
+old_url = b'http://hash.wskxc.cn/\x00'
+new_url = b'127.0.0.1\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+
+pos = data.find(old_url)
+if pos != -1:
+    data[pos:pos+len(new_url)] = new_url
+
+# 重新压缩为gzip
+import gzip
+with open('patched_elf.gz', 'wb') as f:
+    f.write(gzip.compress(bytes(data)))
+
+# 重新打包为sh脚本
+with open('cracked.sh', 'wb') as out:
+    out.write(b'#!/system/bin/sh\n# ...脚本头...\n')
+    out.write(gzip.compress(bytes(data)))
+```
+
+**VMProtect加壳识别：**
+```bash
+# 检测VMP节区
+readpe xxx.exe | grep -i "vmp\|upx\|aspack"
+
+# 或查看节表名
+objdump -h xxx.exe | grep -i "\.vmp\|\.upx"
+```
+- VMP特征节名: `.vmp0`, `.vmp1`, `.vmps0`, `.vmps1`
+- VMP是强壳，需脱壳后才能分析
+- 脱壳工具: VMPDump, Scylla, x64dbg插件
+
+**Electron应用识别：**
+- 包含 `chrome_100_percent.pak`, `LICENSE.electron.txt`
+- 资源目录有 `resources/app.asar`
+- 破解方式: 解压ASAR → 修改JS → 重新打包
+```bash
+npx asar extract resources/app.asar resources/app/
+# 修改JS后
+npx asar pack resources/app/ resources/app.asar
+```
 
 ## 执行架构（AI Agent 五阶段循环 v5.3）
 
@@ -157,6 +300,8 @@ name: apk-crack-engine
 - 用户说"进度" → 立即汇报当前分析/破解状态
 - 用户回复数字(1/2/3) → 直接选择对应选项
 - 用户说"继续" → 继续上一步操作，不重复确认
+- **用户说"自动选择最佳方式" → 不询问，直接分析并执行最优方案，事后汇报结果**
+- **用户说"用破解技能破解收费" → 自动识别文件类型并执行对应破解流程**
 
 **核心特点：**
 - **闭环迭代**：五阶段持续循环，自主纠错、逐步逼近目标
@@ -889,6 +1034,7 @@ bypass = cracker.generate_bypass()
 | **本地文件验证** | 读取本地license文件 | 修改文件/Hook读取 | ⭐ |
 | **SharedPreferences** | 存储在SP中 | Hook getBoolean | ⭐ |
 | **网络API验证** | 请求服务器验证 | 抓包改响应/Hosts劫持 | ⭐⭐⭐ |
+| **URL字符串Patch** | ELF/APK中硬编码服务器地址 | 修改字符串指向本地 | ⭐⭐ |
 | **签名验证** | 校验APK签名 | 重签名/Hook校验 | ⭐⭐ |
 | **机器码绑定** | 绑定MAC/IMEI | 修改机器码/Hook获取 | ⭐⭐ |
 | **时间戳验证** | 检查系统时间 | 修改时间/Hook时间获取 | ⭐ |
@@ -1099,6 +1245,53 @@ results = AutoLicenseCracker.crack_batch(targets)
 AutoLicenseCracker.generate_report(results)
 ```
 
+## 模块十：仓库隐私管理
+
+### 强制规则
+
+涉及破解/逆向/游戏自动化的项目，**必须设为私有仓库**。
+
+### 自动检查清单
+
+```python
+def check_repo_privacy():
+    """检查仓库隐私设置"""
+    sensitive_projects = [
+        "apk-crack-engine",
+        "dnf-gold-bot", 
+        "wendao-gold-bot",
+        "game-memory-module",
+        "hearthstone-auto-bot",
+    ]
+    
+    for project in sensitive_projects:
+        status = check_gitee_visibility(project)
+        if status == "public":
+            print(f"⚠️ {project} 是公开仓库，必须改为私有!")
+            open_repo_settings(project)
+```
+
+### Gitee操作
+
+**创建私有仓库:**
+1. 访问 https://gitee.com/projects/new
+2. 填写仓库名
+3. 选择 **私有仓库** 🔒
+4. 创建
+
+**修改已有仓库:**
+- 访问 `https://gitee.com/<用户名>/<仓库>/settings`
+- 改为私有
+
+### 故障排查
+
+| 错误 | 原因 | 解决 |
+|------|------|------|
+| 404 not found | 仓库不存在 | 先创建仓库 |
+| 登录失效 | API认证过期 | 手动网页操作 |
+
+完整指南: `references/repo-privacy-guide.md`
+
 ## 参考文档
 
 | 文档 | 内容 |
@@ -1110,6 +1303,9 @@ AutoLicenseCracker.generate_report(results)
 | `references/apk-protection-matrix.md` | APK保护方案对比矩阵 |
 | `references/macos-environment-setup.md` | macOS环境配置（brew不可用/网络受限场景） |
 | `references/pyinstaller-exe-reverse.md` | **PyInstaller EXE逆向分析：提取源码、破解授权、重新打包** |
+| `references/windows-pe-analysis.md` | **Windows PE文件分析：加壳识别、静态分析、脱壳流程、Electron破解** |
+| `references/elf-injection-analysis.md` | **ELF注入型外挂分析：自解压脚本提取、SO库Patch、网络验证绕过** |
+| `references/auth-system-design.md` | **授权系统设计：卡密生成/设备绑定/心跳验证/加密传输** |
 | `references/batch-parallel-guide.md` | **批量并行破解指南** |
 | `references/report-generation.md` | **破解报告生成规范** |
 | `references/auto-fix-guide.md` | **环境自动修复手册** |
@@ -1117,6 +1313,10 @@ AutoLicenseCracker.generate_report(results)
 | `references/network-license-server.md` | **网络授权服务器部署指南** |
 | `references/crypto-upgrade.md` | **授权加密强度升级方案** |
 | `references/auto-crack-guide.md` | **授权破解自动化指南** |
+| `references/repo-privacy-guide.md` | **仓库隐私设置指南（强制私有规则）** |
+| `references/gitee-github-api-automation.md` | **Gitee/GitHub API批量操作指南（Token认证、仓库创建、可见性修改）** |
+| `references/ios-ipa-crack.md` | **iOS IPA破解指南：解压分析、Patch验证、重签名安装** |
+| `references/offline-license-system.md` | **离线授权码系统：无需联网的本地授权验证（生成/验证/iOS集成）** |
 
 ## 自进化系统
 
@@ -1153,11 +1353,46 @@ tracker.record_session(
 | v5.2 | 2026-06-09 | 新增triggers覆盖压缩包/脚本/无限期使用等场景；优化实战案例 |
 | v5.3 | 2026-06-09 | AI Agent五阶段循环(新增感知阶段)；智能环境诊断与自动修复；批量并行破解；破解报告自动生成；常见错误自动修复 |
 | v5.4 | 2026-06-09 | 新增模块六：授权管理与保护；支持卡密生成/验证/机器绑定/期限控制/授权破解；新增8种授权方案分析 |
-| **v5.5** | **2026-06-09** | **新增模块七：网络授权服务器；模块八：授权加密强度升级(AES+RSA混合)；模块九：授权破解自动化(一键分析+绕过)** |
+| **v5.5** | **2026-06-09** | **新增模块七：网络授权服务器；模块八：授权加密强度升级(AES+RSA混合)；模块九：授权破解自动化(一键分析+绕过)；模块十：仓库隐私管理(强制私有规则)** |
+| **v6.0** | **2026-06-10** | **新增模块十一：iOS IPA破解；模块十二：离线授权码系统；新增ELF/SO库Patch技术；新增批量卡密生成+二维码导出；适用范围扩展至iOS/离线授权** |
 
 ## 实战案例
 
-### 案例1: PyInstaller EXE破解 (DNF脚本6.02A)
+### 案例1: iOS IPA破解 (撤离者)
+
+**目标**: 破解iOS游戏辅助收费验证
+**类型**: iOS IPA应用 (含dylib动态库)
+**验证方式**: 网络授权 + 本地验证
+
+**破解步骤**:
+1. 解压IPA → 提取Payload
+2. 分析dylib → 定位授权验证函数
+3. Patch服务器地址 → 指向本地
+4. 重签名 → 使用个人证书
+5. 安装测试 → TrollStore/Esign
+
+**破解效果**:
+- ✅ 网络验证已绕过
+- ✅ 本地授权已解锁
+- ✅ 全功能可用
+
+### 案例2: 离线授权码生成 (撤离者)
+
+**目标**: 为iOS游戏辅助生成离线授权码
+**类型**: 离线授权系统
+
+**实现功能**:
+1. 生成加密授权码 (AES-256 + HMAC)
+2. Base32格式化 (XXXX-XXXX-XXXX)
+3. 批量生成 (CSV导出)
+4. 二维码生成 (扫码输入)
+5. iOS本地验证 (Objective-C++)
+
+**技术栈**:
+- Python: cryptography + qrcode
+- iOS: CommonCrypto + Base32
+
+### 案例3: PyInstaller EXE破解 (DNF脚本6.02A)
 
 **目标**: 破解DNF自动搬砖脚本收费验证
 **类型**: PyInstaller打包的Python程序 (97.4MB)
@@ -1177,7 +1412,7 @@ tracker.record_session(
 - ✅ 可离线使用
 - ✅ 无限期/永久使用
 
-### 案例2: 压缩包内嵌软件破解
+### 案例4: 压缩包内嵌软件破解
 
 **目标**: ZIP压缩包内的收费脚本
 **步骤**:
@@ -1187,7 +1422,7 @@ tracker.record_session(
 4. 修改配置或Patch程序
 5. 重新打包
 
-### 案例3: 游戏辅助脚本破解
+### 案例5: 游戏辅助脚本破解
 
 **目标**: 游戏自动化脚本的会员限制
 **常见类型**:
@@ -1202,6 +1437,24 @@ tracker.record_session(
 - 网络验证绕过
 - 内存Patch
 
+### 案例6: ELF注入型外挂破解 (M7内核3.0)
+
+**目标**: 破解Android ELF注入型外挂的授权验证
+**类型**: 自解压Shell脚本 + gzip压缩ELF
+
+**破解步骤**:
+1. 识别自解压脚本 → file命令
+2. 提取gzip部分 → 定位0x1f8b魔数
+3. 解压ELF → gzip -cd
+4. 分析ELF → strings搜索验证字符串
+5. Patch服务器地址 → 修改硬编码URL
+6. 重新压缩 → gzip + 重新打包sh
+
+**破解效果**:
+- ✅ 网络验证已绕过
+- ✅ 授权检查已禁用
+- ✅ 可离线使用
+
 ---
 
-*APK Crack Engine Pro v5.5 - AI Agent五阶段循环版 | 感知→思考→执行→检查→修正*
+*APK Crack Engine Pro v6.0 - AI Agent五阶段循环版 | 感知→思考→执行→检查→修正 | 仓库隐私强制私有 | iOS/离线授权支持*

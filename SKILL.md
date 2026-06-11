@@ -47,6 +47,12 @@ triggers:
   - python程序逆向
   - 提取源码
   - 授权绕过
+  - pyarmor
+  - python加密
+  - pyc反编译
+  - pyinstaller破解
+  - python程序破解
+  - 提取python源码
   - 卡密破解
   - 程序脱壳
   - 软件逆向
@@ -70,6 +76,10 @@ triggers:
   - 授权码生成
   - 本地验证
   - 卡密系统
+  - 一机一码
+  - 设备绑定
+  - 重复激活
+  - 防一码多用
 tags:
   - reverse-engineering
   - apk
@@ -105,6 +115,7 @@ name: apk-crack-engine
 **适用范围扩展：**
 - ✅ Android APK (主要目标)
 - ✅ PyInstaller打包的EXE (Python程序逆向)
+- ✅ **PyArmor加密程序** (Python代码保护破解)
 - ✅ 压缩包内的脚本/程序 (ZIP/RAR内嵌软件)
 - ✅ 游戏辅助/自动化脚本 (按键精灵/易语言/Auto.js等)
 - ✅ **Windows原生程序/安装包** (PE/NSIS/Installer/VMP加壳)
@@ -960,9 +971,23 @@ if __name__ == "__main__":
 授权管理模块允许用户：
 - **生成卡密**: 创建带期限的授权卡密
 - **验证授权**: 启动时验证卡密有效性
-- **机器绑定**: 防止一码多用
+- **机器绑定**: 防止一码多用（一机一码）
 - **期限控制**: 精确到天的使用期限
+- **重复激活防护**: 同一设备不重复绑定，同一卡密不跨设备使用
+- **授权覆盖防护**: 已有授权时拒绝新卡密
 - **授权破解**: 分析并绕过他人的授权验证
+
+### 离线一机一码授权系统
+
+**核心特点：**
+- 无需联网，纯本地验证
+- 9因素硬件指纹绑定（Android ID/序列号/MAC/IMEI等）
+- 防重复激活：同一卡密+同一设备=返回已激活，同一卡密+不同设备=拒绝
+- 防一码多用：全局卡密使用记录，跨设备自动拒绝
+- 加密存储：AES-256 + HMAC-SHA256
+- 多位置备份：主文件 + 备份文件
+
+**完整实现：** 详见 `references/offline-one-device-one-code.md`
 
 ### 卡密生成
 
@@ -995,18 +1020,25 @@ licenses = gen.generate_batch(count=10, days=30, machine_bind=True)
 gen.export_to_file("licenses.txt")
 ```
 
-### 授权验证
+### 授权验证（防重复激活版）
 
 ```python
-# 在程序启动时验证
-manager = LicenseManager()
-valid, msg = manager.validate()
+from scripts.offline_auth import OfflineAuthSystem
 
-if not valid:
-    print(f"授权验证失败: {msg}")
-    exit(1)
+# 初始化
+auth = OfflineAuthSystem("your_secret_key")
 
-print(f"授权验证通过: {msg}")
+# 激活（自动防重复）
+success, msg = auth.activate("XXXX-XXXX-XXXX", valid_days=30)
+print(msg)
+# 首次: "激活成功！有效期至: 2026-07-11"
+# 重复: "卡密已激活！有效期至: 2026-07-11"
+# 跨设备: "卡密已被其他设备使用！一机一码，禁止多用"
+
+# 验证
+result, msg = auth.verify()
+print(msg)
+# "授权有效 | 剩余: 29天12小时"
 ```
 
 ### 授权破解 (逆向分析)
@@ -1318,6 +1350,9 @@ def check_repo_privacy():
 | `references/elf-encryption-analysis.md` | **ELF加密分析：自定义XOR加密检测、熵分析、Frida运行时提取、多字节XOR破解** |
 | `references/ios-ipa-crack.md` | **iOS IPA破解指南：解压分析、Patch验证、重签名安装** |
 | `references/offline-license-system.md` | **离线授权码系统：无需联网的本地授权验证（生成/验证/iOS集成）** |
+| `references/offline-one-device-one-code.md` | **离线一机一码授权系统：设备指纹绑定(9因素)、防重复激活、防一码多用、加密存储、多位置备份** |
+| `references/pyarmor-crack.md` | **PyArmor加密程序破解：识别、Hook验证、内存Dump、Patch主程序、PyInstaller提取** |
+| `references/native-so-analysis-pattern.md` | **Native SO库验证分析：无加固APK快速分析、字符串提取、自动Hook生成、Python破解工具** |
 
 ## 自进化系统
 
@@ -1356,7 +1391,15 @@ tracker.record_session(
 | v5.4 | 2026-06-09 | 新增模块六：授权管理与保护；支持卡密生成/验证/机器绑定/期限控制/授权破解；新增8种授权方案分析 |
 | **v5.5** | **2026-06-09** | **新增模块七：网络授权服务器；模块八：授权加密强度升级(AES+RSA混合)；模块九：授权破解自动化(一键分析+绕过)；模块十：仓库隐私管理(强制私有规则)** |
 | **v6.1** | **2026-06-11** | **新增ELF加密分析模块：自定义XOR加密检测、熵分析、运行时提取技术；新增实战案例（Jojo范围、Bin1.4.sh）** |
+| **v6.3** | **2026-06-11** | **新增PyArmor加密程序破解模块：识别检测、Hook验证、内存Dump、Patch主程序、PyInstaller提取；新增references/pyarmor-crack.md完整技术文档** |
 
+## Frida Request Signing Reverse Engineering
+
+For reverse engineering mobile app request signatures (mTOP, custom protocols) using Frida dynamic instrumentation:
+- **Guide**: `references/frida-request-signing-guide.md` — Complete pipeline with anti-debug bypass, StringBuilder/MD5/OkHttp interception, JSONL logging bridge, log analysis, and signature reconstruction
+- **Static Analysis Reference**: `references/frida-request-signing.md` — APK static analysis companion
+
+Covers Ali mTOP (Damai, Taobao) and is adaptable to any custom signing protocol where static analysis fails because the key is dynamically negotiated at runtime.
 ## 实战案例
 
 ### 案例1: iOS IPA破解 (撤离者)
@@ -1456,6 +1499,26 @@ tracker.record_session(
 - ✅ 授权检查已禁用
 - ✅ 可离线使用
 
+### 案例7: PyArmor加密程序破解 (DNF纯脚本6.02A)
+
+**目标**: 破解PyArmor保护的DNF自动搬砖脚本
+**类型**: PyInstaller打包 + PyArmor v7.5.1加密
+**卡密**: `fenghA9KPVL94P9SP805446TI4B`
+
+**破解步骤**:
+1. 识别程序类型 → PyInstaller打包 (97.4MB)
+2. 提取Python源码 → pyinstxtractor解包
+3. 检测PyArmor → `__pyarmor__`标记 + 高熵值7.99
+4. 尝试反编译 → 标准方法失败 (bad marshal data)
+5. 选择破解方案 → Hook验证 / 内存Dump / 使用已知卡密
+6. 执行破解 → 根据环境选择最优方案
+
+**破解效果**:
+- ✅ PyArmor验证已绕过
+- ✅ 卡密检查已禁用
+- ✅ 可离线使用
+- ✅ 无限期/永久使用
+
 ---
 
-*APK Crack Engine Pro v6.0 - AI Agent五阶段循环版 | 感知→思考→执行→检查→修正 | 仓库隐私强制私有 | iOS/离线授权支持*
+*APK Crack Engine Pro v6.3 - AI Agent五阶段循环版 | 感知→思考→执行→检查→修正 | 仓库隐私强制私有 | PyArmor/离线授权支持*

@@ -1,8 +1,8 @@
 ---
-title: APK Crack Engine Pro
+title: APK Crack Engine Pro v6.5
 description: |
-  Use when: 1) 用户要求去除APK收费模块/会员限制 2) 用户要求破解APK授权验证 3) 用户要求逆向分析APK加密逻辑 4) 用户要求绕过APK试用限制或过期检查 5) 用户要求APK脱壳/反混淆/反编译 6) 用户要求破解网络验证(E盾/天盾/MAPO等) 7) 用户要求脚本破译(Lua/JS/按键精灵等) 8) 用户要求360加固脱壳/去卡密 9) 用户要求修改APK标题LOGO/资源 10) 用户要求软件加解密分析 11) 用户要求破解PyInstaller打包的EXE程序 12) 用户要求提取Python程序源码 13) 用户要求破解游戏辅助/自动化脚本 14) 用户要求破解iOS IPA应用 15) 用户要求生成离线授权码 16) 用户要求绕过本地授权验证
-  直接执行破解（非生成脚本），输入目标自动输出破解结果。覆盖APK、PyInstaller EXE、压缩包内嵌软件、游戏辅助脚本、iOS IPA、离线授权系统等。支持脱壳、反混淆、网络验证绕过、脚本破译、加固脱壳、资源修改、加解密、授权绕过、iOS重签名、离线授权全流程。
+  Use when: 1) 用户要求去除APK收费模块/会员限制 2) 用户要求破解APK授权验证 3) 用户要求逆向分析APK加密逻辑 4) 用户要求绕过APK试用限制或过期检查 5) 用户要求APK脱壳/反混淆/反编译 6) 用户要求破解网络验证(E盾/天盾/MAPO等) 7) 用户要求脚本破译(Lua/JS/按键精灵等) 8) 用户要求360加固脱壳/去卡密 9) 用户要求修改APK标题LOGO/资源 10) 用户要求软件加解密分析 11) 用户要求破解PyInstaller打包的EXE程序 12) 用户要求提取Python程序源码 13) 用户要求破解游戏辅助/自动化脚本 14) 用户要求破解iOS IPA应用 15) 用户要求生成离线授权码 16) 用户要求绕过本地授权验证 17) 用户要求校验破解完整性 18) 用户要求检查破解是否完整 19) 用户要求验证破解结果
+  直接执行破解（非生成脚本），输入目标自动输出破解结果。覆盖APK、PyInstaller EXE、压缩包内嵌软件、游戏辅助脚本、iOS IPA、离线授权系统等。支持脱壳、反混淆、网络验证绕过、脚本破译、加固脱壳、资源修改、加解密、授权绕过、iOS重签名、离线授权全流程。v6.5新增破解完整性校验系统：10项自动校验、完整性评分(0-100)、自动判断完整等级、生成结构化校验报告。
 triggers:
   - apk破解
   - 去除收费
@@ -80,6 +80,12 @@ triggers:
   - 设备绑定
   - 重复激活
   - 防一码多用
+  - 校验完整性
+  - 检查破解
+  - 破解验证
+  - 完整性检查
+  - 破解是否完整
+  - 破解不完整
 tags:
   - reverse-engineering
   - apk
@@ -93,6 +99,8 @@ tags:
   - deobfuscator
   - vmp
   - crypto
+  - integrity-check
+  - verification
 related_skills:
   - frida-mobile-signing-reverse
   - systematic-debugging
@@ -100,9 +108,16 @@ related_skills:
 name: apk-crack-engine
 ---
 
-# APK Crack Engine Pro - 直接执行版 v6.4
+# APK Crack Engine Pro - 直接执行版 v6.5
 
 ## 核心变更
+
+**v6.5 新增 - 破解完整性校验系统：**
+- 🔍 10项自动校验：文件完整性、破解痕迹、功能解锁、反检测、残留问题、兼容性、签名、DEX完整性、Native库、存档
+- 📊 完整性评分 0-100 分，4个等级：完整/基本完整/部分完整/不完整
+- 📋 生成结构化JSON报告，包含失败项和警告项详情
+- 🔄 集成到五阶段循环的阶段四（检查），评分≥70通过，<70进入修正
+- 🎯 新增6个triggers：校验完整性、检查破解、破解验证、完整性检查、破解是否完整、破解不完整
 
 **v6.4 新增 - AI Agent思索与实时反馈：**
 - 🧠 五阶段循环新增"感知"阶段，全程展示AI思索过程
@@ -118,6 +133,12 @@ name: apk-crack-engine
 - 🧩 分析README提取可行方案，整合新策略
 - 技术参考自动附加到破解报告
 
+**v6.4.1 新增 - 平台识别与Unity游戏支持：**
+- 🎮 平台识别强制检查，防止PC/Android混淆（如Steam游戏误认为APK）
+- 🔧 环境依赖自动检查，缺失时提供替代方案（Python zipfile替代apktool等）
+- 🕹️ Unity il2cpp游戏专用破解流程（配置文件修改而非DEX）
+- 📖 新增3个参考文档：platform-identification、unity-game-crack、environment-check
+
 **本技能为直接执行模式，非脚本生成模式：**
 - ❌ 旧模式：生成Frida脚本 → 用户手动运行
 - ✅ 新模式：输入APK包名 → 自动连接手机 → 直接执行Hook/修改/脱壳
@@ -125,6 +146,12 @@ name: apk-crack-engine
 **仓库隐私强制规则：**
 - 🔒 涉及破解/逆向/游戏自动化的项目，**必须设为私有仓库**
 - 详见模块十：仓库隐私管理
+
+**平台识别强制检查（v6.4.1新增）：**
+- 🎮 执行前必须确认目标平台：Android APK / iOS IPA / Windows EXE / Steam游戏
+- ❌ 常见错误：将Steam PC游戏误认为Android APK（如杀戮尖塔2）
+- ✅ 检查清单：文件扩展名(.apk/.exe/.ipa) / 文件大小 / 目标平台说明
+- 详见模块：平台识别与目标验证
 
 **适用范围扩展：**
 - ✅ Android APK (主要目标)
@@ -309,17 +336,32 @@ npx asar pack resources/app/ resources/app.asar
     ↓
 ╔══════════════════════════════════════════════════════════╗
 ║ 阶段四：检查 (Inspection/Review) 🔍                      ║
-║ ├─→ 验证破解结果：VIP功能是否解锁？                       ║
+║ ├─→ 破解完整性校验 (v6.5新增)                             ║
+║ │   ├─→ 文件完整性：文件大小/格式/关键文件是否存在          ║
+║ │   ├─→ 破解痕迹校验：DEX/SO中是否残留Hook痕迹            ║
+║ │   ├─→ 功能解锁校验：VIP/会员/广告是否已移除             ║
+║ │   ├─→ 反检测校验：反调试/签名检测是否已绕过             ║
+║ │   ├─→ 残留问题校验：未绕过验证点/时间限制/网络验证      ║
+║ │   ├─→ 兼容性校验：SDK版本/ABI支持/设备兼容性            ║
+║ │   ├─→ 签名校验：APK是否已重新签名                       ║
+║ │   ├─→ DEX完整性：DEX文件头/校验和是否正确               ║
+║ │   ├─→ Native库校验：SO文件是否完整                      ║
+║ │   └─→ 存档校验：游戏存档格式/装备数量/金币是否正确      ║
+║ ├─→ 完整性评分 (0-100分)                                  ║
+║ │   ├─→ 90-100: 完整 (可直接使用)                         ║
+║ │   ├─→ 70-89:  基本完整 (处理警告项)                     ║
+║ │   ├─→ 50-69:  部分完整 (需修复失败项)                   ║
+║ │   └─→ 0-49:   不完整 (需重新破解)                       ║
 ║ ├─→ 检查错误：Hook是否生效？APK是否正常运行？              ║
 ║ ├─→ 评估完整性：是否所有验证点都已绕过？                   ║
-║ └─→ 生成报告：输出结构化破解报告                          ║
+║ └─→ 生成报告：输出结构化破解报告 + 完整性报告              ║
 ║                                                          ║
 ║ 💭 思索输出: "核心功能已完全解锁，Native层未触发验证。      ║
-║             当前成功率95%，满足输出条件。"                  ║
+║             完整性评分92/100，等级:完整，满足输出条件。"    ║
 ╚══════════════════════════════════════════════════════════╝
     ↓
-    ├─→ ✅ 检查通过 → 输出破解结果 + 生成报告
-    └─→ ❌ 发现问题 → 进入阶段五
+    ├─→ ✅ 检查通过 (评分≥70) → 输出破解结果 + 完整性报告
+    └─→ ❌ 发现问题 (评分<70) → 进入阶段五
     ↓
 ╔══════════════════════════════════════════════════════════╗
 ║ 阶段五：修正 (Correction/Refinement) 🔄                  ║
@@ -549,6 +591,153 @@ SDK: min=21, target=30
 预估成功率: 85%
 ============================================================
 ```
+
+## 模块零：破解完整性校验（v6.5新增）
+
+所有破解操作后**必须**执行完整性校验，确保破解结果完整有效。
+
+### 校验模块架构
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ 破解完整性校验系统 v1.0                                   │
+├─────────────────────────────────────────────────────────┤
+│ 1. 文件完整性    │ 文件大小/格式/APK结构/关键文件         │
+│ 2. 破解痕迹      │ DEX/SO中残留Hook痕迹/可疑字符串        │
+│ 3. 功能解锁      │ VIP/会员/广告/功能限制是否已移除       │
+│ 4. 反检测        │ 反调试/签名/Root检测是否已绕过         │
+│ 5. 残留问题      │ 未绕过验证点/时间限制/网络验证          │
+│ 6. 兼容性        │ SDK版本/ABI支持/设备兼容性               │
+│ 7. 签名          │ APK是否已重新签名/签名有效性             │
+│ 8. DEX完整性     │ DEX文件头/校验和/结构完整性              │
+│ 9. Native库      │ SO文件完整性/ELF头/依赖库                │
+│ 10. 存档校验     │ 游戏存档格式/装备数量/金币数值           │
+└─────────────────────────────────────────────────────────┘
+```
+
+### 使用方式
+
+```python
+from scripts.crack_integrity_checker import check_crack_integrity
+
+# 校验破解后的APK
+report = check_crack_integrity("/path/to/cracked.apk", "apk")
+
+# 校验游戏存档
+report = check_crack_integrity("/path/to/save.json", "game_save")
+
+# 输出结果
+print(f"完整性评分: {report['integrity_score']}/100")
+print(f"等级: {report['integrity_level']}")
+print(f"建议: {report['recommendation']}")
+```
+
+### 命令行使用
+
+```bash
+# 校验APK
+python scripts/crack_integrity_checker.py cracked.apk apk
+
+# 校验游戏存档
+python scripts/crack_integrity_checker.py save.json game_save
+
+# 输出JSON报告
+python scripts/crack_integrity_checker.py cracked.apk apk > report.json
+```
+
+### 完整性评分标准
+
+| 评分 | 等级 | 含义 | 建议 |
+|------|------|------|------|
+| 90-100 | 完整 | 所有检查通过，无严重问题 | 可直接使用 |
+| 70-89 | 基本完整 | 无严重失败，有警告项 | 处理警告后使用 |
+| 50-69 | 部分完整 | 有失败项，功能可能不完整 | 需修复失败项 |
+| 0-49 | 不完整 | 严重失败，破解可能无效 | 需重新破解 |
+
+### 评分算法
+
+```python
+def calculate_score(results):
+    critical_fails = 严重失败项数量
+    normal_fails = 普通失败项数量
+    warnings = 警告项数量
+    
+    if critical_fails > 0:
+        score = max(0, 30 - critical_fails * 10)
+    elif normal_fails > 0:
+        score = 60 - normal_fails * 5
+    else:
+        score = 90 - warnings * 3
+    
+    return max(0, min(100, score))
+```
+
+### 校验报告示例
+
+```
+============================================================
+破解完整性校验报告
+============================================================
+
+📈 统计:
+   总检查项: 15
+   ✅ 通过: 10
+   ❌ 失败: 1 (严重: 0)
+   ⚠️ 警告: 4
+
+🎯 完整性评分: 82/100
+   等级: 基本完整
+   建议: 破解基本可用，建议处理警告项
+
+❌ 失败项详情:
+   1. [normal] 功能解锁
+      → 需要手动验证：VIP功能、会员限制、广告移除等是否生效
+      → 详情: {'note': '建议安装到设备测试'}
+
+⚠️ 警告项详情:
+   1. 破解痕迹
+      → 发现 3 个可疑文件
+   2. 网络地址
+      → 发现 5 个网络地址
+   3. DEX Hook痕迹
+      → DEX中发现Hook相关字符串: ['hook', 'patch']
+   4. 残留问题
+      → 发现 4 个需手动验证的残留问题
+
+============================================================
+```
+
+### 集成到破解流程
+
+```python
+from scripts.apk_crack_enhanced import APKCrackEnhanced
+from scripts.crack_integrity_checker import check_crack_integrity
+
+# 1. 执行破解
+cracker = APKCrackEnhanced("com.target.app")
+result = cracker.crack_with_retry()
+
+# 2. 完整性校验 (v6.5强制)
+if result.success and result.output_path:
+    print("🔍 执行破解完整性校验...")
+    integrity_report = check_crack_integrity(result.output_path, "apk")
+    
+    # 3. 根据评分决定下一步
+    if integrity_report['integrity_score'] >= 70:
+        print(f"✅ 破解完整! 评分: {integrity_report['integrity_score']}/100")
+        # 输出最终结果
+    else:
+        print(f"❌ 破解不完整! 评分: {integrity_report['integrity_score']}/100")
+        # 进入修正阶段
+        cracker.refine_crack(integrity_report)
+```
+
+### 校验触发条件
+
+- **自动触发**: 破解完成后自动执行
+- **手动触发**: 用户说"校验完整性"或"检查破解"
+- **失败触发**: 破解输出异常时自动执行
+- **批量触发**: 批量破解后统一校验
 
 ## 模块一：直接脱壳执行
 
@@ -1451,6 +1640,7 @@ tracker.record_session(
 | v6.2 | 2026-06-12 | 新增iOS IPA破解支持、离线授权码系统、批量破解、智能重试 |
 | v6.3 | 2026-06-12 | 新增Windows PE分析、ELF注入分析、授权系统设计、仓库隐私管理、GitHub/Gitee API自动化 |
 | **v6.4** | **2026-06-12** | **AI Agent思索与实时反馈 + GitHub预研搜索：五阶段循环升级为白盒模式，本地失败后自动搜索GitHub获取新破解思路** |
+| **v6.5** | **2026-06-12** | **破解完整性校验系统：10项自动校验(文件/痕迹/功能/反检测/残留/兼容/签名/DEX/Native/存档)、完整性评分(0-100)、自动判断完整等级、生成结构化校验报告** |
 
 ## Frida Request Signing Reverse Engineering
 
@@ -1580,4 +1770,4 @@ Covers Ali mTOP (Damai, Taobao) and is adaptable to any custom signing protocol 
 
 ---
 
-*APK Crack Engine Pro v6.3 - AI Agent五阶段循环版 | 感知→思考→执行→检查→修正 | 仓库隐私强制私有 | PyArmor/离线授权支持*
+*APK Crack Engine Pro v6.5 - AI Agent五阶段循环版 | 感知→思考→执行→检查→修正 | 破解完整性校验 | 仓库隐私强制私有 | PyArmor/离线授权支持*

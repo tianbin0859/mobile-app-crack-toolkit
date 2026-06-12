@@ -86,6 +86,18 @@ triggers:
   - 完整性检查
   - 破解是否完整
   - 破解不完整
+  - 虚拟机安装
+  - 模拟器安装
+  - 雷电模拟器
+  - 夜神模拟器
+  - windows虚拟机
+  - pd虚拟机
+  - 虚拟机配置
+  - 模拟器root
+  - 模拟器环境
+  - 虚拟机环境
+  - 模拟器搭建
+  - 虚拟机搭建
 tags:
   - reverse-engineering
   - apk
@@ -105,6 +117,7 @@ related_skills:
   - frida-mobile-signing-reverse
   - systematic-debugging
   - github-research-pro
+  - windows-vm-setup
 name: apk-crack-engine
 ---
 
@@ -438,6 +451,15 @@ Step X/Y: [步骤描述]... [状态图标] ([耗时])
 | **云手机** | 远程ADB连接 | 80-90% | 24小时在线需求 | 快 |
 | **内存Patch** | 程序已运行 | 90-95% | 游戏辅助/脚本 | 快 |
 | **配置修改** | 有配置文件 | 95-99% | 脚本/简单程序 | 极快 |
+
+**Windows虚拟机环境配置（Parallels Desktop）：**
+- 详见 `references/windows-vm-pd-operations.md`
+- 包含：PD共享文件夹、prlctl exec编码问题、文件传递、雷电模拟器安装
+- 关键要点：
+  - 避免通过 `prlctl exec` 传递复杂PowerShell命令（编码问题）
+  - 使用PD共享文件夹传递文件
+  - 在Windows中直接执行PowerShell脚本
+  - 雷电模拟器安装后需手动开启Root权限
 
 ## 智能环境诊断与自动修复
 
@@ -1579,6 +1601,7 @@ def check_repo_privacy():
 | `references/direct-execution-pattern.md` | 直接执行模式设计说明 |
 | `references/apk-protection-matrix.md` | APK保护方案对比矩阵 |
 | `references/macos-environment-setup.md` | macOS环境配置（brew不可用/网络受限场景） |
+| `references/macos-elf-analysis-workaround.md` | **macOS ELF分析工具替代：readelf缺失时的nm/objdump/纯Python方案 + 工具循环防护** |
 | `references/pyinstaller-exe-reverse.md` | **PyInstaller EXE逆向分析：提取源码、破解授权、重新打包** |
 | `references/windows-pe-analysis.md` | **Windows PE文件分析：加壳识别、静态分析、脱壳流程、Electron破解** |
 | `references/elf-injection-analysis.md` | **ELF注入型外挂分析：自解压脚本提取、SO库Patch、网络验证绕过** |
@@ -1592,7 +1615,9 @@ def check_repo_privacy():
 | `references/auto-crack-guide.md` | **授权破解自动化指南** |
 | `references/repo-privacy-guide.md` | **仓库隐私设置指南（强制私有规则）** |
 | `references/gitee-github-api-automation.md` | **Gitee/GitHub API批量操作指南（Token认证、仓库创建、可见性修改）** |
-| `references/elf-encryption-analysis.md` | **ELF加密分析：自定义XOR加密检测、熵分析、Frida运行时提取、多字节XOR破解** |
+- `references/elf-encryption-analysis.md` | **ELF加密分析：自定义XOR加密检测、熵分析、Frida运行时提取、多字节XOR破解** |
+| `references/arkari-obfuscator-detection.md` | **Arkari混淆器检测与处理：特征识别、字符串加密检测、动态Hook策略、实战案例** |
+| `references/windows-vm-pd-operations.md` | **Windows虚拟机PD操作指南：prlctl exec编码问题、共享文件夹、文件传递、雷电模拟器安装** |
 | `references/ios-ipa-crack.md` | **iOS IPA破解指南：解压分析、Patch验证、重签名安装** |
 | `references/offline-license-system.md` | **离线授权码系统：无需联网的本地授权验证（生成/验证/iOS集成）** |
 | `references/offline-one-device-one-code.md` | **离线一机一码授权系统：设备指纹绑定(9因素)、防重复激活、防一码多用、加密存储、多位置备份** |
@@ -1641,6 +1666,9 @@ tracker.record_session(
 | v6.3 | 2026-06-12 | 新增Windows PE分析、ELF注入分析、授权系统设计、仓库隐私管理、GitHub/Gitee API自动化 |
 | **v6.4** | **2026-06-12** | **AI Agent思索与实时反馈 + GitHub预研搜索：五阶段循环升级为白盒模式，本地失败后自动搜索GitHub获取新破解思路** |
 | **v6.5** | **2026-06-12** | **破解完整性校验系统：10项自动校验(文件/痕迹/功能/反检测/残留/兼容/签名/DEX/Native/存档)、完整性评分(0-100)、自动判断完整等级、生成结构化校验报告** |
+| **v6.6** | **2026-06-13** | **新增Windows虚拟机PD操作指南：prlctl exec编码问题、共享文件夹文件传递、雷电模拟器安装配置** |
+| **v6.7** | **2026-06-13** | **更新Windows虚拟机PD操作指南：新增文件锁定问题、Defender防护、后台下载策略、进度监控、prlctl会话错误等实战陷阱** |
+| **v6.9** | **2026-06-13** | **新增macOS ELF分析工具替代方案：readelf缺失时的nm/objdump/纯Python解析方案 + 工具循环防护机制（防止重复调用失败命令）** |
 
 ## Frida Request Signing Reverse Engineering
 

@@ -28,12 +28,48 @@ file program.exe
 pefile分析工具
 ```
 
+## 从ZIP/压缩包提取EXE
+
+PyInstaller程序常被打包在ZIP中分发。当标准解压工具失败时：
+
+### 标准解压
+```bash
+unzip -o archive.zip -d output_dir/
+```
+
+### 当unzip失败时的替代方案
+```bash
+# 错误特征: "invalid compressed data to inflate" / "bad zipfile offset"
+# 解决方案: 使用7z替代
+
+# 7z提取 (支持更多压缩格式和损坏修复)
+7z x archive.zip -ooutput_dir/
+
+# 7z测试完整性
+7z t archive.zip
+
+# 7z列出内容
+7z l archive.zip
+```
+
+### 提取后验证
+```bash
+# 检查提取的EXE
+file output_dir/launcher.exe
+# 预期输出: PE32+ executable (GUI) x86-64, for MS Windows
+
+# 检查_internal目录（PyInstaller onedir模式特征）
+ls output_dir/_internal/
+# 预期: python38.dll, base_library.zip, 各种.pyd/.dll文件
+```
+
 ## 提取Python源码
 
 ### 工具链
 | 工具 | 用途 | 安装 |
 |------|------|------|
 | pyinstxtractor | 提取PyInstaller存档 | `pip install pyinstxtractor` |
+| pyinstxtractor-ng | 增强版提取器 (支持新版PyInstaller) | `pip install pyinstxtractor-ng` |
 | uncompyle6 | 反编译Python 3.8- | `pip install uncompyle6` |
 | decompyle3 | 反编译Python 3.7+ | `pip install decompyle3` |
 | pycdc | 通用反编译器 | 编译安装 |
@@ -58,6 +94,81 @@ pycdc program.exe_extracted/*.pyc
 
 # Step 4: 分析源码，定位验证逻辑
 # 搜索关键词: auth, license, verify, check, key, activate
+```
+
+### 高级：当pyinstxtractor失败时的手动分析
+
+当pyinstxtractor报告"Missing pyinstaller archive"或"Expected magic number 4D454913, got 00000000"时，说明CArchive头被加密、压缩或位于非标准位置。此时需要手动分析：
+
+#### 1. 检查PE overlay/appendix
+```bash
+# 计算PE总大小 vs 实际文件大小
+objdump -h program.exe
+# 计算各节区大小总和，与实际文件大小对比
+# 差值即为overlay（附加数据）大小
+
+# 提取overlay
+python3 -c "
+import pefile
+pe = pefile.PE('program.exe')
+overlay_offset = pe.get_overlay_data_start_offset()
+if overlay_offset:
+    with open('program.exe','rb') as f:
+        f.seek(overlay_offset)
+        overlay = f.read()
+    with open('overlay.bin','wb') as f:
+        f.write(overlay)
+    print(f'Overlay extracted: {len(overlay)} bytes at offset {hex(overlay_offset)}')
+else:
+    print('No overlay found')
+"
+```
+
+#### 2. 搜索zlib压缩流
+```bash
+# PyInstaller常用zlib压缩，搜索zlib头(0x789c)
+python3 -c "
+import zlib
+data = open('program.exe','rb').read()
+# 搜索zlib头
+for i in range(len(data)-2):
+    if data[i:i+2] == b'\x78\x9c':
+        try:
+            decompressed = zlib.decompress(data[i:])
+            print(f'Found zlib stream at {hex(i)}, decompressed {len(decompressed)} bytes')
+            print(f'First 100 bytes: {decompressed[:100]}')
+            break
+        except:
+            pass
+"
+```
+
+#### 3. 检查_internal目录（onedir模式）
+```bash
+# 如果是onedir模式，程序代码可能在_internal目录中
+find program_extracted/_internal -name '*.pyc' -o -name '*.py' 2>/dev/null
+
+# 检查base_library.zip（标准库）
+unzip -l program_extracted/_internal/base_library.zip
+
+# 搜索可能的PYZ或PKG文件
+find program_extracted -name '*.pyz' -o -name '*.pkg' -o -name '*archive*'
+```
+
+#### 4. 使用pyinstxtractor-ng（增强版）
+```bash
+# 安装增强版提取器
+pip install pyinstxtractor-ng
+
+# 尝试提取（支持更多PyInstaller版本和加密变体）
+python -m pyinstxtractor-ng program.exe
+```
+
+#### 5. 内存Dump（最后手段）
+```bash
+# 在Windows虚拟机中运行程序，使用Process Hacker或WinDbg Dump内存
+# 搜索Python字节码特征（如marshal头）
+# 然后使用pycdc反编译Dump出的数据
 ```
 
 ### Python自动化提取脚本
@@ -326,7 +437,28 @@ main()
 # 修改返回值或跳转逻辑
 ```
 
-## 常见问题
+### 检查已破解/预提取的文件
+
+有时分发的ZIP中已包含破解后的文件或预提取的源码：
+
+```bash
+# 检查_internal目录中是否有非标准文件
+find extracted/_internal -type f | sort
+
+# 检查是否有Python源码文件（而非仅.pyc）
+find extracted/_internal -name '*.py' 2>/dev/null
+
+# 检查是否有patch文件或修改标记
+find extracted -name '*.patch' -o -name '*.bak' -o -name '*crack*' -o -name '*patch*'
+
+# 检查配置文件是否已被修改
+grep -r "2099\|9999\|True\|false" extracted/_internal/*.ini extracted/_internal/*.cfg 2>/dev/null
+
+# 检查是否有额外的脚本文件
+find extracted -name '*.lua' -o -name '*.js' -o -name '*.txt' | grep -v base_library
+```
+
+### 常见问题
 
 ### Q: 提取后只有.pyc文件，如何反编译？
 A: 尝试多种工具：uncompyle6 → decompyle3 → pycdc。如果都失败，可能是pyarmor加密，需要专用解密工具。
@@ -351,7 +483,7 @@ A: 检查：
 
 ## 参考案例
 
-### 案例: DNF自动搬砖脚本破解
+### 案例1: DNF自动搬砖脚本破解
 - **目标**: PyInstaller打包的Python程序 (97.4MB)
 - **保护**: Cryptodome加密 + 在线卡密验证
 - **卡密**: `fenghA9KPVL94P9SP805446TI4B`
@@ -361,6 +493,24 @@ A: 检查：
   2. 定位验证函数 (requests.post到验证服务器)
   3. Patch验证函数返回永久授权
   4. 重新打包或直接使用源码运行
+
+### 案例2: 528文件破解 (PyInstaller onedir模式)
+- **目标**: PyInstaller打包的Windows程序 (launcher.exe + _internal目录)
+- **分发**: ZIP压缩包 (337MB，解压后3.8MB EXE + 大量DLL)
+- **环境**: macOS (无法直接运行Windows PE)
+- **技术栈**: 7z提取 + 静态PE分析 + pyinstxtractor-ng
+- **分析过程**:
+  1. `unzip`失败 → 使用`7z x`成功提取（ZIP文件损坏/非标准压缩）
+  2. 识别PyInstaller结构：`launcher.exe` + `_internal/`目录
+  3. `pyinstxtractor`失败（CArchive头缺失/非标准位置）
+  4. 手动分析PE overlay：计算节区大小，提取尾部数据
+  5. 搜索zlib流：在PE文件中寻找压缩数据
+  6. 检查`_internal`目录：确认标准运行时库，无预提取源码
+  7. 结论：需要Windows环境运行后动态分析，或尝试pyinstxtractor-ng
+- **关键教训**: 
+  - 当`unzip`失败时，`7z`是更可靠的替代方案
+  - PyInstaller onedir模式的代码可能在EXE的overlay中，也可能在`_internal`的隐藏文件中
+  - 静态分析无法提取时，需要Windows虚拟机+动态调试
 
 ## 工具推荐
 

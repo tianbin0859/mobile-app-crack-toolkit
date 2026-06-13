@@ -74,7 +74,7 @@ GITHUB_USER = "your-username"
 
 # 敏感项目列表
 SENSITIVE_REPOS = [
-    "apk-crack-engine",
+    "mobile-app-crack-toolkit",
     "dnf-gold-bot",
     "wendao-gold-bot",
     "game-memory-module",

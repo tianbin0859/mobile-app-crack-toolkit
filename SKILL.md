@@ -1,5 +1,5 @@
 ---
-title: APK Crack Engine Pro v6.8
+title: 破解工具箱 v6.8
 description: |
   Use when: 1) 用户要求去除APK收费模块/会员限制 2) 用户要求破解APK授权验证 3) 用户要求逆向分析APK加密逻辑 4) 用户要求绕过APK试用限制或过期检查 5) 用户要求APK脱壳/反混淆/反编译 6) 用户要求破解网络验证(E盾/天盾/MAPO等) 7) 用户要求脚本破译(Lua/JS/按键精灵等) 8) 用户要求360加固脱壳/去卡密 9) 用户要求修改APK标题LOGO/资源 10) 用户要求软件加解密分析 11) 用户要求破解PyInstaller打包的EXE程序 12) 用户要求提取Python程序源码 13) 用户要求破解游戏辅助/自动化脚本 14) 用户要求破解iOS IPA应用 15) 用户要求生成离线授权码 16) 用户要求绕过本地授权验证 17) 用户要求校验破解完整性 18) 用户要求检查破解是否完整 19) 用户要求验证破解结果 20) 用户要求安装Windows虚拟机工具链 21) 用户要求配置模拟器环境 22) 用户要求自动安装Frida/ADB/apktool 23) 用户要求雷电模拟器自动Root配置
   直接执行破解（非生成脚本），输入目标自动输出破解结果。覆盖APK、PyInstaller EXE、压缩包内嵌软件、游戏辅助脚本、iOS IPA、离线授权系统等。支持脱壳、反混淆、网络验证绕过、脚本破译、加固脱壳、资源修改、加解密、授权绕过、iOS重签名、离线授权全流程。v6.5新增破解完整性校验系统：10项自动校验、完整性评分(0-100)、自动判断完整等级、生成结构化校验报告。v6.8新增Windows虚拟机工具链自动安装和模拟器自动配置模块。
@@ -128,7 +128,7 @@ related_skills:
   - systematic-debugging
   - github-research-pro
   - windows-vm-setup
-name: apk-crack-engine
+name: mobile-app-crack-toolkit
 ---
 
 # APK Crack Engine Pro - 直接执行版 v6.5
@@ -432,6 +432,7 @@ Step X/Y: [步骤描述]... [状态图标] ([耗时])
 - 用户说"进度" → 立即汇报当前分析/破解状态
 - 用户回复数字(1/2/3) → 直接选择对应选项
 - 用户说"继续" → 继续上一步操作，不重复确认
+- 用户说"回退" → 撤销/回退到之前的版本/状态（如Git回退、版本回退）
 - **用户说"自动选择最佳方式" → 不询问，直接分析并执行最优方案，事后汇报结果**
 - **用户说"用破解技能破解收费" → 自动识别文件类型并执行对应破解流程**
 
@@ -1566,7 +1567,7 @@ AutoLicenseCracker.generate_report(results)
 def check_repo_privacy():
     """检查仓库隐私设置"""
     sensitive_projects = [
-        "apk-crack-engine",
+        "mobile-app-crack-toolkit",
         "dnf-gold-bot", 
         "wendao-gold-bot",
         "game-memory-module",
@@ -1627,9 +1628,11 @@ def check_repo_privacy():
 | `references/gitee-github-api-automation.md` | **Gitee/GitHub API批量操作指南（Token认证、仓库创建、可见性修改）** |
 - `references/elf-encryption-analysis.md` | **ELF加密分析：自定义XOR加密检测、熵分析、Frida运行时提取、多字节XOR破解** |
 | `references/arkari-obfuscator-detection.md` | **Arkari混淆器检测与处理：特征识别、字符串加密检测、动态Hook策略、实战案例** |
-| `references/windows-vm-pd-operations.md` | **Windows虚拟机PD操作指南：prlctl exec编码问题、共享文件夹、文件传递、雷电模拟器安装** |
+| `references/windows-vm-pd-operations.md` | **Windows虚拟机PD操作指南：prlctl exec编码问题、共享文件夹文件传递、雷电模拟器安装配置、中文文件名处理、SYSTEM账户问题、复杂命令分解、PyInstaller测试方法** |
+| `references/windows-toolchain-auto-setup.md` | **Windows虚拟机工具链自动安装：一键安装Python/ADB/Java/Frida/apktool/Jadx等完整工具链** |
 | `references/windows-toolchain-auto-setup.md` | **Windows虚拟机工具链自动安装：一键安装Python/ADB/Java/Frida/apktool/Jadx等完整工具链** |
 | `references/emulator-auto-config.md` | **模拟器自动配置：雷电模拟器Root自动开启、Frida-server自动部署、ADB自动连接、多开配置** |
+| `references/file-identification-workflow.md` | **文件识别与存在性检查工作流：处理用户口误/记忆偏差、快速分析文件类型、判断破解状态、常见游戏辅助结构分析** |
 | `references/ios-ipa-crack.md` | **iOS IPA破解指南：解压分析、Patch验证、重签名安装** |
 | `references/offline-license-system.md` | **离线授权码系统：无需联网的本地授权验证（生成/验证/iOS集成）** |
 | `references/offline-one-device-one-code.md` | **离线一机一码授权系统：设备指纹绑定(9因素)、防重复激活、防一码多用、加密存储、多位置备份** |
@@ -1682,6 +1685,7 @@ tracker.record_session(
 | **v6.7** | **2026-06-13** | **更新Windows虚拟机PD操作指南：新增文件锁定问题、Defender防护、后台下载策略、进度监控、prlctl会话错误等实战陷阱** |
 | **v6.8** | **2026-06-13** | **新增Windows虚拟机工具链自动安装模块：一键安装Python/ADB/Java/Frida/apktool/Jadx等完整工具链；新增模拟器自动配置模块：雷电模拟器Root自动开启、Frida-server自动部署、ADB自动连接** |
 | **v6.9** | **2026-06-13** | **新增macOS ELF分析工具替代方案：readelf缺失时的nm/objdump/纯Python解析方案 + 工具循环防护机制（防止重复调用失败命令）** |
+| **v6.10** | **2026-06-13** | **新增文件识别与存在性检查工作流：处理用户口误/记忆偏差、快速分析文件类型、判断破解状态、常见游戏辅助结构分析** |
 
 ## Frida Request Signing Reverse Engineering
 

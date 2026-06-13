@@ -107,6 +107,260 @@ sleep 60
 prlctl exec "Windows 11" cmd /c "echo ready"
 ```
 
+### 6. prlctl exec 中文路径编码问题（严重）
+
+**症状：**
+- 通过 `prlctl exec` 传递包含中文路径的命令时，文件名显示为乱码或问号
+- `cmd /c dir` 显示中文文件名为 `????.zip`
+- 无法访问或操作中文命名的文件
+
+**示例：**
+```bash
+# ❌ 错误：中文文件名显示为乱码
+prlctl exec "Windows 11" cmd /c "dir C:\Mac\Home\Desktop"
+# 输出：????.zip  (应为：W工具_破解版.zip)
+
+# ❌ 错误：无法通过中文文件名访问文件
+prlctl exec "Windows 11" cmd /c "copy C:\Mac\Home\Desktop\W工具_破解版.zip C:\test\"
+# 输出：系统找不到指定的文件
+```
+
+**原因：**
+- prlctl exec 通过 shell 传递命令，中文编码在多层传递中丢失
+- Windows cmd 默认使用 GBK/GB2312 编码，而 macOS 使用 UTF-8
+- 编码不一致导致中文文件名无法正确解析
+
+**解决方案：**
+
+**方案A：在macOS端重命名为英文文件名（推荐）**
+```bash
+# 在macOS端将中文文件重命名为英文
+mv "W工具_破解版.zip" "w_tool_cracked.zip"
+
+# 然后通过共享文件夹传递到Windows
+# Windows中即可正常访问
+prlctl exec "Windows 11" cmd /c "dir C:\Mac\Home\Desktop\w_tool_cracked.zip"
+```
+
+**方案B：使用Python subprocess直接调用（绕过shell编码问题）**
+```python
+import subprocess
+
+# 使用Python直接调用prlctl，避免shell编码问题
+result = subprocess.run(
+    ["prlctl", "exec", "Windows 11", "cmd", "/c", "dir", "C:\\Mac\\Home\\Desktop"],
+    capture_output=True,
+    text=True,
+    errors='replace'  # 关键：用?替换无法解码的字符
+)
+print(result.stdout)
+```
+
+**方案C：使用PowerShell替代cmd（编码支持更好）**
+```bash
+# PowerShell对UTF-8支持更好，但仍可能有问题
+prlctl exec "Windows 11" powershell -Command "Get-ChildItem -Path 'C:\Mac\Home\Desktop'"
+```
+
+### 7. 共享文件夹实际路径发现
+
+**症状：**
+- 原以为共享文件夹路径是 `C:\Users\tianbin\Desktop\MacHome\`
+- 实际找不到该路径，或路径不存在
+
+**实际路径：**
+```powershell
+# 在Windows中查看实际挂载的共享文件夹路径
+# 方式1：通过资源管理器地址栏输入
+\\Mac\Home\Desktop
+
+# 方式2：映射为网络驱动器后的路径
+C:\Mac\Home\Desktop
+
+# 方式3：通过PowerShell查看
+Get-ChildItem "C:\Mac\Home\Desktop"
+```
+
+**关键发现：**
+- PD共享文件夹实际挂载为 `C:\Mac\Home\`（不是 `C:\Users\tianbin\Desktop\MacHome\`）
+- 这是通过网络驱动器映射实现的，不是本地文件夹
+- 在cmd中可以直接使用 `C:\Mac\Home\Desktop\文件名`
+
+**验证方法：**
+```bash
+# 在macOS中创建测试文件
+touch ~/Desktop/test_shared_folder.txt
+
+# 在Windows中检查是否能访问
+prlctl exec "Windows 11" cmd /c "dir C:\Mac\Home\Desktop\test_shared_folder.txt"
+# 如果显示文件存在，说明路径正确
+```
+
+### 8. prlctl exec 以 SYSTEM 账户执行
+
+**症状：**
+- `echo %USERPROFILE%` 返回 `C:\WINDOWS\system32\config\systemprofile`
+- 而不是预期的 `C:\Users\tianbin`
+- 环境变量与用户账户不同
+
+**原因：**
+- `prlctl exec` 以 SYSTEM 服务账户运行命令
+- 不是以登录用户（tianbin）身份执行
+- 因此用户目录、环境变量都不同
+
+**影响：**
+- 无法访问用户目录下的配置文件
+- 下载的文件保存在 SYSTEM 目录，用户看不到
+- 环境变量与用户账户不一致
+
+**解决方案：**
+
+**方案A：显式使用绝对路径**
+```bash
+# 不要依赖 %USERPROFILE% 或 %HOME%
+# 使用绝对路径指向用户目录
+prlctl exec "Windows 11" cmd /c "dir C:\Users\tianbin\Desktop"
+```
+
+**方案B：使用共享文件夹路径（不受用户账户影响）**
+```bash
+# 共享文件夹路径与当前用户无关
+prlctl exec "Windows 11" cmd /c "dir C:\Mac\Home\Desktop"
+```
+
+**方案C：在Windows中切换到用户上下文执行**
+```powershell
+# 在Windows PowerShell中执行（以登录用户身份）
+runas /user:tianbin "powershell -Command Get-ChildItem C:\Users\tianbin\Desktop"
+```
+
+### 9. tar 在 Windows 中解压中文文件名出错
+
+**症状：**
+- 使用 `tar xf` 解压包含中文文件名的压缩包时出错
+- 错误：`tar: Error exit delayed from previous errors`
+- 中文文件名显示为乱码，文件无法正确解压
+
+**示例：**
+```bash
+# ❌ 错误：中文文件名解压失败
+prlctl exec "Windows 11" cmd /c "tar xf C:\Mac\Home\Desktop\W工具.zip -C C:\test"
+# 输出：tar: 无法创建符号链接 ... 错误
+```
+
+**原因：**
+- Windows 版本的 tar 对中文文件名支持不佳
+- 编码问题导致文件名解析错误
+
+**解决方案：**
+
+**方案A：在macOS端解压后传递（推荐）**
+```bash
+# 在macOS端解压
+unzip "W工具.zip" -d w_tool_extracted/
+
+# 重命名为英文
+mv w_tool_extracted/"中文文件.txt" w_tool_extracted/"english_file.txt"
+
+# 然后通过共享文件夹传递到Windows
+```
+
+**方案B：使用7z替代tar（对中文支持更好）**
+```bash
+# 在Windows中安装7z后使用
+prlctl exec "Windows 11" cmd /c "7z x C:\Mac\Home\Desktop\W工具.zip -oC:\test"
+```
+
+**方案C：重命名为英文文件名后压缩**
+```bash
+# 在macOS端重命名所有文件为英文
+for f in *.txt; do mv "$f" "file_$(date +%s).txt"; done
+
+# 重新压缩
+zip w_tool_renamed.zip *.txt
+
+# 传递到Windows
+```
+
+### 10. 复杂命令分解为简单步骤
+
+**原则：**
+- 避免通过 `prlctl exec` 传递复杂的多步骤命令
+- 每个 `prlctl exec` 调用只执行一个简单操作
+- 在macOS端用Python脚本编排多个简单步骤
+
+**示例：多步骤文件操作**
+```python
+import subprocess
+import time
+
+def vm_exec(cmd, timeout=30):
+    """在VM中执行简单命令，处理编码问题"""
+    result = subprocess.run(
+        ["prlctl", "exec", "Windows 11"] + cmd.split(),
+        capture_output=True,
+        text=True,
+        errors='replace',
+        timeout=timeout
+    )
+    return result.stdout, result.stderr
+
+# 步骤1：创建目录
+vm_exec("cmd /c mkdir C:\\test")
+
+# 步骤2：复制文件（英文文件名）
+vm_exec("cmd /c copy C:\\Mac\\Home\\Desktop\\w_tool.zip C:\\test\\")
+
+# 步骤3：解压
+vm_exec("cmd /c tar xf C:\\test\\w_tool.zip -C C:\\test\\")
+
+# 步骤4：检查文件
+stdout, _ = vm_exec("cmd /c dir C:\\test\\")
+print(stdout)
+```
+
+**优势：**
+- 每个步骤独立，错误容易定位
+- 避免长命令的编码和转义问题
+- 可以在步骤间添加延迟或检查
+- Python 处理逻辑更清晰
+
+### 11. PyInstaller 程序测试方法
+
+**场景：**
+- 破解后的 PyInstaller 程序需要在 Windows 虚拟机中测试
+- 程序是 GUI 应用，无法直接查看运行结果
+
+**测试方法：**
+
+**方法1：检查 launcher.log（推荐）**
+```bash
+# 运行程序后检查日志文件
+prlctl exec "Windows 11" cmd /c "type C:\\test\\launcher.log"
+
+# 日志内容示例：
+# 2026-06-13 10:30:00 - Launcher started
+# 2026-06-13 10:30:01 - Loading modules...
+# 2026-06-13 10:30:02 - Ready
+```
+
+**方法2：检查进程是否存在**
+```bash
+# 检查程序进程是否启动
+prlctl exec "Windows 11" cmd /c "tasklist | findstr launcher"
+```
+
+**方法3：检查输出文件**
+```bash
+# 检查程序是否生成了预期文件
+prlctl exec "Windows 11" cmd /c "dir C:\\test\\output"
+```
+
+**关键发现：**
+- 不需要实际运行 GUI 程序来验证破解是否成功
+- 检查 launcher.log 即可确认程序是否正常启动
+- 日志中的时间戳和状态信息可以证明程序已执行
+
 ## 解决方案
 
 ### 方案1：使用PD共享文件夹（推荐）

@@ -12,7 +12,7 @@ from typing import List, Dict, Optional
 from datetime import datetime
 
 DEFAULT_EVO_DIR = os.path.expanduser(
-    "~/.hermes/skills/software-development/apk-crack-engine/.evolution"
+    "~/.hermes/skills/software-development/mobile-app-crack-toolkit/.evolution"
 )
 
 SLOW_UPDATE_START = "<!-- SLOW_UPDATE_START -->"

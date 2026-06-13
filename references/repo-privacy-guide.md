@@ -48,7 +48,7 @@ curl -X POST "https://gitee.com/api/v5/user/repos" \
 
 | 项目 | 平台 | 状态 | 操作 |
 |------|------|------|------|
-| apk-crack-engine | Gitee | 待改为私有 | [设置](https://gitee.com/tianbinice/apk-crack-engine/settings) |
+| mobile-app-crack-toolkit | Gitee | 待改为私有 | [设置](https://gitee.com/tianbinice/mobile-app-crack-toolkit/settings) |
 | wendao-gold-bot | Gitee | 待改为私有 | [设置](https://gitee.com/tianbinice/wendao-gold-bot/settings) |
 | github-research-pro | Gitee | 待改为私有 | [设置](https://gitee.com/tianbinice/github-research-pro/settings) |
 | dnf-gold-bot | Gitee | 待创建(私有) | [创建](https://gitee.com/projects/new?name=dnf-gold-bot&private=true) |

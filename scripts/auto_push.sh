@@ -4,8 +4,8 @@
 
 set -e
 
-SKILL_DIR="/Users/tianbin/.hermes/skills/software-development/apk-crack-engine"
-LOG_FILE="/Users/tianbin/.hermes/logs/apk-crack-engine-push.log"
+SKILL_DIR="/Users/tianbin/.hermes/skills/software-development/mobile-app-crack-toolkit"
+LOG_FILE="/Users/tianbin/.hermes/logs/mobile-app-crack-toolkit-push.log"
 DATE=$(date '+%Y-%m-%d %H:%M:%S')
 
 # 创建日志目录

@@ -596,9 +596,7 @@ if report.success_rate_estimate > 0.7:
 ### 分析报告示例
 
 ```
-============================================================
 APK深度分析报告
-============================================================
 包名: com.nx.assist
 版本: 2.1.0
 SDK: min=21, target=30
@@ -622,7 +620,6 @@ SDK: min=21, target=30
 
 建议策略: Java层Hook (3个验证点) → SharedPreferences伪造 (2个)
 预估成功率: 85%
-============================================================
 ```
 
 ## 模块零：破解完整性校验（v6.5新增）
@@ -708,9 +705,7 @@ def calculate_score(results):
 ### 校验报告示例
 
 ```
-============================================================
 破解完整性校验报告
-============================================================
 
 📈 统计:
    总检查项: 15
@@ -737,7 +732,6 @@ def calculate_score(results):
    4. 残留问题
       → 发现 4 个需手动验证的残留问题
 
-============================================================
 ```
 
 ### 集成到破解流程
@@ -1633,6 +1627,7 @@ def check_repo_privacy():
 | `references/windows-toolchain-auto-setup.md` | **Windows虚拟机工具链自动安装：一键安装Python/ADB/Java/Frida/apktool/Jadx等完整工具链** |
 | `references/emulator-auto-config.md` | **模拟器自动配置：雷电模拟器Root自动开启、Frida-server自动部署、ADB自动连接、多开配置** |
 | `references/file-identification-workflow.md` | **文件识别与存在性检查工作流：处理用户口误/记忆偏差、快速分析文件类型、判断破解状态、常见游戏辅助结构分析** |
+
 | `references/ios-ipa-crack.md` | **iOS IPA破解指南：解压分析、Patch验证、重签名安装** |
 | `references/offline-license-system.md` | **离线授权码系统：无需联网的本地授权验证（生成/验证/iOS集成）** |
 | `references/offline-one-device-one-code.md` | **离线一机一码授权系统：设备指纹绑定(9因素)、防重复激活、防一码多用、加密存储、多位置备份** |
@@ -1686,6 +1681,7 @@ tracker.record_session(
 | **v6.8** | **2026-06-13** | **新增Windows虚拟机工具链自动安装模块：一键安装Python/ADB/Java/Frida/apktool/Jadx等完整工具链；新增模拟器自动配置模块：雷电模拟器Root自动开启、Frida-server自动部署、ADB自动连接** |
 | **v6.9** | **2026-06-13** | **新增macOS ELF分析工具替代方案：readelf缺失时的nm/objdump/纯Python解析方案 + 工具循环防护机制（防止重复调用失败命令）** |
 | **v6.10** | **2026-06-13** | **新增文件识别与存在性检查工作流：处理用户口误/记忆偏差、快速分析文件类型、判断破解状态、常见游戏辅助结构分析** |
+
 
 ## Frida Request Signing Reverse Engineering
 

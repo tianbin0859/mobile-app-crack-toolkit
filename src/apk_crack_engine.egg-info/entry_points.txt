@@ -1,0 +1,2 @@
+[console_scripts]
+apk-crack = apk_crack_engine.cli.main:app

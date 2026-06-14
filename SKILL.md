@@ -1639,58 +1639,10 @@ def check_repo_privacy():
 | `references/offline-license-system.md` | **离线授权码系统：无需联网的本地授权验证（生成/验证/iOS集成）** |
 | `references/offline-one-device-one-code.md` | **离线一机一码授权系统：设备指纹绑定(9因素)、防重复激活、防一码多用、加密存储、多位置备份** |
 | `references/aliyun-remote-auth-server.md` | **阿里云远程授权控制服务器部署：ECS部署、Web管理面板、公网访问、卡密管理、设备绑定、心跳检测** |
-| `references/local-auth-server-deploy.md` | **本地授权服务器部署：本地运行、Web管理面板、ngrok内网穿透、花生壳DDNS、frp自建** |
 | `references/pyarmor-crack.md` | **PyArmor加密程序破解：识别、Hook验证、内存Dump、Patch主程序、PyInstaller提取** |
 | `references/native-so-analysis-pattern.md` | **Native SO库验证分析：无加固APK快速分析、字符串提取、自动Hook生成、Python破解工具** |
 
-## 模块十一：本地授权服务器部署
-
-### 场景
-
-为破解后的软件搭建替代授权服务器，实现卡密管理、设备绑定、远程激活、心跳检测。
-
-### 部署方式
-
-| 方式 | 适用场景 | 稳定性 | 复杂度 |
-|------|----------|--------|--------|
-| 本地直接运行 | 测试/开发 | 中 | 低 |
-| ngrok内网穿透 | 临时公网访问 | 低（域名变化） | 低 |
-| 花生壳DDNS | 国内稳定访问 | 中 | 中 |
-| frp自建 | 长期稳定 | 高 | 高 |
-
-### 快速启动
-
-```python
-# 启动本地授权服务器
-python w528_auth_server.py
-
-# 后台运行
-nohup python w528_auth_server.py > server.log 2>&1 &
-
-# 启动ngrok内网穿透（后台）
-ngrok http 8080 > ngrok.log 2>&1 &
-```
-
-### Web管理面板
-
-```
-本地: http://127.0.0.1:8080/panel
-公网: https://your-ngrok-url.ngrok-free.dev/panel
-```
-
-功能：卡密生成/列表/启用禁用/统计/设备绑定查看
-
-### 与破解软件联动
-
-1. **修改hosts**：将原始验证服务器指向本地
-2. **Frida Hook**：拦截网络请求重定向到本地服务器
-3. **代理工具**：mitmproxy拦截并转发验证请求
-
-### 完整指南
-
-详见 `references/local-auth-server-deploy.md`
-
-## 模块十二：阿里云远程授权控制服务器部署
+## 模块十一：阿里云远程授权控制服务器部署
 
 ### 场景
 
@@ -1718,11 +1670,11 @@ ngrok http 8080 > ngrok.log 2>&1 &
 
 ### 部署方式
 
+**唯一推荐：阿里云ECS**
+
 | 方式 | 适用场景 | 稳定性 | 域名 |
 |------|----------|--------|------|
-| 阿里云ECS | 国内稳定长期 | 高 | 固定IP |
-| ngrok | 临时测试 | 低（域名变化） | 随机域名 |
-| 花生壳DDNS | 国内动态IP | 中 | 固定域名 |
+| **阿里云ECS** | **国内稳定长期** | **高** | **固定IP** |
 
 ### 快速部署
 
@@ -1824,22 +1776,19 @@ systemctl restart w528-auth
 # 将原始验证服务器指向阿里云
 你的阿里云IP  115.159.3.176
 你的阿里云IP  111.170.163.77
+
+# 刷新DNS缓存
+ipconfig /flushdns
 ```
 
 **2. Frida Hook拦截**
 ```javascript
-// 替换验证服务器地址为你的阿里云IP
+// 替换验证服务器地址为阿里云IP
 Interceptor.attach(connect, {
     onEnter: function(args) {
         // 替换IP为阿里云IP
     }
 });
-```
-
-**3. 代理工具转发**
-```bash
-# mitmproxy拦截并转发验证请求到阿里云
-mitmproxy --mode reverse:http://你的阿里云IP:8080
 ```
 
 ### 卡密分级系统

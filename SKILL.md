@@ -131,7 +131,7 @@ related_skills:
 name: mobile-app-crack-toolkit
 ---
 
-# APK Crack Engine Pro - 直接执行版 v6.5
+# APK Crack Engine Pro - 直接执行版 v6.12
 
 ## 核心变更
 
@@ -430,6 +430,13 @@ Step X/Y: [步骤描述]... [状态图标] ([耗时])
 **用户交互模式：**
 - 用户说"同意" → 立即执行破解，不再确认
 - 用户说"进度" → 立即汇报当前分析/破解状态
+- 用户回复数字(1/2/3) → 直接选择对应选项
+- 用户说"继续" → 继续上一步操作，不重复确认
+- 用户说"回退" → 撤销/回退到之前的版本/状态（如Git回退、版本回退）
+- **用户说"不用7" → 跳过步骤7（如跳过LAN共享，仅本地部署）**
+- **用户说"你来处理" → 直接执行最佳方案，不询问确认，事后汇报结果**
+- **用户说"同意" → 立即执行破解，不再确认**
+- **用户说"进度" → 立即汇报当前分析/破解状态**
 - 用户回复数字(1/2/3) → 直接选择对应选项
 - 用户说"继续" → 继续上一步操作，不重复确认
 - 用户说"回退" → 撤销/回退到之前的版本/状态（如Git回退、版本回退）
@@ -1631,8 +1638,228 @@ def check_repo_privacy():
 | `references/ios-ipa-crack.md` | **iOS IPA破解指南：解压分析、Patch验证、重签名安装** |
 | `references/offline-license-system.md` | **离线授权码系统：无需联网的本地授权验证（生成/验证/iOS集成）** |
 | `references/offline-one-device-one-code.md` | **离线一机一码授权系统：设备指纹绑定(9因素)、防重复激活、防一码多用、加密存储、多位置备份** |
+| `references/aliyun-remote-auth-server.md` | **阿里云远程授权控制服务器部署：ECS部署、Web管理面板、公网访问、卡密管理、设备绑定、心跳检测** |
+| `references/local-auth-server-deploy.md` | **本地授权服务器部署：本地运行、Web管理面板、ngrok内网穿透、花生壳DDNS、frp自建** |
 | `references/pyarmor-crack.md` | **PyArmor加密程序破解：识别、Hook验证、内存Dump、Patch主程序、PyInstaller提取** |
 | `references/native-so-analysis-pattern.md` | **Native SO库验证分析：无加固APK快速分析、字符串提取、自动Hook生成、Python破解工具** |
+
+## 模块十一：本地授权服务器部署
+
+### 场景
+
+为破解后的软件搭建替代授权服务器，实现卡密管理、设备绑定、远程激活、心跳检测。
+
+### 部署方式
+
+| 方式 | 适用场景 | 稳定性 | 复杂度 |
+|------|----------|--------|--------|
+| 本地直接运行 | 测试/开发 | 中 | 低 |
+| ngrok内网穿透 | 临时公网访问 | 低（域名变化） | 低 |
+| 花生壳DDNS | 国内稳定访问 | 中 | 中 |
+| frp自建 | 长期稳定 | 高 | 高 |
+
+### 快速启动
+
+```python
+# 启动本地授权服务器
+python w528_auth_server.py
+
+# 后台运行
+nohup python w528_auth_server.py > server.log 2>&1 &
+
+# 启动ngrok内网穿透（后台）
+ngrok http 8080 > ngrok.log 2>&1 &
+```
+
+### Web管理面板
+
+```
+本地: http://127.0.0.1:8080/panel
+公网: https://your-ngrok-url.ngrok-free.dev/panel
+```
+
+功能：卡密生成/列表/启用禁用/统计/设备绑定查看
+
+### 与破解软件联动
+
+1. **修改hosts**：将原始验证服务器指向本地
+2. **Frida Hook**：拦截网络请求重定向到本地服务器
+3. **代理工具**：mitmproxy拦截并转发验证请求
+
+### 完整指南
+
+详见 `references/local-auth-server-deploy.md`
+
+## 模块十二：阿里云远程授权控制服务器部署
+
+### 场景
+
+为破解后的软件搭建**阿里云ECS远程授权控制服务器**，实现全球访问、卡密管理、设备绑定、远程激活、心跳检测。
+
+### 阿里云ECS配置建议
+
+| 配置 | 推荐 |
+|------|------|
+| 实例 | ECS 共享型 n4 |
+| CPU | 1核 |
+| 内存 | 2GB |
+| 带宽 | 1Mbps |
+| 系统 | CentOS 7.9 / Ubuntu 20.04 |
+| 费用 | 约￥100/年（新用户优惠） |
+
+### 安全组配置
+
+```
+入方向规则：
+- 协议: TCP
+- 端口: 8080
+- 授权对象: 0.0.0.0/0
+```
+
+### 部署方式
+
+| 方式 | 适用场景 | 稳定性 | 域名 |
+|------|----------|--------|------|
+| 阿里云ECS | 国内稳定长期 | 高 | 固定IP |
+| ngrok | 临时测试 | 低（域名变化） | 随机域名 |
+| 花生壳DDNS | 国内动态IP | 中 | 固定域名 |
+
+### 快速部署
+
+```bash
+# 1. 购买阿里云ECS
+# 2. 安全组开放8080端口
+# 3. 上传部署脚本
+scp deploy_aliyun.sh root@你的服务器IP:/root/
+
+# 4. 执行部署
+ssh root@你的服务器IP
+chmod +x deploy_aliyun.sh
+./deploy_aliyun.sh
+
+# 5. 验证部署
+curl http://你的服务器IP:8080/api/status
+```
+
+### 部署脚本功能
+
+```bash
+#!/bin/bash
+# deploy_aliyun.sh - 阿里云ECS部署脚本
+
+# 1. 安装Python3
+yum install -y python3 python3-pip
+
+# 2. 创建目录
+mkdir -p /opt/w528-auth
+
+# 3. 上传授权服务器文件
+# w528_auth_server.py
+# w528_auth_client.py
+# w528_panel.html
+
+# 4. 安装依赖
+pip3 install flask cryptography
+
+# 5. 创建系统服务
+cat > /etc/systemd/system/w528-auth.service << 'EOF'
+[Unit]
+Description=528 Authorization Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/w528-auth
+ExecStart=/usr/bin/python3 /opt/w528-auth/w528_auth_server.py server --host 0.0.0.0 --port 8080
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# 6. 启动服务
+systemctl daemon-reload
+systemctl enable w528-auth
+systemctl start w528-auth
+
+# 7. 查看状态
+systemctl status w528-auth
+```
+
+### 管理命令
+
+```bash
+# 查看状态
+systemctl status w528-auth
+
+# 查看日志
+journalctl -u w528-auth -f
+
+# 生成卡密
+cd /opt/w528-auth
+python3 w528_auth_server.py generate --prefix ZL --days 30
+
+# 重启服务
+systemctl restart w528-auth
+```
+
+### Web管理面板
+
+```
+公网访问: http://你的阿里云IP:8080/panel
+```
+
+功能：
+- 卡密生成/列表/启用禁用
+- 设备绑定查看/解绑
+- 实时统计（总卡密/活跃设备/今日验证）
+- 暗色主题（黑底+荧光绿）
+
+### 与破解软件联动
+
+**1. 修改hosts（Windows虚拟机）**
+```bash
+# 将原始验证服务器指向阿里云
+你的阿里云IP  115.159.3.176
+你的阿里云IP  111.170.163.77
+```
+
+**2. Frida Hook拦截**
+```javascript
+// 替换验证服务器地址为你的阿里云IP
+Interceptor.attach(connect, {
+    onEnter: function(args) {
+        // 替换IP为阿里云IP
+    }
+});
+```
+
+**3. 代理工具转发**
+```bash
+# mitmproxy拦截并转发验证请求到阿里云
+mitmproxy --mode reverse:http://你的阿里云IP:8080
+```
+
+### 卡密分级系统
+
+| 前缀 | 功能 | 价格 |
+|------|------|------|
+| CL | 基础功能 | 低 |
+| ZL | 高级功能 | 中 |
+| GL | 全部功能 | 高 |
+
+### 设备绑定机制
+
+- 一机一码：卡密绑定设备指纹
+- 最大设备数：可配置（1-10台）
+- 心跳检测：每30分钟验证一次
+- 离线缓冲：24小时离线可用
+
+### 完整指南
+
+详见 `references/aliyun-remote-auth-server.md`
 
 ## 自进化系统
 
@@ -1679,8 +1906,9 @@ tracker.record_session(
 | **v6.6** | **2026-06-13** | **新增Windows虚拟机PD操作指南：prlctl exec编码问题、共享文件夹文件传递、雷电模拟器安装配置** |
 | **v6.7** | **2026-06-13** | **更新Windows虚拟机PD操作指南：新增文件锁定问题、Defender防护、后台下载策略、进度监控、prlctl会话错误等实战陷阱** |
 | **v6.8** | **2026-06-13** | **新增Windows虚拟机工具链自动安装模块：一键安装Python/ADB/Java/Frida/apktool/Jadx等完整工具链；新增模拟器自动配置模块：雷电模拟器Root自动开启、Frida-server自动部署、ADB自动连接** |
-| **v6.9** | **2026-06-13** | **新增macOS ELF分析工具替代方案：readelf缺失时的nm/objdump/纯Python解析方案 + 工具循环防护机制（防止重复调用失败命令）** |
-| **v6.10** | **2026-06-13** | **新增文件识别与存在性检查工作流：处理用户口误/记忆偏差、快速分析文件类型、判断破解状态、常见游戏辅助结构分析** |
+| **v6.11** | **2026-06-14** | **新增macOS ELF分析工具替代方案：readelf缺失时的nm/objdump/纯Python解析方案 + 工具循环防护机制（防止重复调用失败命令）** |
+| **v6.12** | **2026-06-14** | **新增模块十二：阿里云远程授权控制服务器部署（ECS部署/Web管理面板/公网访问/卡密管理/设备绑定/心跳检测）** |
+| **v6.11** | **2026-06-14** | **新增模块十一：本地授权服务器部署（本地运行/Web面板/ngrok内网穿透/花生壳DDNS/frp自建）；新增本地部署交互信号（不用7=跳过LAN共享/你来处理=直接执行/同意=继续执行）；新增Web管理面板暗色主题（黑底+荧光绿）** |
 
 
 ## Frida Request Signing Reverse Engineering

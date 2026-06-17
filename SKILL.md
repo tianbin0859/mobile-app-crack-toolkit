@@ -1,8 +1,8 @@
 ---
-title: 破解工具箱 v6.20
+title: 破解工具箱 v7.0
 description: |
   Use when: 1) 用户要求去除APK收费模块/会员限制 2) 用户要求破解APK授权验证 3) 用户要求逆向分析APK加密逻辑 4) 用户要求绕过APK试用限制或过期检查 5) 用户要求APK脱壳/反混淆/反编译 6) 用户要求破解网络验证(E盾/天盾/MAPO等) 7) 用户要求脚本破译(Lua/JS/按键精灵等) 8) 用户要求360加固脱壳/去卡密 9) 用户要求修改APK标题LOGO/资源 10) 用户要求软件加解密分析 11) 用户要求破解PyInstaller打包的EXE程序 12) 用户要求提取Python程序源码 13) 用户要求破解游戏辅助/自动化脚本 14) 用户要求破解iOS IPA应用 15) 用户要求生成离线授权码 16) 用户要求绕过本地授权验证 17) 用户要求校验破解完整性 18) 用户要求检查破解是否完整 19) 用户要求验证破解结果 20) 用户要求部署远程授权服务器 21) 用户要求配置阿里云ECS 22) 用户要求Docker部署授权服务器 23) 用户要求配置Nginx反向代理 24) 用户要求配置SSL/HTTPS 25) 用户要求配置防火墙 26) 用户要求配置系统服务 27) 用户要求配置日志轮转 28) 用户要求远程管理授权服务器
-  直接执行破解（非生成脚本），输入目标自动输出破解结果。覆盖APK、PyInstaller EXE、压缩包内嵌软件、游戏辅助脚本、iOS IPA、离线授权系统、Windows EXE（Themida/HAP保护）、Unity IL2CPP、.NET、Electron、Chrome扩展、Java JAR、固件/IoT等。支持脱壳、反混淆、网络验证绕过、脚本破译、加固脱壳、资源修改、加解密、授权绕过、iOS重签名、离线授权全流程、内存修改、DLL注入进阶、SSL Pinning绕过、云手机批量、AI辅助分析、自动化流水线。v6.5新增破解完整性校验系统：10项自动校验、完整性评分(0-100)、自动判断完整等级、生成结构化校验报告。v6.14新增远程授权服务器部署模块：Docker部署、系统服务配置、Nginx反向代理、SSL/HTTPS、防火墙配置、日志轮转、远程管理CLI工具。v6.15新增Windows EXE破解模块：Themida脱壳（x64dbg+Themidie+ScyllaHide）、HAP SDK网络验证绕过。v6.20新增12个扩展模块：Unity IL2CPP逆向、.NET程序破解、内存修改器框架、DLL注入进阶、Electron/ASAR破解、Chrome扩展逆向、Java JAR逆向、SSL Pinning绕过、云手机/远程真机、AI辅助代码分析、批量自动化流水线、固件/IoT破解。注意：本技能不包含PD虚拟机/模拟器配置内容（用户明确要求删除）。
+  直接执行破解（非生成脚本），输入目标自动输出破解结果。覆盖APK、PyInstaller EXE、压缩包内嵌软件、游戏辅助脚本、iOS IPA、离线授权系统、Windows EXE（Themida/HAP保护）、Unity IL2CPP、.NET、Electron、Chrome扩展、Java JAR、固件/IoT等。支持脱壳、反混淆、网络验证绕过、脚本破译、加固脱壳、资源修改、加解密、授权绕过、iOS重签名、离线授权全流程、内存修改、DLL注入进阶、SSL Pinning绕过、云手机批量、AI辅助分析、自动化流水线。v6.5新增破解完整性校验系统：10项自动校验、完整性评分(0-100)、自动判断完整等级、生成结构化校验报告。v6.14新增远程授权服务器部署模块：Docker部署、系统服务配置、Nginx反向代理、SSL/HTTPS、防火墙配置、日志轮转、远程管理CLI工具。v6.15新增Windows EXE破解模块：Themida脱壳（x64dbg+Themidie+ScyllaHide）、HAP SDK网络验证绕过。v6.20新增12个扩展模块：Unity IL2CPP逆向、.NET程序破解、内存修改器框架、DLL注入进阶、Electron/ASAR破解、Chrome扩展逆向、Java JAR逆向、SSL Pinning绕过、云手机/远程真机、AI辅助代码分析、批量自动化流水线、固件/IoT破解。v7.0全面进化：APK自动脱壳（Frida Dump+JADX）、iOS动态调试（LLDB）、多线程并发（线程池+进度条）、Web实时监控（任务队列+状态流）、插件系统（动态加载+Hook）、配置热更新（文件监听）、日志审计（结构化追踪）、自动化报告（HTML/JSON/Markdown）、Frida-Server自动连接、IDA Pro联动、JADX深度集成。注意：本技能不包含PD虚拟机/模拟器配置内容（用户明确要求删除）。
 triggers:
   - apk破解
   - 去除收费
@@ -218,6 +218,36 @@ triggers:
   - 路由器破解
   - 嵌入式破解
   - 硬件破解
+  - 插件系统
+  - 动态加载
+  - 热更新
+  - 配置重载
+  - 日志审计
+  - 审计日志
+  - 破解报告
+  - 自动化报告
+  - 生成报告
+  - 破解流水线
+  - 批量处理
+  - 多线程破解
+  - 并发破解
+  - 进度监控
+  - 实时状态
+  - 任务队列
+  - 破解队列
+  - frida连接
+  - 自动连接
+  - ida联动
+  - ida集成
+  - jadx集成
+  - 反编译集成
+  - 工具联动
+  - 工具集成
+  - 工具链整合
+  - 破解工具箱
+  - 逆向工具箱
+  - 破解套件
+  - 逆向套件
 tags:
   - reverse-engineering
   - apk
@@ -241,9 +271,24 @@ related_skills:
 name: mobile-app-crack-toolkit
 ---
 
-# APK Crack Engine Pro - 直接执行版 v6.13
+# APK Crack Engine Pro - 直接执行版 v7.0
 
 ## 核心变更
+
+**v7.0 全面进化 - 架构升级与工具集成：**
+- 🚀 APK自动脱壳：Frida Dump + JADX反编译，支持360加固/腾讯乐固/梆梆等
+- 🍎 iOS动态调试：LLDB远程调试 + 符号恢复 + 内存断点
+- ⚡ 多线程并发：线程池 + 实时进度条 + 超时控制 + 批量处理
+- 🌐 Web实时监控：任务队列 + 状态流推送 + 暗色主题管理面板
+- 🔌 插件系统：动态加载 + Hook机制 + 事件驱动扩展
+- 🔄 配置热更新：文件监听 + 自动重载 + 观察者模式
+- 📝 日志审计：结构化追踪 + 分类日志 + 审计报告
+- 📊 自动化报告：HTML/JSON/Markdown三格式 + 暗色主题
+- 🔗 Frida-Server自动连接：USB/Local/Remote三种模式 + 自动启动
+- 🛠️ IDA Pro联动：自动分析 + 脚本执行 + 结果回传
+- 📦 JADX深度集成：APK反编译 + 单类提取 + 方法列表 + 去混淆
+- 🎯 新增30个triggers：插件系统、热更新、日志审计、自动化报告、工具联动等
+- 📦 项目：Crack Engine v2.1.0 (GitHub: tianbin0859/crack-engine)
 
 **v6.5 新增 - 破解完整性校验系统：**
 - 🔍 10项自动校验：文件完整性、破解痕迹、功能解锁、反检测、残留问题、兼容性、签名、DEX完整性、Native库、存档

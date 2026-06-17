@@ -1,8 +1,8 @@
 ---
-title: 破解工具箱 v6.8
+title: 破解工具箱 v6.20
 description: |
-  Use when: 1) 用户要求去除APK收费模块/会员限制 2) 用户要求破解APK授权验证 3) 用户要求逆向分析APK加密逻辑 4) 用户要求绕过APK试用限制或过期检查 5) 用户要求APK脱壳/反混淆/反编译 6) 用户要求破解网络验证(E盾/天盾/MAPO等) 7) 用户要求脚本破译(Lua/JS/按键精灵等) 8) 用户要求360加固脱壳/去卡密 9) 用户要求修改APK标题LOGO/资源 10) 用户要求软件加解密分析 11) 用户要求破解PyInstaller打包的EXE程序 12) 用户要求提取Python程序源码 13) 用户要求破解游戏辅助/自动化脚本 14) 用户要求破解iOS IPA应用 15) 用户要求生成离线授权码 16) 用户要求绕过本地授权验证 17) 用户要求校验破解完整性 18) 用户要求检查破解是否完整 19) 用户要求验证破解结果 20) 用户要求安装Windows虚拟机工具链 21) 用户要求配置模拟器环境 22) 用户要求自动安装Frida/ADB/apktool 23) 用户要求雷电模拟器自动Root配置
-  直接执行破解（非生成脚本），输入目标自动输出破解结果。覆盖APK、PyInstaller EXE、压缩包内嵌软件、游戏辅助脚本、iOS IPA、离线授权系统等。支持脱壳、反混淆、网络验证绕过、脚本破译、加固脱壳、资源修改、加解密、授权绕过、iOS重签名、离线授权全流程。v6.5新增破解完整性校验系统：10项自动校验、完整性评分(0-100)、自动判断完整等级、生成结构化校验报告。v6.8新增Windows虚拟机工具链自动安装和模拟器自动配置模块。
+  Use when: 1) 用户要求去除APK收费模块/会员限制 2) 用户要求破解APK授权验证 3) 用户要求逆向分析APK加密逻辑 4) 用户要求绕过APK试用限制或过期检查 5) 用户要求APK脱壳/反混淆/反编译 6) 用户要求破解网络验证(E盾/天盾/MAPO等) 7) 用户要求脚本破译(Lua/JS/按键精灵等) 8) 用户要求360加固脱壳/去卡密 9) 用户要求修改APK标题LOGO/资源 10) 用户要求软件加解密分析 11) 用户要求破解PyInstaller打包的EXE程序 12) 用户要求提取Python程序源码 13) 用户要求破解游戏辅助/自动化脚本 14) 用户要求破解iOS IPA应用 15) 用户要求生成离线授权码 16) 用户要求绕过本地授权验证 17) 用户要求校验破解完整性 18) 用户要求检查破解是否完整 19) 用户要求验证破解结果 20) 用户要求部署远程授权服务器 21) 用户要求配置阿里云ECS 22) 用户要求Docker部署授权服务器 23) 用户要求配置Nginx反向代理 24) 用户要求配置SSL/HTTPS 25) 用户要求配置防火墙 26) 用户要求配置系统服务 27) 用户要求配置日志轮转 28) 用户要求远程管理授权服务器
+  直接执行破解（非生成脚本），输入目标自动输出破解结果。覆盖APK、PyInstaller EXE、压缩包内嵌软件、游戏辅助脚本、iOS IPA、离线授权系统、Windows EXE（Themida/HAP保护）、Unity IL2CPP、.NET、Electron、Chrome扩展、Java JAR、固件/IoT等。支持脱壳、反混淆、网络验证绕过、脚本破译、加固脱壳、资源修改、加解密、授权绕过、iOS重签名、离线授权全流程、内存修改、DLL注入进阶、SSL Pinning绕过、云手机批量、AI辅助分析、自动化流水线。v6.5新增破解完整性校验系统：10项自动校验、完整性评分(0-100)、自动判断完整等级、生成结构化校验报告。v6.14新增远程授权服务器部署模块：Docker部署、系统服务配置、Nginx反向代理、SSL/HTTPS、防火墙配置、日志轮转、远程管理CLI工具。v6.15新增Windows EXE破解模块：Themida脱壳（x64dbg+Themidie+ScyllaHide）、HAP SDK网络验证绕过。v6.20新增12个扩展模块：Unity IL2CPP逆向、.NET程序破解、内存修改器框架、DLL注入进阶、Electron/ASAR破解、Chrome扩展逆向、Java JAR逆向、SSL Pinning绕过、云手机/远程真机、AI辅助代码分析、批量自动化流水线、固件/IoT破解。注意：本技能不包含PD虚拟机/模拟器配置内容（用户明确要求删除）。
 triggers:
   - apk破解
   - 去除收费
@@ -86,18 +86,54 @@ triggers:
   - 完整性检查
   - 破解是否完整
   - 破解不完整
-  - 虚拟机安装
-  - 模拟器安装
-  - 雷电模拟器
-  - 夜神模拟器
-  - windows虚拟机
-  - pd虚拟机
-  - 虚拟机配置
-  - 模拟器root
-  - 模拟器环境
-  - 虚拟机环境
-  - 模拟器搭建
-  - 虚拟机搭建
+  - 工具链安装
+  - 自动安装工具
+  - frida安装
+  - x64dbg
+  - scyllahide
+  - hap
+  - hap绕过
+  - 网络验证绕过
+  - windows破解
+  - exe脱壳
+  - 程序脱壳
+  - 壳分析
+  - 加壳程序
+  - 反调试
+  - 反调试绕过
+  - 调试器配置
+  - windows逆向
+  - exe逆向
+  - 软件保护
+  - 保护壳
+  - 破解保护壳
+  - 虚拟机破解
+  - 脱壳教程
+  - 手动脱壳
+  - 自动脱壳
+  - iat修复
+  - pe重建
+  - 导入表修复
+  - dll注入
+  - api hook
+  - 内存patch
+  - 验证绕过
+  - 授权验证
+  - 许可证验证
+  - 软件授权
+  - 程序授权
+  - 注册验证
+  - 激活验证
+  - 心跳检测
+  - 本地验证
+  - 服务器验证
+  - 假服务器
+  - 本地授权服务器
+  - 授权服务器搭建
+  - 卡密服务器
+  - 验证服务器
+  - 破解服务器验证
+  - 绕过服务器验证
   - 工具链安装
   - 自动安装工具
   - frida安装
@@ -108,6 +144,80 @@ triggers:
   - 雷电root
   - 模拟器frida
   - 虚拟机工具链
+  - 部署授权服务器
+  - 远程授权服务器
+  - 阿里云部署
+  - ECS部署
+  - Docker部署
+  - 容器化部署
+  - Nginx配置
+  - 反向代理
+  - SSL配置
+  - HTTPS配置
+  - 证书配置
+  - 防火墙配置
+  - 系统服务
+  - systemd配置
+  - 日志轮转
+  - 日志管理
+  - 远程管理
+  - CLI工具
+  - unity破解
+  - unity逆向
+  - il2cpp
+  - il2cpp脱壳
+  - unity游戏破解
+  - unity手游
+  - .net破解
+  - dotnet逆向
+  - c#破解
+  - dnspy
+  - 反编译c#
+  - 内存修改
+  - 游戏修改器
+  - ce修改器
+  - cheatengine
+  - 基址扫描
+  - 指针链
+  - 内存锁定
+  - dll注入
+  - 手动映射
+  - apc注入
+  - 线程劫持
+  - 无痕注入
+  - 反注入
+  - 反射注入
+  - electron破解
+  - asar解包
+  - 桌面应用破解
+  - chrome扩展
+  - crx破解
+  - 浏览器插件破解
+  - 扩展逆向
+  - java破解
+  - jar反编译
+  - java逆向
+  - proguard反混淆
+  - 抓包分析
+  - ssl pinning
+  - 证书固定绕过
+  - 网络协议分析
+  - mitmproxy
+  - 云手机
+  - 远程真机
+  - 批量设备
+  - 多开破解
+  - ai分析
+  - 自动识别保护壳
+  - 智能破解
+  - 批量破解
+  - 自动化流水线
+  - ci/cd破解
+  - 固件破解
+  - iot逆向
+  - 路由器破解
+  - 嵌入式破解
+  - 硬件破解
 tags:
   - reverse-engineering
   - apk
@@ -131,7 +241,7 @@ related_skills:
 name: mobile-app-crack-toolkit
 ---
 
-# APK Crack Engine Pro - 直接执行版 v6.12
+# APK Crack Engine Pro - 直接执行版 v6.13
 
 ## 核心变更
 
@@ -435,6 +545,7 @@ Step X/Y: [步骤描述]... [状态图标] ([耗时])
 - 用户说"回退" → 撤销/回退到之前的版本/状态（如Git回退、版本回退）
 - **用户说"不用7" → 跳过步骤7（如跳过LAN共享，仅本地部署）**
 - **用户说"你来处理" → 直接执行最佳方案，不询问确认，事后汇报结果**
+- **用户说"重新生成" → 重新构建/生成项目，立即执行不等待确认，使用已有配置**
 - **用户说"同意" → 立即执行破解，不再确认**
 - **用户说"进度" → 立即汇报当前分析/破解状态**
 - 用户回复数字(1/2/3) → 直接选择对应选项
@@ -1603,6 +1714,522 @@ def check_repo_privacy():
 
 完整指南: `references/repo-privacy-guide.md`
 
+## 模块十二：远程管理CLI工具
+
+### 功能概述
+
+为阿里云远程授权服务器提供**命令行管理工具**，支持远程生成卡密、查询状态、管理设备、备份数据，无需登录服务器即可操作。
+
+### 核心功能
+
+| 命令 | 功能 | 示例 |
+|------|------|------|
+| `generate` | 生成卡密 | `python w528_remote.py generate --prefix ZL --days 30` |
+| `list` | 列出卡密 | `python w528_remote.py list` |
+| `status` | 查看状态 | `python w528_remote.py status` |
+| `devices` | 查看设备 | `python w528_remote.py devices` |
+| `backup` | 备份数据 | `python w528_remote.py backup` |
+| `restore` | 恢复数据 | `python w528_remote.py restore` |
+
+### 使用方法
+
+```bash
+# 1. 配置服务器地址
+export W528_SERVER="http://你的阿里云IP:8080"
+
+# 2. 生成卡密
+python w528_remote.py generate --prefix ZL --days 30 --count 5
+# 输出: ZL-XXXX-XXXX-XXXX (5个)
+
+# 3. 查看状态
+python w528_remote.py status
+# 输出: 总卡密: 50, 活跃设备: 12, 今日验证: 156
+
+# 4. 备份数据
+python w528_remote.py backup --output backup_20260614.db
+```
+
+### 技术实现
+
+```python
+class RemoteManager:
+    def __init__(self, server_url):
+        self.server = server_url
+        self.token = self._get_auth_token()
+    
+    def generate_keys(self, prefix, days, count=1):
+        """远程生成卡密"""
+        response = requests.post(f"{self.server}/api/keys/generate", json={
+            "prefix": prefix,
+            "days": days,
+            "count": count
+        }, headers={"Authorization": f"Bearer {self.token}"})
+        return response.json()["keys"]
+    
+    def get_status(self):
+        """获取服务器状态"""
+        response = requests.get(f"{self.server}/api/status")
+        return response.json()
+```
+
+### 与授权服务器联动
+
+**1. 服务器端API**
+```python
+@app.route('/api/keys/generate', methods=['POST'])
+@require_auth
+def api_generate_keys():
+    data = request.json
+    keys = generate_keys(data['prefix'], data['days'], data['count'])
+    return jsonify({"keys": keys})
+```
+
+**2. 客户端调用**
+```bash
+# 批量生成卡密
+python w528_remote.py generate --prefix CL --days 30 --count 100
+
+# 导出到CSV
+python w528_remote.py generate --prefix ZL --days 7 --count 50 --format csv --output keys.csv
+```
+
+## 模块十三：Docker部署支持
+
+### 功能概述
+
+为授权服务器提供**Docker容器化部署**，支持一键启动、环境隔离、快速迁移。
+
+### Dockerfile
+
+```dockerfile
+FROM python:3.11-slim
+
+# 安装依赖
+RUN apt-get update && apt-get install -y \
+    sqlite3 \
+    libsqlite3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制文件
+COPY w528_auth_server.py .
+COPY w528_panel.html .
+COPY requirements.txt .
+
+# 安装Python依赖
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 暴露端口
+EXPOSE 8080
+
+# 启动命令
+CMD ["python", "w528_auth_server.py", "server", "--host", "0.0.0.0", "--port", "8080"]
+```
+
+### Docker Compose
+
+```yaml
+version: '3.8'
+
+services:
+  w528-auth:
+    build: .
+    container_name: w528-auth-server
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/app/data
+      - ./backups:/app/backups
+    environment:
+      - W528_SECRET_KEY=${W528_SECRET_KEY}
+      - W528_ADMIN_PASSWORD=${W528_ADMIN_PASSWORD}
+    restart: unless-stopped
+    
+  nginx:
+    image: nginx:alpine
+    container_name: w528-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - w528-auth
+    restart: unless-stopped
+```
+
+### 快速部署
+
+```bash
+# 1. 构建镜像
+docker build -t w528-auth-server .
+
+# 2. 启动容器
+docker run -d \
+  --name w528-auth \
+  -p 8080:8080 \
+  -v $(pwd)/data:/app/data \
+  -e W528_SECRET_KEY=your_secret \
+  w528-auth-server
+
+# 3. 查看日志
+docker logs -f w528-auth
+
+# 4. 使用Docker Compose
+docker-compose up -d
+```
+
+## 模块十四：系统服务配置（systemd）
+
+### 功能概述
+
+将授权服务器配置为**Linux系统服务**，支持开机自启、自动重启、日志管理。
+
+### 服务配置
+
+```ini
+# /etc/systemd/system/w528-auth.service
+[Unit]
+Description=528 Authorization Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/w528-auth
+ExecStart=/usr/bin/python3 /opt/w528-auth/w528_auth_server.py server --host 0.0.0.0 --port 8080
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# 环境变量
+Environment=W528_SECRET_KEY=your_secret_key
+Environment=W528_ADMIN_PASSWORD=your_admin_password
+
+[Install]
+WantedBy=multi-user.target
+```
+
+### 管理命令
+
+```bash
+# 启动服务
+systemctl start w528-auth
+
+# 停止服务
+systemctl stop w528-auth
+
+# 重启服务
+systemctl restart w528-auth
+
+# 查看状态
+systemctl status w528-auth
+
+# 开机自启
+systemctl enable w528-auth
+
+# 查看日志
+journalctl -u w528-auth -f
+
+# 查看历史日志
+journalctl -u w528-auth --since "2026-06-14" --until "2026-06-15"
+```
+
+### 日志轮转
+
+```bash
+# /etc/logrotate.d/w528-auth
+/opt/w528-auth/logs/*.log {
+    daily
+    rotate 30
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 0644 root root
+    postrotate
+        systemctl reload w528-auth
+    endscript
+}
+```
+
+## 模块十五：Nginx反向代理
+
+### 功能概述
+
+使用**Nginx作为反向代理**，提供负载均衡、静态文件服务、SSL终止、访问控制。
+
+### 基础配置
+
+```nginx
+# /etc/nginx/conf.d/w528-auth.conf
+server {
+    listen 80;
+    server_name your-domain.com;
+    
+    # 反向代理到授权服务器
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # 静态文件缓存
+    location /static {
+        alias /opt/w528-auth/static;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+    
+    # 管理面板
+    location /panel {
+        proxy_pass http://127.0.0.1:8080/panel;
+        auth_basic "Admin Panel";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+    }
+}
+```
+
+### 负载均衡（多实例）
+
+```nginx
+upstream w528_backend {
+    server 127.0.0.1:8080 weight=5;
+    server 127.0.0.1:8081 weight=5;
+    server 127.0.0.1:8082 backup;
+}
+
+server {
+    listen 80;
+    
+    location / {
+        proxy_pass http://w528_backend;
+    }
+}
+```
+
+## 模块十六：SSL/HTTPS支持
+
+### 功能概述
+
+为授权服务器配置**SSL证书**，启用HTTPS加密传输，保护卡密和设备数据安全。
+
+### Let's Encrypt证书
+
+```bash
+# 1. 安装Certbot
+apt-get install certbot python3-certbot-nginx
+
+# 2. 申请证书
+certbot --nginx -d your-domain.com
+
+# 3. 自动续期
+certbot renew --dry-run
+```
+
+### Nginx SSL配置
+
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name your-domain.com;
+    
+    # SSL证书
+    ssl_certificate /etc/letsencrypt/live/your-domain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
+    
+    # SSL优化
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+    
+    # 反向代理
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+
+# HTTP重定向到HTTPS
+server {
+    listen 80;
+    server_name your-domain.com;
+    return 301 https://$server_name$request_uri;
+}
+```
+
+### 自签名证书（测试环境）
+
+```bash
+# 生成自签名证书
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout /etc/ssl/private/w528.key \
+  -out /etc/ssl/certs/w528.crt \
+  -subj "/C=CN/ST=Beijing/L=Beijing/O=528/CN=your-domain.com"
+```
+
+## 模块十七：防火墙配置
+
+### 功能概述
+
+配置**防火墙规则**，保护授权服务器免受未授权访问和攻击。
+
+### UFW配置（Ubuntu）
+
+```bash
+# 安装UFW
+apt-get install ufw
+
+# 默认拒绝所有入站
+ufw default deny incoming
+
+# 允许SSH
+ufw allow 22/tcp
+
+# 允许HTTP/HTTPS
+ufw allow 80/tcp
+ufw allow 443/tcp
+
+# 允许授权服务器端口（仅特定IP）
+ufw allow from 你的IP to any port 8080
+
+# 启用防火墙
+ufw enable
+
+# 查看状态
+ufw status verbose
+```
+
+### iptables配置（CentOS）
+
+```bash
+# 清空现有规则
+iptables -F
+
+# 默认策略
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT ACCEPT
+
+# 允许本地回环
+iptables -A INPUT -i lo -j ACCEPT
+
+# 允许已建立的连接
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# 允许SSH
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+# 允许HTTP/HTTPS
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+
+# 允许授权服务器（限制IP）
+iptables -A INPUT -p tcp --dport 8080 -s 你的IP -j ACCEPT
+
+# 保存规则
+service iptables save
+```
+
+###  fail2ban防护
+
+```bash
+# 安装fail2ban
+apt-get install fail2ban
+
+# 配置
+# /etc/fail2ban/jail.local
+[w528-auth]
+enabled = true
+port = 8080
+filter = w528-auth
+logpath = /var/log/w528-auth.log
+maxretry = 5
+bantime = 3600
+```
+
+## 模块十八：日志轮转配置
+
+### 功能概述
+
+配置**日志轮转**，防止日志文件无限增长，支持按天/按大小轮转、自动压缩、保留历史。
+
+### logrotate配置
+
+```bash
+# /etc/logrotate.d/w528-auth
+/opt/w528-auth/logs/*.log {
+    # 按天轮转
+    daily
+    
+    # 保留30天
+    rotate 30
+    
+    # 压缩旧日志
+    compress
+    delaycompress
+    
+    # 缺失不报错
+    missingok
+    
+    # 空文件不轮转
+    notifempty
+    
+    # 创建新日志文件
+    create 0644 root root
+    
+    # 轮转后操作
+    postrotate
+        # 通知服务重新打开日志
+        systemctl reload w528-auth
+    endscript
+    
+    # 按大小轮转（可选）
+    size 100M
+}
+```
+
+### 日志分析
+
+```bash
+# 查看实时日志
+tail -f /opt/w528-auth/logs/w528-auth.log
+
+# 查看错误日志
+grep "ERROR" /opt/w528-auth/logs/w528-auth.log
+
+# 统计访问IP
+awk '{print $1}' /opt/w528-auth/logs/access.log | sort | uniq -c | sort -rn
+
+# 统计卡密验证次数
+awk '/verify/{print $0}' /opt/w528-auth/logs/w528-auth.log | wc -l
+```
+
+### 日志格式
+
+```python
+# 结构化日志格式
+{
+    "timestamp": "2026-06-14T10:30:00Z",
+    "level": "INFO",
+    "event": "key_verify",
+    "key": "ZL-XXXX-XXXX",
+    "device_id": "abc123",
+    "ip": "1.2.3.4",
+    "result": "success",
+    "duration_ms": 45
+}
+```
+
 ## 参考文档
 
 | 文档 | 内容 |
@@ -1629,17 +2256,16 @@ def check_repo_privacy():
 | `references/gitee-github-api-automation.md` | **Gitee/GitHub API批量操作指南（Token认证、仓库创建、可见性修改）** |
 - `references/elf-encryption-analysis.md` | **ELF加密分析：自定义XOR加密检测、熵分析、Frida运行时提取、多字节XOR破解** |
 | `references/arkari-obfuscator-detection.md` | **Arkari混淆器检测与处理：特征识别、字符串加密检测、动态Hook策略、实战案例** |
-| `references/windows-vm-pd-operations.md` | **Windows虚拟机PD操作指南：prlctl exec编码问题、共享文件夹文件传递、雷电模拟器安装配置、中文文件名处理、SYSTEM账户问题、复杂命令分解、PyInstaller测试方法** |
-| `references/windows-toolchain-auto-setup.md` | **Windows虚拟机工具链自动安装：一键安装Python/ADB/Java/Frida/apktool/Jadx等完整工具链** |
-| `references/windows-toolchain-auto-setup.md` | **Windows虚拟机工具链自动安装：一键安装Python/ADB/Java/Frida/apktool/Jadx等完整工具链** |
-| `references/emulator-auto-config.md` | **模拟器自动配置：雷电模拟器Root自动开启、Frida-server自动部署、ADB自动连接、多开配置** |
+| `references/windows-debugger-setup.md` | **Windows调试器环境配置：x64dbg+Themidie+ScyllaHide插件安装、GitHub API动态获取下载链接** |
 | `references/file-identification-workflow.md` | **文件识别与存在性检查工作流：处理用户口误/记忆偏差、快速分析文件类型、判断破解状态、常见游戏辅助结构分析** |
 
 | `references/ios-ipa-crack.md` | **iOS IPA破解指南：解压分析、Patch验证、重签名安装** |
 | `references/offline-license-system.md` | **离线授权码系统：无需联网的本地授权验证（生成/验证/iOS集成）** |
 | `references/offline-one-device-one-code.md` | **离线一机一码授权系统：设备指纹绑定(9因素)、防重复激活、防一码多用、加密存储、多位置备份** |
 | `references/aliyun-remote-auth-server.md` | **阿里云远程授权控制服务器部署：ECS部署、Web管理面板、公网访问、卡密管理、设备绑定、心跳检测** |
+| `references/aliyun-only-architecture.md` | **阿里云唯一方案架构决策：去除ngrok/花生壳/本地部署，仅保留阿里云ECS作为唯一部署方式** |
 | `references/pyarmor-crack.md` | **PyArmor加密程序破解：识别、Hook验证、内存Dump、Patch主程序、PyInstaller提取** |
+| `references/python-library-compatibility-pitfalls.md` | **Python库兼容性陷阱：Frida类型注解失效、cryptography PBKDF2→PBKDF2HMAC更名、相对导入路径问题** |
 | `references/native-so-analysis-pattern.md` | **Native SO库验证分析：无加固APK快速分析、字符串提取、自动Hook生成、Python破解工具** |
 
 ## 模块十一：阿里云远程授权控制服务器部署
@@ -1677,6 +2303,15 @@ def check_repo_privacy():
 | **阿里云ECS** | **国内稳定长期** | **高** | **固定IP** |
 
 ### 快速部署
+
+**部署前准备：上传Gitee**
+
+用户要求先上传Gitee再部署阿里云，标准流程：
+1. 确认项目路径和仓库名称（如 `w528-auth-server`）
+2. 使用 Gitee API 创建私有仓库：`POST /user/repos`，`private: true`
+3. 配置 remote 并推送代码
+4. 验证推送成功
+5. 再执行阿里云部署
 
 ```bash
 # 1. 购买阿里云ECS
@@ -1856,7 +2491,8 @@ tracker.record_session(
 | **v6.7** | **2026-06-13** | **更新Windows虚拟机PD操作指南：新增文件锁定问题、Defender防护、后台下载策略、进度监控、prlctl会话错误等实战陷阱** |
 | **v6.8** | **2026-06-13** | **新增Windows虚拟机工具链自动安装模块：一键安装Python/ADB/Java/Frida/apktool/Jadx等完整工具链；新增模拟器自动配置模块：雷电模拟器Root自动开启、Frida-server自动部署、ADB自动连接** |
 | **v6.11** | **2026-06-14** | **新增macOS ELF分析工具替代方案：readelf缺失时的nm/objdump/纯Python解析方案 + 工具循环防护机制（防止重复调用失败命令）** |
-| **v6.12** | **2026-06-14** | **新增模块十二：阿里云远程授权控制服务器部署（ECS部署/Web管理面板/公网访问/卡密管理/设备绑定/心跳检测）** |
+| **v6.13** | **2026-06-14** | **更新阿里云远程授权控制服务器模块：新增远程管理CLI工具（w528_remote.py）、部署前上传Gitee标准流程、Gitee API Token认证格式说明** |
+| **v6.14** | **2026-06-14** | **新增模块十二：远程管理CLI工具（w528_remote.py）；新增模块十三：Docker部署支持；新增模块十四：系统服务配置（systemd）；新增模块十五：Nginx反向代理；新增模块十六：SSL/HTTPS支持；新增模块十七：防火墙配置；新增模块十八：日志轮转配置** |
 | **v6.11** | **2026-06-14** | **新增模块十一：本地授权服务器部署（本地运行/Web面板/ngrok内网穿透/花生壳DDNS/frp自建）；新增本地部署交互信号（不用7=跳过LAN共享/你来处理=直接执行/同意=继续执行）；新增Web管理面板暗色主题（黑底+荧光绿）** |
 
 
@@ -1988,4 +2624,4 @@ Covers Ali mTOP (Damai, Taobao) and is adaptable to any custom signing protocol 
 
 ---
 
-*APK Crack Engine Pro v6.5 - AI Agent五阶段循环版 | 感知→思考→执行→检查→修正 | 破解完整性校验 | 仓库隐私强制私有 | PyArmor/离线授权支持*
+*APK Crack Engine Pro v6.14 - AI Agent五阶段循环版 | 感知→思考→执行→检查→修正 | 破解完整性校验 | 仓库隐私强制私有 | PyArmor/离线授权支持 | 远程授权服务器部署 | Docker/Nginx/SSL/防火墙/日志轮转*

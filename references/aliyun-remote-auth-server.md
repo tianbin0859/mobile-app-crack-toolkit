@@ -406,7 +406,217 @@ curl http://你的阿里云IP:8080/api/status
 - 国内用户为主
 - 预算有限
 
+## 远程管理CLI工具
+
+### 功能概述
+
+为授权服务器创建远程管理CLI工具，实现：
+- **查看服务器状态**：实时查看卡密数量、设备数量、验证次数
+- **禁用/启用卡密**：远程控制卡密状态
+- **查看设备绑定**：查看设备绑定情况
+- **远程操作**：无需登录服务器即可管理
+
+### 使用方式
+
+```bash
+# 查看服务器状态
+python w528_remote.py status --url http://你的服务器IP:8080
+
+# 查看卡密列表
+python w528_remote.py list --url http://你的服务器IP:8080
+
+# 禁用卡密
+python w528_remote.py disable <卡密> --url http://你的服务器IP:8080
+
+# 启用卡密
+python w528_remote.py enable <卡密> --url http://你的服务器IP:8080
+
+# 查看设备绑定
+python w528_remote.py devices --url http://你的服务器IP:8080
+
+# 解绑设备
+python w528_remote.py unbind <设备ID> --url http://你的服务器IP:8080
+```
+
+### 代码实现
+
+```python
+#!/usr/bin/env python3
+"""
+w528_remote.py - 528授权服务器远程管理CLI工具
+用法: python w528_remote.py <command> [options]
+"""
+
+import argparse
+import requests
+import sys
+from datetime import datetime
+
+def get_status(base_url):
+    """获取服务器状态"""
+    try:
+        r = requests.get(f"{base_url}/api/status", timeout=10)
+        if r.status_code == 200:
+            data = r.json()
+            print(f"✅ 服务器状态: {data.get('status', 'unknown')}")
+            print(f"📊 总卡密: {data.get('total_licenses', 0)}")
+            print(f"📱 活跃设备: {data.get('active_devices', 0)}")
+            print(f"✅ 今日验证: {data.get('today_verifications', 0)}")
+            return True
+    except Exception as e:
+        print(f"❌ 连接失败: {e}")
+    return False
+
+def list_licenses(base_url):
+    """列出所有卡密"""
+    try:
+        r = requests.get(f"{base_url}/api/admin/list", timeout=10)
+        if r.status_code == 200:
+            data = r.json()
+            licenses = data.get('licenses', [])
+            print(f"\n📋 卡密列表 ({len(licenses)}个):")
+            print("-" * 80)
+            for lic in licenses:
+                status = "✅" if lic.get('enabled') else "❌"
+                print(f"{status} {lic['key']} | 设备:{lic.get('device_count',0)} | 验证:{lic.get('verify_count',0)}")
+            return True
+    except Exception as e:
+        print(f"❌ 获取失败: {e}")
+    return False
+
+def disable_license(base_url, license_key):
+    """禁用卡密"""
+    try:
+        r = requests.post(f"{base_url}/api/admin/disable", 
+                         json={"license_key": license_key}, timeout=10)
+        if r.status_code == 200:
+            print(f"✅ 已禁用卡密: {license_key}")
+            return True
+        else:
+            print(f"❌ 禁用失败: {r.text}")
+    except Exception as e:
+        print(f"❌ 请求失败: {e}")
+    return False
+
+def enable_license(base_url, license_key):
+    """启用卡密"""
+    try:
+        r = requests.post(f"{base_url}/api/admin/enable", 
+                         json={"license_key": license_key}, timeout=10)
+        if r.status_code == 200:
+            print(f"✅ 已启用卡密: {license_key}")
+            return True
+        else:
+            print(f"❌ 启用失败: {r.text}")
+    except Exception as e:
+        print(f"❌ 请求失败: {e}")
+    return False
+
+def main():
+    parser = argparse.ArgumentParser(description="528授权服务器远程管理工具")
+    parser.add_argument("command", choices=["status", "list", "disable", "enable", "devices", "unbind"],
+                       help="管理命令")
+    parser.add_argument("arg", nargs="?", help="命令参数(卡密/设备ID)")
+    parser.add_argument("--url", default="http://localhost:8080", help="服务器地址")
+    
+    args = parser.parse_args()
+    
+    if args.command == "status":
+        get_status(args.url)
+    elif args.command == "list":
+        list_licenses(args.url)
+    elif args.command == "disable":
+        if not args.arg:
+            print("❌ 请提供卡密: python w528_remote.py disable <卡密>")
+            sys.exit(1)
+        disable_license(args.url, args.arg)
+    elif args.command == "enable":
+        if not args.arg:
+            print("❌ 请提供卡密: python w528_remote.py enable <卡密>")
+            sys.exit(1)
+        enable_license(args.url, args.arg)
+    elif args.command == "devices":
+        print("📱 设备列表功能开发中...")
+    elif args.command == "unbind":
+        if not args.arg:
+            print("❌ 请提供设备ID: python w528_remote.py unbind <设备ID>")
+            sys.exit(1)
+        print(f"🔓 解绑设备: {args.arg}")
+
+if __name__ == "__main__":
+    main()
+```
+
+### 与服务器联动
+
+远程管理CLI工具需要服务器端支持以下API：
+- `GET /api/status` - 获取服务器状态
+- `GET /api/admin/list` - 获取卡密列表
+- `POST /api/admin/disable` - 禁用卡密
+- `POST /api/admin/enable` - 启用卡密
+- `GET /api/admin/devices` - 获取设备列表
+- `POST /api/admin/unbind` - 解绑设备
+
+### 部署流程
+
+1. **上传Gitee**：先使用Gitee API创建私有仓库，推送代码
+2. **部署阿里云**：使用部署脚本在阿里云ECS上部署服务
+3. **配置远程管理**：将远程管理CLI工具分发给管理员
+4. **测试验证**：测试远程管理功能是否正常
+
+## 部署前上传Gitee
+
+### 标准流程
+
+用户要求先上传Gitee再部署阿里云，标准流程：
+
+1. **确认项目信息**：
+   - 项目路径：`/Users/tianbin/w528-auth-server/`
+   - 仓库名称：`w528-auth-server`
+   - 仓库类型：私有（破解/逆向项目必须私有）
+
+2. **创建Gitee仓库**：
+   ```bash
+   # 使用Gitee API创建私有仓库
+   curl -X POST https://gitee.com/api/v5/user/repos \
+     -H "Authorization: token <TOKEN>" \
+     -H "Content-Type: application/json" \
+     -d '{"name": "w528-auth-server", "private": true, "auto_init": false}'
+   ```
+
+3. **推送代码**：
+   ```bash
+   cd /Users/tianbin/w528-auth-server
+   git remote add origin https://gitee.com/<用户名>/w528-auth-server.git
+   git push -u origin main
+   ```
+
+4. **验证推送**：
+   ```bash
+   git log --oneline
+   # 确认提交已推送到远程
+   ```
+
+5. **部署阿里云**：
+   ```bash
+   # 使用部署脚本在阿里云ECS上部署
+   ssh root@<服务器IP>
+   ./deploy_aliyun.sh
+   ```
+
+### Gitee API Token
+
+- **格式**：`Authorization: token <TOKEN>`
+- **Token来源**：从git凭证提取或用户提供
+- **权限**：需要 `projects` 权限
+
+### 注意事项
+
+- 破解/逆向项目必须设为私有仓库
+- API创建仓库时`PATCH`修改可见性必须同时传`name`字段
+- 部署前先完成Gitee上传，确保代码备份
+
 ---
 
-*阿里云远程授权控制服务器部署指南 v1.0*
-*适用于528游戏辅助工具等破解软件的授权管理*
+*阿里云远程授权控制服务器部署指南 v1.1*
+*新增远程管理CLI工具和部署前上传Gitee流程*

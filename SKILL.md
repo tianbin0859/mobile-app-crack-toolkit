@@ -1,5 +1,5 @@
 ---
-title: 破解工具箱 v8.0
+title: 破解工具箱 v8.1
 description: |
   Use when: 1) 用户要求去除APK收费模块/会员限制 2) 用户要求破解APK授权验证 3) 用户要求逆向分析APK加密逻辑 4) 用户要求绕过APK试用限制或过期检查 5) 用户要求APK脱壳/反混淆/反编译 6) 用户要求破解网络验证(E盾/天盾/MAPO等) 7) 用户要求脚本破译(Lua/JS/按键精灵等) 8) 用户要求360加固脱壳/去卡密 9) 用户要求修改APK标题LOGO/资源 10) 用户要求软件加解密分析 11) 用户要求破解PyInstaller打包的EXE程序 12) 用户要求提取Python程序源码 13) 用户要求破解游戏辅助/自动化脚本 14) 用户要求破解iOS IPA应用 15) 用户要求生成离线授权码 16) 用户要求绕过本地授权验证 17) 用户要求校验破解完整性 18) 用户要求检查破解是否完整 19) 用户要求验证破解结果 20) 用户要求部署远程授权服务器 21) 用户要求配置阿里云ECS 22) 用户要求Docker部署授权服务器 23) 用户要求配置Nginx反向代理 24) 用户要求配置SSL/HTTPS 25) 用户要求配置防火墙 26) 用户要求配置系统服务 27) 用户要求配置日志轮转 28) 用户要求远程管理授权服务器
   直接执行破解（非生成脚本），输入目标自动输出破解结果。覆盖APK、PyInstaller EXE、压缩包内嵌软件、游戏辅助脚本、iOS IPA、离线授权系统、Windows EXE（Themida/HAP保护）、Unity IL2CPP、.NET、Electron、Chrome扩展、Java JAR、固件/IoT等。支持脱壳、反混淆、网络验证绕过、脚本破译、加固脱壳、资源修改、加解密、授权绕过、iOS重签名、离线授权全流程、内存修改、DLL注入进阶、SSL Pinning绕过、云手机批量、AI辅助分析、自动化流水线。v6.5新增破解完整性校验系统：10项自动校验、完整性评分(0-100)、自动判断完整等级、生成结构化校验报告。v6.14新增远程授权服务器部署模块：Docker部署、系统服务配置、Nginx反向代理、SSL/HTTPS、防火墙配置、日志轮转、远程管理CLI工具。v6.15新增Windows EXE破解模块：Themida脱壳（x64dbg+Themidie+ScyllaHide）、HAP SDK网络验证绕过。v6.20新增12个扩展模块：Unity IL2CPP逆向、.NET程序破解、内存修改器框架、DLL注入进阶、Electron/ASAR破解、Chrome扩展逆向、Java JAR逆向、SSL Pinning绕过、云手机/远程真机、AI辅助代码分析、批量自动化流水线、固件/IoT破解。v7.0全面进化：APK自动脱壳（Frida Dump+JADX）、iOS动态调试（LLDB）、多线程并发（线程池+进度条）、Web实时监控（任务队列+状态流）、插件系统（动态加载+Hook）、配置热更新（文件监听）、日志审计（结构化追踪）、自动化报告（HTML/JSON/Markdown）、Frida-Server自动连接、IDA Pro联动、JADX深度集成。v7.5新增5大模块：AI智能分析（保护类型识别+策略推荐）、运行时探索引擎（交互式Frida+实时Hook）、远程设备管理（多设备并发+云手机支持）、反混淆增强引擎（控制流还原+字符串解密）、漏洞扫描模块（组件暴露+安全评分）。CLI命令从8个扩展至18个。注意：本技能不包含PD虚拟机/模拟器配置内容（用户明确要求删除）。
@@ -13,9 +13,11 @@ description: |
 - 🌐 跨平台扩展：Windows/macOS/Linux/iOS/Android全平台统一接口
 - 🔄 实时协作：WebSocket实时同步 → 多人协作破解 → 专家远程协助
 - 🛡️ 预测防护：行为模式识别 → 反调试预测 → 动态对抗策略
-- 📦 项目：Crack Engine v8.0 (GitHub: tianbin0859/crack-engine)
+- 📦 项目：Crack Engine v8.1 (GitHub: tianbin0859/crack-engine)
 - 🎯 新增40个triggers：AI分析、自动化流水线、多Agent、知识图谱、云原生等
-- ⚡ CLI命令从18个扩展至28个
+- ⚡ CLI命令从28个扩展至35个
+- 🦀 新增Rust二进制逆向分析：程序识别、混淆符号还原、rustls TLS分析、证书固定绕过、四层防线分析、熵值分析、失败模式分析
+- 📚 新增参考文档：rust-program-analysis-guide.md、tls-encryption-bypass.md、blackmamba-case-study.md
 triggers:
   - apk破解
   - 去除收费
@@ -292,6 +294,219 @@ triggers:
   - 动态对抗
   - 行为模式识别
   - 智能防护绕过
+  - rust逆向
+  - rust程序
+  - rust二进制
+  - rust分析
+  - rustls
+  - tls加密
+  - 证书固定
+  - 证书绑定
+  - 四层防线
+  - 多层防护
+  - ip校验
+  - ip白名单
+  - 服务器验证
+  - 协议分析
+  - 协议伪造
+  - 二进制协议
+  - 熵值分析
+  - 加密检测
+  - 失败分析
+  - 破解失败
+  - 失败模式
+  - 经验总结
+  - 黑曼巴
+  - 三角洲行动
+  - 游戏辅助破解
+  - 游戏外挂破解
+  - 内核驱动破解
+  - 驱动破解
+  - 反作弊绕过
+  - 反作弊破解
+  - 内存保护绕过
+  - 代码虚拟化
+  - vmp分析
+  - vmp逆向
+  - 虚拟化保护
+  - 虚拟机保护
+  - 强壳分析
+  - 强壳破解
+  - 强壳逆向
+  - 保护壳分析
+  - 保护壳破解
+  - 保护壳逆向
+  - 壳分析
+  - 壳破解
+  - 壳逆向
+  - 脱壳分析
+  - 脱壳破解
+  - 脱壳逆向
+  - 手动脱壳
+  - 自动脱壳
+  - iat修复
+  - pe重建
+  - 导入表修复
+  - dll注入
+  - api hook
+  - 内存patch
+  - 验证绕过
+  - 授权验证
+  - 许可证验证
+  - 软件授权
+  - 程序授权
+  - 注册验证
+  - 激活验证
+  - 心跳检测
+  - 本地验证
+  - 服务器验证
+  - 假服务器
+  - 本地授权服务器
+  - 授权服务器搭建
+  - 卡密服务器
+  - 验证服务器
+  - 破解服务器验证
+  - 绕过服务器验证
+  - 工具链安装
+  - 自动安装工具
+  - frida安装
+  - adb安装
+  - apktool安装
+  - jadx安装
+  - 模拟器自动配置
+  - 雷电root
+  - 模拟器frida
+  - 虚拟机工具链
+  - 部署授权服务器
+  - 远程授权服务器
+  - 阿里云部署
+  - ECS部署
+  - Docker部署
+  - 容器化部署
+  - Nginx配置
+  - 反向代理
+  - SSL配置
+  - HTTPS配置
+  - 证书配置
+  - 防火墙配置
+  - 系统服务
+  - systemd配置
+  - 日志轮转
+  - 日志管理
+  - 远程管理
+  - CLI工具
+  - unity破解
+  - unity逆向
+  - il2cpp
+  - il2cpp脱壳
+  - unity游戏破解
+  - unity手游
+  - .net破解
+  - dotnet逆向
+  - c#破解
+  - dnspy
+  - 反编译c#
+  - 内存修改
+  - 游戏修改器
+  - ce修改器
+  - cheatengine
+  - 基址扫描
+  - 指针链
+  - 内存锁定
+  - dll注入
+  - 手动映射
+  - apc注入
+  - 线程劫持
+  - 无痕注入
+  - 反注入
+  - 反射注入
+  - electron破解
+  - asar解包
+  - 桌面应用破解
+  - chrome扩展
+  - crx破解
+  - 浏览器插件破解
+  - 扩展逆向
+  - java破解
+  - jar反编译
+  - java逆向
+  - proguard反混淆
+  - 抓包分析
+  - ssl pinning
+  - 证书固定绕过
+  - 网络协议分析
+  - mitmproxy
+  - 云手机
+  - 远程真机
+  - 批量设备
+  - 多开破解
+  - ai分析
+  - 自动识别保护壳
+  - 智能破解
+  - 批量破解
+  - 自动化流水线
+  - ci/cd破解
+  - 固件破解
+  - iot逆向
+  - 路由器破解
+  - 嵌入式破解
+  - 硬件破解
+  - 插件系统
+  - 动态加载
+  - 热更新
+  - 配置重载
+  - 日志审计
+  - 审计日志
+  - 破解报告
+  - 自动化报告
+  - 生成报告
+  - 破解流水线
+  - 批量处理
+  - 多线程破解
+  - 并发破解
+  - 进度监控
+  - 实时状态
+  - 任务队列
+  - 破解队列
+  - frida连接
+  - 自动连接
+  - ida联动
+  - ida集成
+  - jadx集成
+  - 反编译集成
+  - 工具联动
+  - 工具集成
+  - 工具链整合
+  - 破解工具箱
+  - 逆向工具箱
+  - 破解套件
+  - 逆向套件
+  - 技能进化
+  - 技能升级
+  - 技能优化
+  - 破解技能进化
+  - 破解技能升级
+  - 破解技能优化
+  - ai语义分析
+  - 自然语言破解
+  - 智能破解策略
+  - 自动化流水线
+  - ci/cd破解
+  - 破解流水线
+  - 多agent协作
+  - 多智能体协作
+  - 协作破解
+  - 知识图谱
+  - 保护壳特征库
+  - 验证模式图谱
+  - 云原生部署
+  - kubernetes破解
+  - 弹性伸缩破解
+  - 跨平台破解
+  - 全平台破解
+  - 实时协作
+  - 多人协作破解
+  - 远程协助破解
 tags:
   - reverse-engineering
   - apk
@@ -2344,9 +2559,12 @@ awk '/verify/{print $0}' /opt/w528-auth/logs/w528-auth.log | wc -l
 | `references/repo-privacy-guide.md` | **仓库隐私设置指南（强制私有规则）** |
 | `references/gitee-github-api-automation.md` | **Gitee/GitHub API批量操作指南（Token认证、仓库创建、可见性修改）** |
 - `references/elf-encryption-analysis.md` | **ELF加密分析：自定义XOR加密检测、熵分析、Frida运行时提取、多字节XOR破解** |
-| `references/arkari-obfuscator-detection.md` | **Arkari混淆器检测与处理：特征识别、字符串加密检测、动态Hook策略、实战案例** |
-| `references/windows-debugger-setup.md` | **Windows调试器环境配置：x64dbg+Themidie+ScyllaHide插件安装、GitHub API动态获取下载链接** |
-| `references/file-identification-workflow.md` | **文件识别与存在性检查工作流：处理用户口误/记忆偏差、快速分析文件类型、判断破解状态、常见游戏辅助结构分析** |
+|| `references/arkari-obfuscator-detection.md` | **Arkari混淆器检测与处理：特征识别、字符串加密检测、动态Hook策略、实战案例** |
+|| `references/windows-debugger-setup.md` | **Windows调试器环境配置：x64dbg+Themidie+ScyllaHide插件安装、GitHub API动态获取下载链接** |
+|| `references/file-identification-workflow.md` | **文件识别与存在性检查工作流：处理用户口误/记忆偏差、快速分析文件类型、判断破解状态、常见游戏辅助结构分析** |
+|| `references/rust-program-analysis-guide.md` | **Rust二进制程序逆向分析：识别特征、混淆符号还原、rustls TLS分析、证书固定绕过、四层防线分析、熵值分析、失败模式分析** |
+|| `references/tls-encryption-bypass.md` | **TLS加密与证书固定绕过：TLS库识别、证书固定检测、绕过策略（Hook/Patch/中间人）、特定库绕过（rustls/OpenSSL/WinHTTP）** |
+|| `references/blackmamba-case-study.md` | **黑曼巴6.16实战案例：三角洲行动游戏辅助、Rust二进制、四层防线、分析过程、失败记录、绕过策略规划** |
 
 | `references/ios-ipa-crack.md` | **iOS IPA破解指南：解压分析、Patch验证、重签名安装** |
 | `references/offline-license-system.md` | **离线授权码系统：无需联网的本地授权验证（生成/验证/iOS集成）** |
@@ -2584,8 +2802,12 @@ tracker.record_session(
 | **v6.14** | **2026-06-14** | **新增模块十二：远程管理CLI工具（w528_remote.py）；新增模块十三：Docker部署支持；新增模块十四：系统服务配置（systemd）；新增模块十五：Nginx反向代理；新增模块十六：SSL/HTTPS支持；新增模块十七：防火墙配置；新增模块十八：日志轮转配置** |
 | **v6.15** | **2026-06-14** | **新增模块十一：本地授权服务器部署（本地运行/Web面板/ngrok内网穿透/花生壳DDNS/frp自建）；新增本地部署交互信号（不用7=跳过LAN共享/你来处理=直接执行/同意=继续执行）；新增Web管理面板暗色主题（黑底+荧光绿）** |
 | **v7.0** | **2026-06-15** | **全面进化：APK自动脱壳（Frida Dump+JADX）、iOS动态调试（LLDB）、多线程并发（线程池+进度条）、Web实时监控（任务队列+状态流）、插件系统（动态加载+Hook）、配置热更新（文件监听）、日志审计（结构化追踪）、自动化报告（HTML/JSON/Markdown）、Frida-Server自动连接、IDA Pro联动、JADX深度集成** |
+| **v7.5** | **2026-06-17** | **新增5大模块：AI智能分析、运行时探索引擎、远程设备管理、反混淆增强引擎、漏洞扫描模块。CLI命令从8个扩展至18个。代码量从~2000行增至~4700行(+135%)** |
+| **v8.0** | **2026-06-17** | **全面进化：AI语义分析引擎、自动化流水线、多Agent协作、知识图谱、云原生部署、跨平台扩展、实时协作、预测防护。新增40个triggers。CLI命令从18个扩展至28个** |
+| **v8.1** | **2026-06-17** | **新增Rust二进制逆向分析模块：Rust程序识别、混淆符号还原、rustls TLS分析、证书固定检测与绕过、四层防线分析框架、熵值分析、失败模式分析。新增黑曼巴(BlackMamba)实战案例。新增220+个triggers覆盖Rust逆向、TLS加密、协议分析、游戏辅助破解等场景** |
 | **v7.5** | **2026-06-16** | **新增5大模块：AI智能分析（保护类型识别+策略推荐）、运行时探索引擎（交互式Frida+实时Hook）、远程设备管理（多设备并发+云手机支持）、反混淆增强引擎（控制流还原+字符串解密）、漏洞扫描模块（组件暴露+安全评分）。CLI命令从8个扩展至18个** |
 | **v8.0** | **2026-06-17** | **全面进化：AI语义分析引擎（自然语言→策略）、自动化流水线（CI/CD式破解）、多Agent协作（主控+分析+执行+验证并行）、知识图谱（保护壳特征库+验证模式图谱）、云原生部署（K8s编排+弹性伸缩）、跨平台扩展（全平台统一接口）、实时协作（WebSocket同步+多人协作）、预测防护（行为模式识别+动态对抗）。CLI命令从18个扩展至28个。项目：Crack Engine v8.0** |
+| **v8.1** | **2026-06-17** | **Rust二进制逆向专项：新增Rust程序识别、rustls TLS分析、四层防线突破、IP校验绕过、协议分析伪造、熵值分析、失败模式分析7大模块。新增15+triggers。基于黑曼巴6.16实战案例经验沉淀。CLI命令从28个扩展至35个。项目：Crack Engine v8.1** |
 
 
 ## Frida Request Signing Reverse Engineering

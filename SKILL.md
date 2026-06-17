@@ -2559,7 +2559,7 @@ awk '/verify/{print $0}' /opt/w528-auth/logs/w528-auth.log | wc -l
 | `references/repo-privacy-guide.md` | **仓库隐私设置指南（强制私有规则）** |
 | `references/gitee-github-api-automation.md` | **Gitee/GitHub API批量操作指南（Token认证、仓库创建、可见性修改）** |
 - `references/elf-encryption-analysis.md` | **ELF加密分析：自定义XOR加密检测、熵分析、Frida运行时提取、多字节XOR破解** |
-|| `references/arkari-obfuscator-detection.md` | **Arkari混淆器检测与处理：特征识别、字符串加密检测、动态Hook策略、实战案例** |
+|| `references/rust-reverse-experience-summary.md` | **Rust程序逆向实战经验总结：7大教训、Rust特定技巧、优化流程、黑曼巴经验、技能进化建议** |
 || `references/windows-debugger-setup.md` | **Windows调试器环境配置：x64dbg+Themidie+ScyllaHide插件安装、GitHub API动态获取下载链接** |
 || `references/file-identification-workflow.md` | **文件识别与存在性检查工作流：处理用户口误/记忆偏差、快速分析文件类型、判断破解状态、常见游戏辅助结构分析** |
 || `references/rust-program-analysis-guide.md` | **Rust二进制程序逆向分析：识别特征、混淆符号还原、rustls TLS分析、证书固定绕过、四层防线分析、熵值分析、失败模式分析** |

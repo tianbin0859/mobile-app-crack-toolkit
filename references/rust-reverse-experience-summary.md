@@ -105,7 +105,7 @@
 | 功能无关 | 1 | 3.7% | 确认DLL是否被加载 |
 | 其他 | 11 | 40.7% | 记录失败原因，避免重复尝试 |
 
-### 7. 工具链优化建议
+**工具链优化建议**：
 
 **必备工具**：
 ```python
@@ -124,12 +124,13 @@ from flask import Flask
 # - IDA Pro/Ghidra：静态分析
 # - pktmon：内核抓包
 # - netsh：网络配置
+# - pydivert：用户态网络包捕获（WinDivert Python绑定）
 ```
 
 **工具选择原则**：
 1. 先静态分析（strings/nm/pefile）→ 快速了解程序结构
 2. 再动态分析（Frida/x64dbg）→ 确认运行时行为
-3. 网络分析（抓包/TCP代理）→ 确认协议
+3. 网络分析（抓包/TCP代理/pydivert）→ 确认协议
 4. 最后尝试Patch（内存/二进制）→ 修改行为
 
 ## 二、Rust特定技巧

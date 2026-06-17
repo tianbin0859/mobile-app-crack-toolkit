@@ -78,6 +78,8 @@ from core.config import CACHE_DIR, OUTPUT_DIR
 | frida | `frida.Session` (type annotation) | `object` or no annotation | `AttributeError: module 'frida' has no attribute 'Session'` |
 | cryptography | `PBKDF2` | `PBKDF2HMAC` | `ImportError: cannot import name 'PBKDF2'` |
 | Python imports | `from .config import X` | `from core.config import X` | `ModuleNotFoundError: No module named 'modules.config'` |
+| click | `@command()` with same function name | `@command(name="...")` + unique function name | `NameError: name 'analyze' is not defined` or duplicate command registration |
+| Python f-string | `f"path_{id.replace(':', '_')}.png"` | `"path_" + id.replace(":", "_") + ".png"` | `SyntaxError: f-string expression part cannot include a backslash` or quote conflicts |
 
 ## Detection Pattern
 
@@ -95,3 +97,74 @@ crack --help
 ```
 
 Import errors that appear only in certain entry points indicate path resolution issues.
+
+## click: Command Name Collision
+
+**Problem:** Multiple CLI command groups use the same function name `analyze`, causing `NameError` or duplicate command registration when all groups are imported into the same CLI module.
+
+**Root Cause:** When using `click` decorators, the function name becomes the command name by default. If multiple modules define `@click.command()` on functions named `analyze`, importing them all into a single CLI module causes name collisions.
+
+**Fix:** Use explicit `name=` parameter in the `@click.command()` decorator, and use unique function names.
+
+```python
+# ❌ BROKEN - Name collision when multiple groups imported
+@click.command()
+def analyze():
+    pass
+
+# ✅ WORKING - Explicit name + unique function name
+@click.command(name="analyze")
+def ai_analyze():
+    pass
+
+@click.command(name="analyze")
+def deob_analyze():
+    pass
+
+@click.command(name="analyze")
+def scan_analyze():
+    pass
+```
+
+**CLI Result:**
+```bash
+crack ai analyze <apk>      # → ai_analyze function
+crack deob analyze <apk>    # → deob_analyze function
+crack scan analyze <apk>     # → scan_analyze function
+```
+
+**Rule:** Always use `name=` parameter when the command name might collide with other commands. Keep function names descriptive and unique.
+
+## Python f-string: Nested Quote Conflicts
+
+**Problem:** f-strings containing method calls with string arguments cause `SyntaxError` due to quote conflicts.
+
+**Root Cause:** When an f-string expression contains a method call with string arguments (e.g., `.replace(':', '_')`), the quotes inside the expression conflict with the f-string's outer quotes.
+
+**Fix:** Use string concatenation instead of f-string for complex expressions with nested quotes.
+
+```python
+# ❌ BROKEN - SyntaxError: f-string expression part cannot include a backslash
+# (or quote conflicts)
+screenshot_path = f"/tmp/screenshot_{device_id.replace(':', '_')}.png"
+
+# ✅ WORKING - String concatenation avoids quote conflicts
+screenshot_path = "/tmp/screenshot_" + device_id.replace(":", "_") + ".png"
+
+# Alternative: Use double quotes for outer, single for inner (works for simple cases)
+screenshot_path = f'/tmp/screenshot_{device_id.replace(":", "_")}.png'
+```
+
+**Rule of Thumb:**
+- Use f-strings for simple variable interpolation only
+- Use string concatenation (`+`) when the expression contains method calls with string arguments
+- Use `str.format()` or `%` formatting for complex cases with many nested quotes
+
+**Example from v7.5 device_manager.py:**
+```python
+# Original (broken):
+output_path = f"/tmp/screenshot_{device_id.replace(':', '_')}.png"
+
+# Fixed:
+output_path = "/tmp/screenshot_" + device_id.replace(":", "_") + ".png"
+```

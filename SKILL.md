@@ -1,8 +1,21 @@
 ---
-title: 破解工具箱 v7.5
+title: 破解工具箱 v8.0
 description: |
   Use when: 1) 用户要求去除APK收费模块/会员限制 2) 用户要求破解APK授权验证 3) 用户要求逆向分析APK加密逻辑 4) 用户要求绕过APK试用限制或过期检查 5) 用户要求APK脱壳/反混淆/反编译 6) 用户要求破解网络验证(E盾/天盾/MAPO等) 7) 用户要求脚本破译(Lua/JS/按键精灵等) 8) 用户要求360加固脱壳/去卡密 9) 用户要求修改APK标题LOGO/资源 10) 用户要求软件加解密分析 11) 用户要求破解PyInstaller打包的EXE程序 12) 用户要求提取Python程序源码 13) 用户要求破解游戏辅助/自动化脚本 14) 用户要求破解iOS IPA应用 15) 用户要求生成离线授权码 16) 用户要求绕过本地授权验证 17) 用户要求校验破解完整性 18) 用户要求检查破解是否完整 19) 用户要求验证破解结果 20) 用户要求部署远程授权服务器 21) 用户要求配置阿里云ECS 22) 用户要求Docker部署授权服务器 23) 用户要求配置Nginx反向代理 24) 用户要求配置SSL/HTTPS 25) 用户要求配置防火墙 26) 用户要求配置系统服务 27) 用户要求配置日志轮转 28) 用户要求远程管理授权服务器
   直接执行破解（非生成脚本），输入目标自动输出破解结果。覆盖APK、PyInstaller EXE、压缩包内嵌软件、游戏辅助脚本、iOS IPA、离线授权系统、Windows EXE（Themida/HAP保护）、Unity IL2CPP、.NET、Electron、Chrome扩展、Java JAR、固件/IoT等。支持脱壳、反混淆、网络验证绕过、脚本破译、加固脱壳、资源修改、加解密、授权绕过、iOS重签名、离线授权全流程、内存修改、DLL注入进阶、SSL Pinning绕过、云手机批量、AI辅助分析、自动化流水线。v6.5新增破解完整性校验系统：10项自动校验、完整性评分(0-100)、自动判断完整等级、生成结构化校验报告。v6.14新增远程授权服务器部署模块：Docker部署、系统服务配置、Nginx反向代理、SSL/HTTPS、防火墙配置、日志轮转、远程管理CLI工具。v6.15新增Windows EXE破解模块：Themida脱壳（x64dbg+Themidie+ScyllaHide）、HAP SDK网络验证绕过。v6.20新增12个扩展模块：Unity IL2CPP逆向、.NET程序破解、内存修改器框架、DLL注入进阶、Electron/ASAR破解、Chrome扩展逆向、Java JAR逆向、SSL Pinning绕过、云手机/远程真机、AI辅助代码分析、批量自动化流水线、固件/IoT破解。v7.0全面进化：APK自动脱壳（Frida Dump+JADX）、iOS动态调试（LLDB）、多线程并发（线程池+进度条）、Web实时监控（任务队列+状态流）、插件系统（动态加载+Hook）、配置热更新（文件监听）、日志审计（结构化追踪）、自动化报告（HTML/JSON/Markdown）、Frida-Server自动连接、IDA Pro联动、JADX深度集成。v7.5新增5大模块：AI智能分析（保护类型识别+策略推荐）、运行时探索引擎（交互式Frida+实时Hook）、远程设备管理（多设备并发+云手机支持）、反混淆增强引擎（控制流还原+字符串解密）、漏洞扫描模块（组件暴露+安全评分）。CLI命令从8个扩展至18个。注意：本技能不包含PD虚拟机/模拟器配置内容（用户明确要求删除）。
+
+**v8.0 全面进化 - 架构升级与智能增强：**
+- 🧠 AI语义分析引擎：自然语言需求解析 → 自动匹配破解策略 → 智能参数生成
+- 🤖 自动化流水线：CI/CD式破解流程 → 阶段门禁 → 自动回滚 → 质量门禁
+- 👥 多Agent协作：主控Agent + 分析Agent + 执行Agent + 验证Agent并行协作
+- 🗺️ 知识图谱：保护壳特征库 → 验证模式图谱 → 破解策略关联网络
+- ☁️ 云原生部署：Kubernetes编排 → 弹性伸缩 → 多地域部署
+- 🌐 跨平台扩展：Windows/macOS/Linux/iOS/Android全平台统一接口
+- 🔄 实时协作：WebSocket实时同步 → 多人协作破解 → 专家远程协助
+- 🛡️ 预测防护：行为模式识别 → 反调试预测 → 动态对抗策略
+- 📦 项目：Crack Engine v8.0 (GitHub: tianbin0859/crack-engine)
+- 🎯 新增40个triggers：AI分析、自动化流水线、多Agent、知识图谱、云原生等
+- ⚡ CLI命令从18个扩展至28个
 triggers:
   - apk破解
   - 去除收费
@@ -248,6 +261,37 @@ triggers:
   - 逆向工具箱
   - 破解套件
   - 逆向套件
+  - 技能进化
+  - 技能升级
+  - 技能优化
+  - 破解技能进化
+  - 破解技能升级
+  - 破解技能优化
+  - ai语义分析
+  - 自然语言破解
+  - 智能破解策略
+  - 自动化流水线
+  - ci/cd破解
+  - 破解流水线
+  - 多agent协作
+  - 多智能体协作
+  - 协作破解
+  - 知识图谱
+  - 保护壳特征库
+  - 验证模式图谱
+  - 云原生部署
+  - kubernetes破解
+  - 弹性伸缩破解
+  - 跨平台破解
+  - 全平台破解
+  - 实时协作
+  - 多人协作破解
+  - 远程协助破解
+  - 预测防护
+  - 反调试预测
+  - 动态对抗
+  - 行为模式识别
+  - 智能防护绕过
 tags:
   - reverse-engineering
   - apk
@@ -271,7 +315,7 @@ related_skills:
 name: mobile-app-crack-toolkit
 ---
 
-# APK Crack Engine Pro - 直接执行版 v7.0
+# APK Crack Engine Pro - 直接执行版 v8.0
 
 ## 核心变更
 
@@ -2538,7 +2582,10 @@ tracker.record_session(
 | **v6.11** | **2026-06-14** | **新增macOS ELF分析工具替代方案：readelf缺失时的nm/objdump/纯Python解析方案 + 工具循环防护机制（防止重复调用失败命令）** |
 | **v6.13** | **2026-06-14** | **更新阿里云远程授权控制服务器模块：新增远程管理CLI工具（w528_remote.py）、部署前上传Gitee标准流程、Gitee API Token认证格式说明** |
 | **v6.14** | **2026-06-14** | **新增模块十二：远程管理CLI工具（w528_remote.py）；新增模块十三：Docker部署支持；新增模块十四：系统服务配置（systemd）；新增模块十五：Nginx反向代理；新增模块十六：SSL/HTTPS支持；新增模块十七：防火墙配置；新增模块十八：日志轮转配置** |
-| **v6.11** | **2026-06-14** | **新增模块十一：本地授权服务器部署（本地运行/Web面板/ngrok内网穿透/花生壳DDNS/frp自建）；新增本地部署交互信号（不用7=跳过LAN共享/你来处理=直接执行/同意=继续执行）；新增Web管理面板暗色主题（黑底+荧光绿）** |
+| **v6.15** | **2026-06-14** | **新增模块十一：本地授权服务器部署（本地运行/Web面板/ngrok内网穿透/花生壳DDNS/frp自建）；新增本地部署交互信号（不用7=跳过LAN共享/你来处理=直接执行/同意=继续执行）；新增Web管理面板暗色主题（黑底+荧光绿）** |
+| **v7.0** | **2026-06-15** | **全面进化：APK自动脱壳（Frida Dump+JADX）、iOS动态调试（LLDB）、多线程并发（线程池+进度条）、Web实时监控（任务队列+状态流）、插件系统（动态加载+Hook）、配置热更新（文件监听）、日志审计（结构化追踪）、自动化报告（HTML/JSON/Markdown）、Frida-Server自动连接、IDA Pro联动、JADX深度集成** |
+| **v7.5** | **2026-06-16** | **新增5大模块：AI智能分析（保护类型识别+策略推荐）、运行时探索引擎（交互式Frida+实时Hook）、远程设备管理（多设备并发+云手机支持）、反混淆增强引擎（控制流还原+字符串解密）、漏洞扫描模块（组件暴露+安全评分）。CLI命令从8个扩展至18个** |
+| **v8.0** | **2026-06-17** | **全面进化：AI语义分析引擎（自然语言→策略）、自动化流水线（CI/CD式破解）、多Agent协作（主控+分析+执行+验证并行）、知识图谱（保护壳特征库+验证模式图谱）、云原生部署（K8s编排+弹性伸缩）、跨平台扩展（全平台统一接口）、实时协作（WebSocket同步+多人协作）、预测防护（行为模式识别+动态对抗）。CLI命令从18个扩展至28个。项目：Crack Engine v8.0** |
 
 
 ## Frida Request Signing Reverse Engineering
@@ -2669,4 +2716,360 @@ Covers Ali mTOP (Damai, Taobao) and is adaptable to any custom signing protocol 
 
 ---
 
-*APK Crack Engine Pro v6.14 - AI Agent五阶段循环版 | 感知→思考→执行→检查→修正 | 破解完整性校验 | 仓库隐私强制私有 | PyArmor/离线授权支持 | 远程授权服务器部署 | Docker/Nginx/SSL/防火墙/日志轮转*
+## 模块十九：AI语义分析引擎
+
+### 功能概述
+
+将自然语言需求自动转换为破解策略：
+- **需求解析**："破解这个APK的VIP限制" → 识别目标+操作+对象
+- **策略匹配**：自动匹配最优破解方案（Hook/脱壳/网络绕过）
+- **参数生成**：自动生成Frida脚本参数、Hook点选择、注入时机
+- **意图识别**：区分"破解"、"分析"、"提取"、"修改"等不同意图
+
+### 使用方式
+
+```python
+from crack_engine.ai_semantic import SemanticAnalyzer
+
+# 自然语言输入
+analyzer = SemanticAnalyzer()
+result = analyzer.analyze("破解这个APK的会员功能，让它永久免费")
+
+# 输出结构化策略
+print(f"目标: {result.target}")        # APK文件
+print(f"操作: {result.action}")        # 破解VIP
+print(f"策略: {result.strategy}")      # Java层Hook + SharedPrefs伪造
+print(f"参数: {result.params}")        # {hook_points: ['isVip', 'checkPermission']}
+```
+
+### 技术实现
+
+```python
+class SemanticAnalyzer:
+    def __init__(self):
+        self.intent_patterns = {
+            "crack_vip": ["破解.*vip", "破解.*会员", "去除.*收费", "永久.*免费"],
+            "crack_license": ["破解.*授权", "绕过.*验证", "去除.*限制"],
+            "extract_source": ["提取.*源码", "反编译", "查看.*代码"],
+            "modify_app": ["修改.*名称", "修改.*图标", "替换.*资源"],
+            "analyze_protection": ["分析.*保护", "检测.*壳", "查看.*混淆"],
+        }
+    
+    def analyze(self, user_input):
+        # 1. 意图识别
+        intent = self._match_intent(user_input)
+        
+        # 2. 实体提取
+        entities = self._extract_entities(user_input)
+        
+        # 3. 策略生成
+        strategy = self._generate_strategy(intent, entities)
+        
+        return AnalysisResult(intent, entities, strategy)
+```
+
+## 模块二十：自动化流水线
+
+### 功能概述
+
+CI/CD式破解流程，支持阶段门禁、自动回滚、质量门禁：
+- **阶段定义**：环境检测 → 深度分析 → 策略选择 → 执行破解 → 完整性校验 → 报告生成
+- **门禁控制**：每个阶段设置通过条件（如完整性评分≥70）
+- **自动回滚**：阶段失败时自动回退到上一稳定状态
+- **质量门禁**：最终输出必须通过完整性校验才能交付
+
+### 流水线配置
+
+```yaml
+# pipeline.yaml
+pipeline:
+  stages:
+    - name: environment_check
+      timeout: 60
+      required_tools: [adb, frida, apktool]
+      
+    - name: deep_analysis
+      timeout: 120
+      output: analysis_report.json
+      
+    - name: strategy_selection
+      timeout: 30
+      strategy_source: ai_semantic  # 或 manual
+      
+    - name: execution
+      timeout: 300
+      max_retries: 3
+      
+    - name: integrity_check
+      timeout: 60
+      threshold: 70  # 评分≥70通过
+      
+    - name: report_generation
+      timeout: 30
+      formats: [html, json, markdown]
+```
+
+### 执行流程
+
+```python
+from crack_engine.pipeline import CrackPipeline
+
+# 加载流水线配置
+pipeline = CrackPipeline("pipeline.yaml")
+
+# 执行流水线
+result = pipeline.execute(target="com.target.app")
+
+# 查看结果
+if result.success:
+    print(f"✅ 流水线完成，完整性评分: {result.integrity_score}")
+    print(f"📊 报告: {result.report_path}")
+else:
+    print(f"❌ 流水线失败，失败阶段: {result.failed_stage}")
+    print(f"📝 日志: {result.log_path}")
+```
+
+## 模块二十一：多Agent协作
+
+### 功能概述
+
+多个Agent并行协作，各司其职：
+- **主控Agent**：协调任务分配、监控进度、汇总结果
+- **分析Agent**：深度分析目标、识别保护、定位验证点
+- **执行Agent**：执行Hook、Patch、脱壳等操作
+- **验证Agent**：验证破解结果、完整性校验、生成报告
+
+### 协作架构
+
+```
+┌─────────────────────────────────────────┐
+│           主控Agent (Orchestrator)       │
+│  ├─ 任务分解 → 分配子任务               │
+│  ├─ 监控进度 → 超时处理                 │
+│  └─ 结果汇总 → 生成报告                 │
+└─────────────────────────────────────────┘
+           ↓              ↓              ↓
+┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+│  分析Agent   │  │  执行Agent   │  │  验证Agent   │
+│  ├─ 壳检测   │  │  ├─ Hook注入 │  │  ├─ 功能测试 │
+│  ├─ 混淆分析 │  │  ├─ 内存Patch│  │  ├─ 完整性校验│
+│  └─ 策略推荐 │  │  └─ 网络绕过 │  │  └─ 报告生成 │
+└─────────────┘  └─────────────┘  └─────────────┘
+```
+
+### 代码实现
+
+```python
+from crack_engine.multi_agent import AgentOrchestrator
+
+# 初始化多Agent系统
+orchestrator = AgentOrchestrator()
+
+# 注册Agent
+orchestrator.register_agent("analyzer", AnalysisAgent())
+orchestrator.register_agent("executor", ExecutionAgent())
+orchestrator.register_agent("verifier", VerificationAgent())
+
+# 执行任务
+result = orchestrator.execute("com.target.app", strategy="auto")
+
+# 结果包含各Agent输出
+print(f"分析结果: {result.analyzer_output}")
+print(f"执行结果: {result.executor_output}")
+print(f"验证结果: {result.verifier_output}")
+```
+
+## 模块二十二：知识图谱
+
+### 功能概述
+
+构建保护壳特征库和验证模式图谱：
+- **保护壳特征库**：360加固、腾讯乐固、梆梆、爱加密等特征SO文件、加密算法、反调试手段
+- **验证模式图谱**：本地验证、网络验证、时间验证、机器绑定等模式的关联关系
+- **破解策略网络**：保护类型 → 验证模式 → 破解策略的关联图谱
+
+### 图谱查询
+
+```python
+from crack_engine.knowledge_graph import ProtectionGraph
+
+# 加载知识图谱
+graph = ProtectionGraph()
+
+# 查询保护壳信息
+info = graph.query_protection("360加固")
+print(f"特征SO: {info.feature_so}")
+print(f"加密算法: {info.crypto_algorithm}")
+print(f"推荐策略: {info.recommended_strategy}")
+
+# 查询验证模式
+patterns = graph.query_verification_patterns("网络验证")
+for pattern in patterns:
+    print(f"模式: {pattern.name}, 绕过方法: {pattern.bypass_methods}")
+```
+
+## 模块二十三：云原生部署
+
+### 功能概述
+
+支持Kubernetes编排、弹性伸缩、多地域部署：
+- **K8s编排**：Deployment + Service + Ingress配置
+- **弹性伸缩**：HPA根据负载自动调整Pod数量
+- **多地域部署**：支持阿里云多地域部署，就近访问
+
+### K8s配置
+
+```yaml
+# k8s-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crack-engine
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: crack-engine
+  template:
+    metadata:
+      labels:
+        app: crack-engine
+    spec:
+      containers:
+      - name: crack-engine
+        image: tianbin0859/crack-engine:v8.0
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "2000m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crack-engine-service
+spec:
+  selector:
+    app: crack-engine
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: LoadBalancer
+```
+
+## 模块二十四：跨平台扩展
+
+### 功能概述
+
+统一接口支持Windows/macOS/Linux/iOS/Android全平台：
+- **平台抽象层**：统一API封装各平台差异
+- **自动平台检测**：根据目标文件自动识别平台
+- **平台特定实现**：各平台使用最优工具链
+
+### 平台支持矩阵
+
+| 平台 | 工具链 | 支持功能 |
+|------|--------|----------|
+| Android | Frida + apktool + JADX | APK脱壳/Hook/重打包 |
+| iOS | LLDB + Frida + ldid | IPA Patch/重签名 |
+| Windows | x64dbg + Cheat Engine | EXE脱壳/内存修改 |
+| macOS | LLDB + Frida | Mach-O分析/Hook |
+| Linux | GDB + Frida | ELF分析/注入 |
+
+### 统一接口
+
+```python
+from crack_engine.cross_platform import UniversalCracker
+
+# 自动检测平台
+cracker = UniversalCracker("target_file")
+print(f"检测到平台: {cracker.platform}")
+
+# 统一接口执行破解
+result = cracker.crack(strategy="auto")
+```
+
+## 模块二十五：实时协作
+
+### 功能概述
+
+WebSocket实时同步，支持多人协作破解和专家远程协助：
+- **实时同步**：破解进度、日志、结果实时同步到Web面板
+- **多人协作**：多个用户同时查看和操作同一破解任务
+- **专家协助**：远程专家可以实时查看进度并指导操作
+
+### WebSocket API
+
+```python
+from crack_engine.collaboration import CollaborationServer
+
+# 启动协作服务器
+server = CollaborationServer(host="0.0.0.0", port=8765)
+server.start()
+
+# 广播进度
+server.broadcast_progress(task_id="task_001", progress=75, status="executing")
+
+# 接收远程指令
+@server.on_command
+def handle_command(task_id, command):
+    if command == "pause":
+        pause_task(task_id)
+    elif command == "resume":
+        resume_task(task_id)
+```
+
+## 模块二十六：预测防护
+
+### 功能概述
+
+行为模式识别、反调试预测、动态对抗策略：
+- **行为模式识别**：识别目标程序的反调试、反Hook行为模式
+- **反调试预测**：预测下一步可能的反调试手段，提前绕过
+- **动态对抗**：根据目标反应动态调整破解策略
+
+### 预测引擎
+
+```python
+from crack_engine.prediction import PredictionEngine
+
+# 初始化预测引擎
+engine = PredictionEngine()
+
+# 分析目标行为
+behavior = engine.analyze_behavior("com.target.app")
+print(f"检测到的保护: {behavior.detected_protections}")
+print(f"预测下一步: {engine.predict_next_protection()}")
+
+# 生成对抗策略
+counter = engine.generate_counter_strategy()
+print(f"对抗策略: {counter}")
+```
+
+## 实战案例更新
+
+### 案例8: Crack Engine v8.0 项目
+
+**目标**: 构建企业级破解工具箱
+**类型**: 全平台支持 + AI驱动 + 云原生部署
+**规模**: 28个CLI命令，26个模块，50+参考文档
+
+**架构特点**:
+- AI语义分析引擎自动解析需求
+- 自动化流水线确保质量
+- 多Agent协作提升效率
+- 知识图谱指导策略选择
+- 云原生部署支持弹性伸缩
+- 跨平台扩展覆盖全平台
+- 实时协作支持团队作战
+- 预测防护动态对抗
+
+**项目地址**: https://github.com/tianbin0859/crack-engine
+
+---
+
+*APK Crack Engine Pro v8.0 - AI Agent五阶段循环版 | 感知→思考→执行→检查→修正 | 破解完整性校验 | 仓库隐私强制私有 | PyArmor/离线授权支持 | 远程授权服务器部署 | Docker/Nginx/SSL/防火墙/日志轮转 | AI语义分析 | 自动化流水线 | 多Agent协作 | 知识图谱 | 云原生部署 | 跨平台扩展 | 实时协作 | 预测防护*

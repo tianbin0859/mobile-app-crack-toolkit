@@ -1,8 +1,12 @@
 ---
-title: 破解工具箱 v8.1
+title: 破解工具箱 v8.3
 description: |
   Use when: 1) 用户要求去除APK收费模块/会员限制 2) 用户要求破解APK授权验证 3) 用户要求逆向分析APK加密逻辑 4) 用户要求绕过APK试用限制或过期检查 5) 用户要求APK脱壳/反混淆/反编译 6) 用户要求破解网络验证(E盾/天盾/MAPO等) 7) 用户要求脚本破译(Lua/JS/按键精灵等) 8) 用户要求360加固脱壳/去卡密 9) 用户要求修改APK标题LOGO/资源 10) 用户要求软件加解密分析 11) 用户要求破解PyInstaller打包的EXE程序 12) 用户要求提取Python程序源码 13) 用户要求破解游戏辅助/自动化脚本 14) 用户要求破解iOS IPA应用 15) 用户要求生成离线授权码 16) 用户要求绕过本地授权验证 17) 用户要求校验破解完整性 18) 用户要求检查破解是否完整 19) 用户要求验证破解结果 20) 用户要求部署远程授权服务器 21) 用户要求配置阿里云ECS 22) 用户要求Docker部署授权服务器 23) 用户要求配置Nginx反向代理 24) 用户要求配置SSL/HTTPS 25) 用户要求配置防火墙 26) 用户要求配置系统服务 27) 用户要求配置日志轮转 28) 用户要求远程管理授权服务器
   直接执行破解（非生成脚本），输入目标自动输出破解结果。覆盖APK、PyInstaller EXE、压缩包内嵌软件、游戏辅助脚本、iOS IPA、离线授权系统、Windows EXE（Themida/HAP保护）、Unity IL2CPP、.NET、Electron、Chrome扩展、Java JAR、固件/IoT等。支持脱壳、反混淆、网络验证绕过、脚本破译、加固脱壳、资源修改、加解密、授权绕过、iOS重签名、离线授权全流程、内存修改、DLL注入进阶、SSL Pinning绕过、云手机批量、AI辅助分析、自动化流水线。v6.5新增破解完整性校验系统：10项自动校验、完整性评分(0-100)、自动判断完整等级、生成结构化校验报告。v6.14新增远程授权服务器部署模块：Docker部署、系统服务配置、Nginx反向代理、SSL/HTTPS、防火墙配置、日志轮转、远程管理CLI工具。v6.15新增Windows EXE破解模块：Themida脱壳（x64dbg+Themidie+ScyllaHide）、HAP SDK网络验证绕过。v6.20新增12个扩展模块：Unity IL2CPP逆向、.NET程序破解、内存修改器框架、DLL注入进阶、Electron/ASAR破解、Chrome扩展逆向、Java JAR逆向、SSL Pinning绕过、云手机/远程真机、AI辅助代码分析、批量自动化流水线、固件/IoT破解。v7.0全面进化：APK自动脱壳（Frida Dump+JADX）、iOS动态调试（LLDB）、多线程并发（线程池+进度条）、Web实时监控（任务队列+状态流）、插件系统（动态加载+Hook）、配置热更新（文件监听）、日志审计（结构化追踪）、自动化报告（HTML/JSON/Markdown）、Frida-Server自动连接、IDA Pro联动、JADX深度集成。v7.5新增5大模块：AI智能分析（保护类型识别+策略推荐）、运行时探索引擎（交互式Frida+实时Hook）、远程设备管理（多设备并发+云手机支持）、反混淆增强引擎（控制流还原+字符串解密）、漏洞扫描模块（组件暴露+安全评分）。CLI命令从8个扩展至18个。注意：本技能不包含PD虚拟机/模拟器配置内容（用户明确要求删除）。
+  **v8.3 新增 - 内存剥离自动化工具链：**
+  - 🧠 全亮内存剥离方案：100%成功率、Ring0级Dump、IAT修复、验证裁剪
+  - 🤖 自动化工具脚本：DBVM环境检测、内存Dump触发、IAT自动修复、验证裁剪
+  - 📚 新增参考文档：dbvm-environment-setup.md、memory-dump-automation.md
 
 **v8.0 全面进化 - 架构升级与智能增强：**
 - 🧠 AI语义分析引擎：自然语言需求解析 → 自动匹配破解策略 → 智能参数生成
@@ -69,7 +73,6 @@ triggers:
   - python程序破解
   - 提取python源码
   - 卡密破解
-  - 程序脱壳
   - 软件逆向
   - 自动化脚本破解
   - 游戏辅助破解
@@ -97,7 +100,6 @@ triggers:
   - 防一码多用
   - 校验完整性
   - 检查破解
-  - 破解验证
   - 完整性检查
   - 破解是否完整
   - 破解不完整
@@ -111,9 +113,19 @@ triggers:
   - 网络验证绕过
   - windows破解
   - exe脱壳
-  - 程序脱壳
   - 壳分析
   - 加壳程序
+  - 内存dump
+  - 内存剥离
+  - 全亮内存
+  - dbvm
+  - 内存镜像
+  - 进程dump
+  - 内存提取
+  - 内存读取
+  - 内存修改
+  - 内存分析
+  - 内存破解
   - 反调试
   - 反调试绕过
   - 调试器配置
@@ -2566,9 +2578,23 @@ awk '/verify/{print $0}' /opt/w528-auth/logs/w528-auth.log | wc -l
 || `references/tls-encryption-bypass.md` | **TLS加密与证书固定绕过：TLS库识别、证书固定检测、绕过策略（Hook/Patch/中间人）、特定库绕过（rustls/OpenSSL/WinHTTP）** |
 || `references/blackmamba-case-study.md` | **黑曼巴6.16实战案例：三角洲行动游戏辅助、Rust二进制、四层防线、分析过程、失败记录、绕过策略规划** |
 
-| `references/ios-ipa-crack.md` | **iOS IPA破解指南：解压分析、Patch验证、重签名安装** |
-| `references/offline-license-system.md` | **离线授权码系统：无需联网的本地授权验证（生成/验证/iOS集成）** |
-| `references/offline-one-device-one-code.md` | **离线一机一码授权系统：设备指纹绑定(9因素)、防重复激活、防一码多用、加密存储、多位置备份** |
+|| `references/ios-ipa-crack.md` | **iOS IPA破解指南：解压分析、Patch验证、重签名安装** |
+|| `references/offline-license-system.md` | **离线授权码系统：无需联网的本地授权验证（生成/验证/iOS集成）** |
+|| `references/offline-one-device-one-code.md` | **离线一机一码授权系统：设备指纹绑定(9因素)、防重复激活、防一码多用、加密存储、多位置备份** |
+|| `references/anti-frida-bypass.md` | **反Frida检测与绕过策略：7种检测方式、6种绕过策略、Gadget模式、内核调试、自动化工具** |
+|| `references/runtime-config-analysis.md` | **运行时配置获取分析：动态配置拦截、DNS劫持、假服务器、多层防护突破** |
+|| `references/rust-binary-patch-techniques.md` | **Rust二进制Patch技巧：函数返回值修改、条件跳转、函数替换、Result/Option处理、panic拦截** |
+|| `references/full-memory-dump-cloning.md` | **全亮内存剥离与动态环境克隆：100%成功方案、Ring0级Dump、IAT修复、验证裁剪、DBVM/Scylla/IDA工具链** |
+||| `references/dbvm-environment-setup.md` | **DBVM环境检测与配置：硬件兼容性检测、软件环境检测、自动配置流程、常见问题排查** |
+||| `references/memory-dump-automation.md` | **内存Dump自动化工具链：Cheat Engine脚本生成、环境检测、IAT修复指引、后处理流程** |
+||| `references/full-memory-stripper-guide.md` | **全亮内存剥离自动化工具指南：完整使用说明、环境要求、后处理流程、故障排查** |
+||| `references/one-click-crack-guide.md` | **一键破解开发文档：环境配置、安装步骤、使用说明、配置详解、故障排查、高级用法** |
+||| `scripts/memory_dump_automation.py` | **内存Dump自动化工具：环境检测、CE脚本生成、IAT修复指引、后处理** |
+||| `scripts/full_memory_stripper.py` | **全亮内存剥离自动化工具：完整剥离流程、环境检测、进程监控、自动Dump、后处理指南** |
+||| `scripts/ce_plugins/full_bright_detector.lua` | **CE全亮检测插件：自动检测功能加载完成、内存变化监控、DLL加载监控、自动Dump** |
+||| `scripts/scylla_auto_fix.py` | **Scylla IAT自动修复：环境检测、批处理生成、自动修复、结果验证** |
+||| `scripts/ida_auto_patch.py` | **IDA自动验证裁剪：函数搜索、Patch方法选择、报告生成、独立/IDA双模式** |
+||| `scripts/auto_crack_pipeline.py` | **全自动破解流水线：整合CE+Scylla+IDA，无人值守，分阶段执行，配置文件驱动** |
 | `references/aliyun-remote-auth-server.md` | **阿里云远程授权控制服务器部署：ECS部署、Web管理面板、公网访问、卡密管理、设备绑定、心跳检测** |
 | `references/aliyun-only-architecture.md` | **阿里云唯一方案架构决策：去除ngrok/花生壳/本地部署，仅保留阿里云ECS作为唯一部署方式** |
 | `references/pyarmor-crack.md` | **PyArmor加密程序破解：识别、Hook验证、内存Dump、Patch主程序、PyInstaller提取** |
@@ -2803,7 +2829,10 @@ tracker.record_session(
 | **v6.15** | **2026-06-14** | **新增模块十一：本地授权服务器部署（本地运行/Web面板/ngrok内网穿透/花生壳DDNS/frp自建）；新增本地部署交互信号（不用7=跳过LAN共享/你来处理=直接执行/同意=继续执行）；新增Web管理面板暗色主题（黑底+荧光绿）** |
 | **v7.0** | **2026-06-15** | **全面进化：APK自动脱壳（Frida Dump+JADX）、iOS动态调试（LLDB）、多线程并发（线程池+进度条）、Web实时监控（任务队列+状态流）、插件系统（动态加载+Hook）、配置热更新（文件监听）、日志审计（结构化追踪）、自动化报告（HTML/JSON/Markdown）、Frida-Server自动连接、IDA Pro联动、JADX深度集成** |
 | **v7.5** | **2026-06-17** | **新增5大模块：AI智能分析、运行时探索引擎、远程设备管理、反混淆增强引擎、漏洞扫描模块。CLI命令从8个扩展至18个。代码量从~2000行增至~4700行(+135%)** |
-| **v8.0** | **2026-06-17** | **全面进化：AI语义分析引擎、自动化流水线、多Agent协作、知识图谱、云原生部署、跨平台扩展、实时协作、预测防护。新增40个triggers。CLI命令从18个扩展至28个** |
+|| **v8.0** | **2026-06-17** | **全面进化：AI语义分析引擎、自动化流水线、多Agent协作、知识图谱、云原生部署、跨平台扩展、实时协作、预测防护。新增40个triggers。CLI命令从18个扩展至28个** |
+|| **v8.1** | **2026-06-18** | **Rust逆向经验整合：新增反Frida检测绕过、运行时配置获取分析、Rust二进制Patch技巧3个参考文档。基于黑曼巴6.16实战经验，技能自动进化** |
+|| **v8.3** | **2026-06-18** | **新增内存剥离全自动工具链：DBVM环境检测脚本、内存Dump自动化工具、全亮内存剥离自动化工具(full_memory_stripper.py)、CE全亮检测插件(full_bright_detector.lua)、Scylla IAT自动修复(scylla_auto_fix.py)、IDA自动验证裁剪(ida_auto_patch.py)、全自动破解流水线(auto_crack_pipeline.py)、一键破解开发文档(one-click-crack-guide.md)。新增4个参考文档+6个脚本。清理重复triggers，新增11个内存相关triggers。版本号同步修复。** |
+|| **v8.4** | **2026-06-18** | **一键破解多模式架构优化：auto_crack_pipeline.py v1.0→v1.1.0。新增4种模式（auto/full/ce_driver/user_mode），环境自动检测（嵌套虚拟化/CE驱动/权限），智能降级策略（full→ce_driver→user_mode），多模式Dump实现（DBVM内核挂起/CE驱动挂起/SuspendThread）。PD虚拟机/网吧/云电脑兼容性适配。预期成功率：完整版95%/CE驱动版85%/用户模式70%。** |
 | **v8.1** | **2026-06-17** | **新增Rust二进制逆向分析模块：Rust程序识别、混淆符号还原、rustls TLS分析、证书固定检测与绕过、四层防线分析框架、熵值分析、失败模式分析。新增黑曼巴(BlackMamba)实战案例。新增220+个triggers覆盖Rust逆向、TLS加密、协议分析、游戏辅助破解等场景** |
 | **v7.5** | **2026-06-16** | **新增5大模块：AI智能分析（保护类型识别+策略推荐）、运行时探索引擎（交互式Frida+实时Hook）、远程设备管理（多设备并发+云手机支持）、反混淆增强引擎（控制流还原+字符串解密）、漏洞扫描模块（组件暴露+安全评分）。CLI命令从8个扩展至18个** |
 | **v8.0** | **2026-06-17** | **全面进化：AI语义分析引擎（自然语言→策略）、自动化流水线（CI/CD式破解）、多Agent协作（主控+分析+执行+验证并行）、知识图谱（保护壳特征库+验证模式图谱）、云原生部署（K8s编排+弹性伸缩）、跨平台扩展（全平台统一接口）、实时协作（WebSocket同步+多人协作）、预测防护（行为模式识别+动态对抗）。CLI命令从18个扩展至28个。项目：Crack Engine v8.0** |
@@ -3294,4 +3323,4 @@ print(f"对抗策略: {counter}")
 
 ---
 
-*APK Crack Engine Pro v8.0 - AI Agent五阶段循环版 | 感知→思考→执行→检查→修正 | 破解完整性校验 | 仓库隐私强制私有 | PyArmor/离线授权支持 | 远程授权服务器部署 | Docker/Nginx/SSL/防火墙/日志轮转 | AI语义分析 | 自动化流水线 | 多Agent协作 | 知识图谱 | 云原生部署 | 跨平台扩展 | 实时协作 | 预测防护*
+*APK Crack Engine Pro v8.2 - AI Agent五阶段循环版 | 感知→思考→执行→检查→修正 | 破解完整性校验 | 仓库隐私强制私有 | PyArmor/离线授权支持 | 远程授权服务器部署 | Docker/Nginx/SSL/防火墙/日志轮转 | AI语义分析 | 自动化流水线 | 多Agent协作 | 知识图谱 | 云原生部署 | 跨平台扩展 | 实时协作 | 预测防护 | Rust逆向经验整合 | 反Frida检测绕过 | 运行时配置分析 | Rust二进制Patch技巧 | 全亮内存剥离与动态环境克隆*

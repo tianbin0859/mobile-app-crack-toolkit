@@ -2602,7 +2602,8 @@ awk '/verify/{print $0}' /opt/w528-auth/logs/w528-auth.log | wc -l
 ||| `references/dbvm-environment-setup.md` | **DBVM环境检测与配置：硬件兼容性检测、软件环境检测、自动配置流程、常见问题排查** |
 ||| `references/memory-dump-automation.md` | **内存Dump自动化工具链：Cheat Engine脚本生成、环境检测、IAT修复指引、后处理流程** |
 ||| `references/full-memory-stripper-guide.md` | **全亮内存剥离自动化工具指南：完整使用说明、环境要求、后处理流程、故障排查** |
-||| `references/one-click-crack-guide.md` | **一键破解开发文档：环境配置、安装步骤、使用说明、配置详解、故障排查、高级用法** |
+||| `references/one-click-crack-guide.md` | **一键破解系统概述：环境配置、安装步骤、使用说明、配置详解、故障排查、高级用法** |
+||| `references/auto-pipeline-workflow.md` | **一键破解实战开发文档：架构总览、协议逆向、GUI自动化、二进制Patch、全亮内存剥离、IDA操作、开源工具链（1392行完整版）** |
 ||| `scripts/memory_dump_automation.py` | **内存Dump自动化工具：环境检测、CE脚本生成、IAT修复指引、后处理** |
 ||| `scripts/full_memory_stripper.py` | **全亮内存剥离自动化工具：完整剥离流程、环境检测、进程监控、自动Dump、后处理指南** |
 ||| `scripts/ce_plugins/full_bright_detector.lua` | **CE全亮检测插件：自动检测功能加载完成、内存变化监控、DLL加载监控、自动Dump** |

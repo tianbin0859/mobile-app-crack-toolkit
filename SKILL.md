@@ -2577,6 +2577,7 @@ awk '/verify/{print $0}' /opt/w528-auth/logs/w528-auth.log | wc -l
 || `references/rust-program-analysis-guide.md` | **Rust二进制程序逆向分析：识别特征、混淆符号还原、rustls TLS分析、证书固定绕过、四层防线分析、熵值分析、失败模式分析** |
 || `references/tls-encryption-bypass.md` | **TLS加密与证书固定绕过：TLS库识别、证书固定检测、绕过策略（Hook/Patch/中间人）、特定库绕过（rustls/OpenSSL/WinHTTP）** |
 || `references/blackmamba-case-study.md` | **黑曼巴6.16实战案例：三角洲行动游戏辅助、Rust二进制、四层防线、分析过程、失败记录、绕过策略规划** |
+|| `references/blackmamba-6.16-case-study.md` | **黑曼巴6.16完整逆向报告：PE结构分析、认证协议逆向、加密破解尝试、二进制Patch、产出物清单、后续建议** |
 || `references/unity-il2cpp-reverse.md` | **Unity IL2CPP逆向工具链：metadata解析、符号恢复、IDA/Ghidra脚本、Frida Hook生成、Inspector配置** |
 || `references/python-packer-reverse.md` | **Python打包程序逆向：PyInstaller/UPX检测提取、pyc反编译、资源提取、导入分析** |
 || `references/vmp-enhanced-analysis.md` | **VMP增强分析：VM Handler识别、API跟踪、IAT修复、脚本生成、脱壳辅助** |

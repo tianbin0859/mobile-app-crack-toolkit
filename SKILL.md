@@ -2579,7 +2579,12 @@ awk '/verify/{print $0}' /opt/w528-auth/logs/w528-auth.log | wc -l
 || `references/blackmamba-case-study.md` | **黑曼巴6.16实战案例：三角洲行动游戏辅助、Rust二进制、四层防线、分析过程、失败记录、绕过策略规划** |
 || `references/unity-il2cpp-reverse.md` | **Unity IL2CPP逆向工具链：metadata解析、符号恢复、IDA/Ghidra脚本、Frida Hook生成、Inspector配置** |
 || `references/python-packer-reverse.md` | **Python打包程序逆向：PyInstaller/UPX检测提取、pyc反编译、资源提取、导入分析** |
-|| `references/vmp-enhanced-analysis.md` | **VMP增强分析：VM Handler识别、API跟踪、IAT修复、Frida/x64dbg脚本生成** |
+|| `references/vmp-enhanced-analysis.md` | **VMP增强分析：VM Handler识别、API跟踪、IAT修复、脚本生成、脱壳辅助** |
+|| `references/dotnet-reverse.md` | **.NET逆向工具：dnSpy/ILSpy自动化、IL提取、反编译、字节码Patch** |
+|| `references/go-reverse.md` | **Go二进制逆向：符号表恢复、函数名提取、Goroutine分析、IDA/Ghidra脚本** |
+|| `references/network-protocol-reverse.md` | **网络协议逆向：协议识别、签名分析、Frida Hook生成、请求重放** |
+|| `references/java-bytecode-reverse.md` | **Java字节码逆向：JAR/DEX分析、类提取、字节码Patch、重新打包** |
+|| `references/lua-extractor.md` | **Lua脚本提取：字节码提取、反编译、脚本Patch、APK/二进制提取** |
 
 || `references/ios-ipa-crack.md` | **iOS IPA破解指南：解压分析、Patch验证、重签名安装** |
 || `references/offline-license-system.md` | **离线授权码系统：无需联网的本地授权验证（生成/验证/iOS集成）** |
@@ -2835,7 +2840,7 @@ tracker.record_session(
 || **v8.0** | **2026-06-17** | **全面进化：AI语义分析引擎、自动化流水线、多Agent协作、知识图谱、云原生部署、跨平台扩展、实时协作、预测防护。新增40个triggers。CLI命令从18个扩展至28个** |
 || **v8.1** | **2026-06-18** | **Rust逆向经验整合：新增反Frida检测绕过、运行时配置获取分析、Rust二进制Patch技巧3个参考文档。基于黑曼巴6.16实战经验，技能自动进化** |
 || **v8.3** | **2026-06-18** | **新增内存剥离全自动工具链：DBVM环境检测脚本、内存Dump自动化工具、全亮内存剥离自动化工具(full_memory_stripper.py)、CE全亮检测插件(full_bright_detector.lua)、Scylla IAT自动修复(scylla_auto_fix.py)、IDA自动验证裁剪(ida_auto_patch.py)、全自动破解流水线(auto_crack_pipeline.py)、一键破解开发文档(one-click-crack-guide.md)。新增4个参考文档+6个脚本。清理重复triggers，新增11个内存相关triggers。版本号同步修复。** |
-||| **v8.5** | **2026-06-18** | **新增Unity IL2CPP逆向工具链 + Python打包程序逆向 + VMP增强分析。il2cpp_dumper.py：自动解析metadata/恢复符号/生成IDA脚本。unity_method_resolver.py：方法名还原/Frida Hook生成/Inspector配置。pyinstaller_extractor.py：PyInstaller/UPX检测提取/pyc反编译。vmp_enhancer.py：VM Handler识别/API跟踪/IAT修复。基于21个GitHub项目预研（Perfare/Il2CppDumper⭐9069等）。** |
+||| **v8.6** | **2026-06-18** | **批量新增5个逆向工具：.NET逆向（dnSpy/ILSpy自动化）、Go二进制逆向、网络协议逆向、Java字节码逆向、Lua脚本提取。dotnet_reverse.py：.NET程序识别/IL提取/反编译/Patch。go_reverse.py：Go符号表恢复/函数名提取/Goroutine分析。network_protocol_reverse.py：协议自动识别/签名分析/Frida Hook生成。java_bytecode_reverse.py：JAR/DEX分析/字节码Patch。lua_extractor.py：Lua字节码提取/反编译/脚本Patch。新增5个参考文档。** |
 ||| **v8.4** | **2026-06-18** | **一键破解多模式架构优化：auto_crack_pipeline.py v1.0→v1.1.0。新增4种模式（auto/full/ce_driver/user_mode），环境自动检测（嵌套虚拟化/CE驱动/权限），智能降级策略（full→ce_driver→user_mode），多模式Dump实现（DBVM内核挂起/CE驱动挂起/SuspendThread）。PD虚拟机/网吧/云电脑兼容性适配。预期成功率：完整版95%/CE驱动版85%/用户模式70%。** |
 | **v8.1** | **2026-06-17** | **新增Rust二进制逆向分析模块：Rust程序识别、混淆符号还原、rustls TLS分析、证书固定检测与绕过、四层防线分析框架、熵值分析、失败模式分析。新增黑曼巴(BlackMamba)实战案例。新增220+个triggers覆盖Rust逆向、TLS加密、协议分析、游戏辅助破解等场景** |
 | **v7.5** | **2026-06-16** | **新增5大模块：AI智能分析（保护类型识别+策略推荐）、运行时探索引擎（交互式Frida+实时Hook）、远程设备管理（多设备并发+云手机支持）、反混淆增强引擎（控制流还原+字符串解密）、漏洞扫描模块（组件暴露+安全评分）。CLI命令从8个扩展至18个** |

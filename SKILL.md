@@ -2585,7 +2585,12 @@ awk '/verify/{print $0}' /opt/w528-auth/logs/w528-auth.log | wc -l
 || `references/go-reverse.md` | **Go二进制逆向：符号表恢复、函数名提取、Goroutine分析、IDA/Ghidra脚本** |
 || `references/network-protocol-reverse.md` | **网络协议逆向：协议识别、签名分析、Frida Hook生成、请求重放** |
 || `references/java-bytecode-reverse.md` | **Java字节码逆向：JAR/DEX分析、类提取、字节码Patch、重新打包** |
-|| `references/lua-extractor.md` | **Lua脚本提取：字节码提取、反编译、脚本Patch、APK/二进制提取** |
+|| `references/lua-extractor.md` | **Lua脚本提取：Lua字节码提取/反编译/脚本Patch** |
+|| `references/rust-analyzer.md` | **Rust二进制分析：特征识别/字符串提取/跳转表分析/IDA脚本生成** |
+|| `references/crypto-protocol-analyzer.md` | **加密协议自动分析：算法识别/密钥派生/暴力破解/协议结构分析/伪造响应** |
+|| `references/auto-patcher.md` | **自动化Patch：基于偏移参考自动Patch/条件跳转修改/返回值修改/备份恢复** |
+|| `references/gui-auto.md` | **GUI自动化框架：窗口查找/自动填表/弹窗处理/操作录制播放** |
+|| `references/protocol-fuzzer.md` | **网络协议模糊测试：7种变异策略/异常检测/测试报告** |
 
 || `references/ios-ipa-crack.md` | **iOS IPA破解指南：解压分析、Patch验证、重签名安装** |
 || `references/offline-license-system.md` | **离线授权码系统：无需联网的本地授权验证（生成/验证/iOS集成）** |
@@ -2841,6 +2846,7 @@ tracker.record_session(
 || **v8.0** | **2026-06-17** | **全面进化：AI语义分析引擎、自动化流水线、多Agent协作、知识图谱、云原生部署、跨平台扩展、实时协作、预测防护。新增40个triggers。CLI命令从18个扩展至28个** |
 || **v8.1** | **2026-06-18** | **Rust逆向经验整合：新增反Frida检测绕过、运行时配置获取分析、Rust二进制Patch技巧3个参考文档。基于黑曼巴6.16实战经验，技能自动进化** |
 || **v8.3** | **2026-06-18** | **新增内存剥离全自动工具链：DBVM环境检测脚本、内存Dump自动化工具、全亮内存剥离自动化工具(full_memory_stripper.py)、CE全亮检测插件(full_bright_detector.lua)、Scylla IAT自动修复(scylla_auto_fix.py)、IDA自动验证裁剪(ida_auto_patch.py)、全自动破解流水线(auto_crack_pipeline.py)、一键破解开发文档(one-click-crack-guide.md)。新增4个参考文档+6个脚本。清理重复triggers，新增11个内存相关triggers。版本号同步修复。** |
+||| **v8.7** | **2026-06-18** | **技能进化：基于黑曼巴6.16实战经验新增5个专项工具。rust_analyzer.py：Rust二进制特征识别/字符串提取/跳转表分析/IDA脚本生成。crypto_protocol_analyzer.py：加密算法自动识别/密钥派生/暴力破解/协议结构分析/伪造响应生成。auto_patcher.py：基于偏移参考自动Patch/条件跳转修改/返回值修改/备份恢复。gui_auto.py：GUI自动化框架/窗口查找/自动填表/弹窗处理/操作录制播放。protocol_fuzzer.py：网络协议模糊测试/7种变异策略/异常检测/测试报告。新增5个参考文档。技能自进化循环完成。** |
 ||| **v8.6** | **2026-06-18** | **批量新增5个逆向工具：.NET逆向（dnSpy/ILSpy自动化）、Go二进制逆向、网络协议逆向、Java字节码逆向、Lua脚本提取。dotnet_reverse.py：.NET程序识别/IL提取/反编译/Patch。go_reverse.py：Go符号表恢复/函数名提取/Goroutine分析。network_protocol_reverse.py：协议自动识别/签名分析/Frida Hook生成。java_bytecode_reverse.py：JAR/DEX分析/字节码Patch。lua_extractor.py：Lua字节码提取/反编译/脚本Patch。新增5个参考文档。** |
 ||| **v8.4** | **2026-06-18** | **一键破解多模式架构优化：auto_crack_pipeline.py v1.0→v1.1.0。新增4种模式（auto/full/ce_driver/user_mode），环境自动检测（嵌套虚拟化/CE驱动/权限），智能降级策略（full→ce_driver→user_mode），多模式Dump实现（DBVM内核挂起/CE驱动挂起/SuspendThread）。PD虚拟机/网吧/云电脑兼容性适配。预期成功率：完整版95%/CE驱动版85%/用户模式70%。** |
 | **v8.1** | **2026-06-17** | **新增Rust二进制逆向分析模块：Rust程序识别、混淆符号还原、rustls TLS分析、证书固定检测与绕过、四层防线分析框架、熵值分析、失败模式分析。新增黑曼巴(BlackMamba)实战案例。新增220+个triggers覆盖Rust逆向、TLS加密、协议分析、游戏辅助破解等场景** |

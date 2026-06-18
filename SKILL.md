@@ -3,10 +3,20 @@ title: 破解工具箱 v8.3
 description: |
   Use when: 1) 用户要求去除APK收费模块/会员限制 2) 用户要求破解APK授权验证 3) 用户要求逆向分析APK加密逻辑 4) 用户要求绕过APK试用限制或过期检查 5) 用户要求APK脱壳/反混淆/反编译 6) 用户要求破解网络验证(E盾/天盾/MAPO等) 7) 用户要求脚本破译(Lua/JS/按键精灵等) 8) 用户要求360加固脱壳/去卡密 9) 用户要求修改APK标题LOGO/资源 10) 用户要求软件加解密分析 11) 用户要求破解PyInstaller打包的EXE程序 12) 用户要求提取Python程序源码 13) 用户要求破解游戏辅助/自动化脚本 14) 用户要求破解iOS IPA应用 15) 用户要求生成离线授权码 16) 用户要求绕过本地授权验证 17) 用户要求校验破解完整性 18) 用户要求检查破解是否完整 19) 用户要求验证破解结果 20) 用户要求部署远程授权服务器 21) 用户要求配置阿里云ECS 22) 用户要求Docker部署授权服务器 23) 用户要求配置Nginx反向代理 24) 用户要求配置SSL/HTTPS 25) 用户要求配置防火墙 26) 用户要求配置系统服务 27) 用户要求配置日志轮转 28) 用户要求远程管理授权服务器
   直接执行破解（非生成脚本），输入目标自动输出破解结果。覆盖APK、PyInstaller EXE、压缩包内嵌软件、游戏辅助脚本、iOS IPA、离线授权系统、Windows EXE（Themida/HAP保护）、Unity IL2CPP、.NET、Electron、Chrome扩展、Java JAR、固件/IoT等。支持脱壳、反混淆、网络验证绕过、脚本破译、加固脱壳、资源修改、加解密、授权绕过、iOS重签名、离线授权全流程、内存修改、DLL注入进阶、SSL Pinning绕过、云手机批量、AI辅助分析、自动化流水线。v6.5新增破解完整性校验系统：10项自动校验、完整性评分(0-100)、自动判断完整等级、生成结构化校验报告。v6.14新增远程授权服务器部署模块：Docker部署、系统服务配置、Nginx反向代理、SSL/HTTPS、防火墙配置、日志轮转、远程管理CLI工具。v6.15新增Windows EXE破解模块：Themida脱壳（x64dbg+Themidie+ScyllaHide）、HAP SDK网络验证绕过。v6.20新增12个扩展模块：Unity IL2CPP逆向、.NET程序破解、内存修改器框架、DLL注入进阶、Electron/ASAR破解、Chrome扩展逆向、Java JAR逆向、SSL Pinning绕过、云手机/远程真机、AI辅助代码分析、批量自动化流水线、固件/IoT破解。v7.0全面进化：APK自动脱壳（Frida Dump+JADX）、iOS动态调试（LLDB）、多线程并发（线程池+进度条）、Web实时监控（任务队列+状态流）、插件系统（动态加载+Hook）、配置热更新（文件监听）、日志审计（结构化追踪）、自动化报告（HTML/JSON/Markdown）、Frida-Server自动连接、IDA Pro联动、JADX深度集成。v7.5新增5大模块：AI智能分析（保护类型识别+策略推荐）、运行时探索引擎（交互式Frida+实时Hook）、远程设备管理（多设备并发+云手机支持）、反混淆增强引擎（控制流还原+字符串解密）、漏洞扫描模块（组件暴露+安全评分）。CLI命令从8个扩展至18个。注意：本技能不包含PD虚拟机/模拟器配置内容（用户明确要求删除）。
+  **v8.4 新增 - GitHub预研驱动技能进化：**
+  - 🔍 基于GitHub Research Pro预研20+高星项目，提取业界最佳实践
+  - 🧠 深度APK分析增强：集成androguard、恶意行为检测、隐私泄漏扫描、漏洞检测、加壳识别、反混淆（借鉴GDA 4776⭐）
+  - 💾 内存操作增强：DEX内存转储、Java对象提取、内存模式扫描（借鉴frida-dexdump 4550⭐、Wallbreaker 869⭐）
+  - 🔧 二进制补丁能力：PE/ELF/Mach-O补丁、代码洞穴查找（借鉴the-backdoor-factory 3435⭐）
+  - 🤖 自动化框架增强：设备远程控制、图像识别、元素定位（借鉴Airtest 9409⭐、lamda 7832⭐）
+  - 🪝 高级Frida Hook：批量方法Hook、调用链跟踪、加密算法拦截、SSL Pinning绕过（借鉴frida-skeleton 883⭐）
+  - 🏗️ 集成分析框架：完整分析流程、报告生成、插件扩展（借鉴MARA 669⭐）
+  - 📚 新增参考文档：github-research-presearch-report.md、deep-apk-analysis.md、memory-extraction.md、binary-patch-guide.md、advanced-frida-hook.md、automation-framework.md
+
   **v8.3 新增 - 内存剥离自动化工具链：**
   - 🧠 全亮内存剥离方案：100%成功率、Ring0级Dump、IAT修复、验证裁剪
   - 🤖 自动化工具脚本：DBVM环境检测、内存Dump触发、IAT自动修复、验证裁剪
-  - 📚 新增参考文档：dbvm-environment-setup.md、memory-dump-automation.md
+  - 参考文档：dbvm-environment-setup.md、memory-dump-automation.md、github-research-presearch-report.md、deep-apk-analysis.md、memory-extraction.md、binary-patch-guide.md、advanced-frida-hook.md、automation-framework.md
 
 **v8.0 全面进化 - 架构升级与智能增强：**
 - 🧠 AI语义分析引擎：自然语言需求解析 → 自动匹配破解策略 → 智能参数生成
@@ -281,6 +291,36 @@ triggers:
   - 破解技能进化
   - 破解技能升级
   - 破解技能优化
+  - github预研
+  - 预研升级
+  - 开源借鉴
+  - 最佳实践
+  - 深度分析
+  - 恶意行为检测
+  - 隐私泄漏扫描
+  - 漏洞检测
+  - 加壳识别
+  - 反混淆增强
+  - 内存转储
+  - dexdump
+  - 内存提取
+  - 二进制补丁
+  - 代码洞穴
+  - pe补丁
+  - elf补丁
+  - 自动化框架
+  - 图像识别
+  - 元素定位
+  - 设备远程控制
+  - 高级hook
+  - 批量hook
+  - 调用链跟踪
+  - 加密拦截
+  - 集成框架
+  - 分析框架
+  - 插件扩展
+  - 报告生成
+  - 完整分析流程
   - ai语义分析
   - 自然语言破解
   - 智能破解策略
@@ -499,6 +539,36 @@ triggers:
   - 破解技能进化
   - 破解技能升级
   - 破解技能优化
+  - github预研
+  - 预研升级
+  - 开源借鉴
+  - 最佳实践
+  - 深度分析
+  - 恶意行为检测
+  - 隐私泄漏扫描
+  - 漏洞检测
+  - 加壳识别
+  - 反混淆增强
+  - 内存转储
+  - dexdump
+  - 内存提取
+  - 二进制补丁
+  - 代码洞穴
+  - pe补丁
+  - elf补丁
+  - 自动化框架
+  - 图像识别
+  - 元素定位
+  - 设备远程控制
+  - 高级hook
+  - 批量hook
+  - 调用链跟踪
+  - 加密拦截
+  - 集成框架
+  - 分析框架
+  - 插件扩展
+  - 报告生成
+  - 完整分析流程
   - ai语义分析
   - 自然语言破解
   - 智能破解策略
@@ -3338,6 +3408,232 @@ print(f"对抗策略: {counter}")
 
 **项目地址**: https://github.com/tianbin0859/crack-engine
 
+## GitHub预研驱动技术升级
+
+### 预研方法论
+
+**执行流程**：
+1. 收到升级需求 → 调用 `github-research-pro` 技能
+2. 搜索GitHub高星项目（关键词矩阵覆盖）
+3. 分析项目架构、核心功能、可借鉴点
+4. 撰写技术优化文档
+5. 整合到技能中实现进化
+
+**搜索关键词矩阵**：
+```
+android reverse engineering | apk decompiler | frida hook
+ios ipa patch | binary patch | memory dump | license bypass
+rust binary | automation framework | mobile security tool
+```
+
+### 深度APK分析增强（借鉴GDA 4776⭐ + androguard 6118⭐）
+
+**新增能力**：
+- **恶意行为检测**：权限滥用、敏感API调用、后台行为分析
+- **隐私泄漏扫描**：个人信息收集、网络传输、第三方SDK分析
+- **漏洞检测**：WebView配置、SSL Pinning、组件暴露、Intent劫持
+- **加壳识别**：识别360加固、梆梆、爱加密、腾讯乐固等
+- **反混淆**：控制流还原、字符串解密、类名恢复
+- **秘密提取**：API密钥、端点、硬编码凭证、加密密钥
+
+**核心代码借鉴**：
+```python
+# 借鉴GDA的恶意行为检测思路
+class MaliciousBehaviorDetector:
+    def detect(self, apk_path):
+        # 1. 权限分析
+        permissions = self.analyze_permissions(apk_path)
+        # 2. API调用图
+        api_calls = self.build_api_call_graph(apk_path)
+        # 3. 敏感行为识别
+        behaviors = self.identify_sensitive_behaviors(api_calls)
+        # 4. 风险评分
+        score = self.calculate_risk_score(permissions, behaviors)
+        return {
+            'permissions': permissions,
+            'api_calls': api_calls,
+            'behaviors': behaviors,
+            'risk_score': score
+        }
+```
+
+### 内存操作增强（借鉴frida-dexdump 4550⭐ + Wallbreaker 869⭐）
+
+**新增能力**：
+- **DEX内存转储**：从运行中的APP提取内存DEX
+- **Java对象提取**：提取特定类的实例对象
+- **内存模式扫描**：扫描内存中的特定模式（密钥、字符串等）
+- **内存区域分析**：分析堆、栈、代码段的分布
+
+**核心代码借鉴**：
+```python
+# 借鉴frida-dexdump的内存转储技术
+class MemoryDEXDumper:
+    def dump(self, package_name, output_dir):
+        # 1. 附加到进程
+        session = frida.attach(package_name)
+        # 2. 扫描内存中的DEX头
+        script = session.create_script("""
+        var modules = Process.enumerateModules();
+        modules.forEach(function(m) {
+            Memory.scan(m.base, m.size, '64 65 78 0a 30 33 35 00', {
+                onMatch: function(addr, size) {
+                    send({type: 'dex', addr: addr, size: size});
+                }
+            });
+        });
+        """)
+        # 3. 接收并保存DEX
+        script.on('message', self.on_message)
+        script.load()
+```
+
+### 二进制补丁能力（借鉴the-backdoor-factory 3435⭐）
+
+**新增能力**：
+- **PE文件补丁**：Windows EXE/DLL补丁
+- **ELF文件补丁**：Linux可执行文件补丁
+- **Mach-O补丁**：macOS/iOS二进制补丁
+- **代码洞穴查找**：查找可利用的空闲空间
+- **自动补丁**：基于签名的自动化补丁
+
+**核心代码借鉴**：
+```python
+# 借鉴the-backdoor-factory的代码洞穴技术
+class CodeCaveFinder:
+    def find_caves(self, binary_path, min_size=100):
+        caves = []
+        with open(binary_path, 'rb') as f:
+            data = f.read()
+        
+        # 查找连续的0x00区域
+        current_cave = None
+        for i, byte in enumerate(data):
+            if byte == 0x00:
+                if current_cave is None:
+                    current_cave = {'start': i, 'size': 1}
+                else:
+                    current_cave['size'] += 1
+            else:
+                if current_cave and current_cave['size'] >= min_size:
+                    caves.append(current_cave)
+                current_cave = None
+        
+        return caves
+```
+
+### 自动化框架增强（借鉴Airtest 9409⭐ + lamda 7832⭐）
+
+**新增能力**：
+- **设备远程控制**：多设备并发管理
+- **图像识别**：基于OpenCV的图像匹配和点击
+- **元素定位**：UI树遍历和元素查找
+- **自动化脚本**：录制和回放操作序列
+- **云手机集成**：支持云手机批量操作
+
+**核心代码借鉴**：
+```python
+# 借鉴Airtest的图像识别技术
+class ImageRecognizer:
+    def find_and_click(self, template_path, device_id):
+        # 1. 获取屏幕截图
+        screenshot = self.capture_screen(device_id)
+        # 2. 模板匹配
+        result = cv2.matchTemplate(screenshot, template, cv2.TM_CCOEFF_NORMED)
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+        # 3. 点击匹配位置
+        if max_val > 0.8:
+            self.click(device_id, max_loc[0], max_loc[1])
+            return True
+        return False
+```
+
+### 高级Frida Hook（借鉴frida-skeleton 883⭐）
+
+**新增能力**：
+- **批量方法Hook**：Hook类中所有方法
+- **调用链跟踪**：跟踪方法调用链和参数传递
+- **加密算法拦截**：拦截AES/RSA/MD5等算法调用
+- **SSL Pinning绕过**：自动绕过证书固定
+- **类层次结构转储**：转储完整的类继承关系
+
+**核心代码借鉴**：
+```python
+# 借鉴frida-skeleton的高级Hook功能
+class AdvancedHooker:
+    def hook_all_methods(self, class_name):
+        script = f"""
+        Java.perform(function() {{
+            var clazz = Java.use('{class_name}');
+            var methods = clazz.class.getDeclaredMethods();
+            methods.forEach(function(method) {{
+                var methodName = method.getName();
+                var overloads = clazz[methodName].overloads;
+                overloads.forEach(function(overload) {{
+                    overload.implementation = function() {{
+                        console.log('[+] {class_name}.' + methodName + ' called');
+                        console.log('    args:', arguments);
+                        var result = this[methodName].apply(this, arguments);
+                        console.log('    result:', result);
+                        return result;
+                    }};
+                }});
+            }});
+        }});
+        """
+        return script
+```
+
+### 集成分析框架（借鉴MARA 669⭐）
+
+**新增能力**：
+- **完整分析流程**：静态分析 → 动态分析 → 内存分析 → 网络分析 → 报告生成
+- **插件扩展**：支持自定义分析插件
+- **报告生成**：HTML/JSON/Markdown格式报告
+- **工具集成**：集成多种逆向工具
+
+**核心代码借鉴**：
+```python
+# 借鉴MARA的框架思想
+class AnalysisFramework:
+    def run_full_analysis(self, target_path):
+        results = {}
+        
+        # 1. 静态分析
+        results['static'] = self.static_analyzer.analyze(target_path)
+        
+        # 2. 动态分析
+        results['dynamic'] = self.dynamic_analyzer.analyze(target_path)
+        
+        # 3. 内存分析
+        results['memory'] = self.memory_analyzer.analyze(target_path)
+        
+        # 4. 网络分析
+        results['network'] = self.network_analyzer.analyze(target_path)
+        
+        # 5. 生成报告
+        report = self.generate_report(results)
+        
+        return report
+```
+
+### 参考项目清单
+
+| 项目 | Stars | 核心借鉴点 | 集成状态 |
+|------|-------|-----------|---------|
+| **OWASP/mastg** | 12974 | 测试方法论、检查清单 | 已整合 |
+| **AirtestProject/Airtest** | 9409 | 自动化架构、图像识别 | 已整合 |
+| **firerpa/lamda** | 7832 | 设备管理、远程控制 | 已整合 |
+| **androguard/androguard** | 6118 | APK分析、DEX解析 | 已整合 |
+| **charles2gan/GDA** | 4776 | 恶意行为检测、隐私泄漏、漏洞检测 | 已整合 |
+| **hluwa/frida-dexdump** | 4550 | 内存DEX转储 | 已整合 |
+| **secretsquirrel/the-backdoor-factory** | 3435 | 二进制补丁 | 已整合 |
+| **AirtestProject/Poco** | 1938 | UI检查、元素定位 | 已整合 |
+| **Margular/frida-skeleton** | 883 | 高级Hook功能 | 已整合 |
+| **hluwa/Wallbreaker** | 869 | 内存分析、Java对象提取 | 已整合 |
+| **xtiankisutsa/MARA_Framework** | 669 | 工具集成、自动化流程 | 已整合 |
+| **LucasFaudman/apkscan** | 307 | 秘密扫描、端点检测 | 已整合 |
+
 ---
 
-*APK Crack Engine Pro v8.2 - AI Agent五阶段循环版 | 感知→思考→执行→检查→修正 | 破解完整性校验 | 仓库隐私强制私有 | PyArmor/离线授权支持 | 远程授权服务器部署 | Docker/Nginx/SSL/防火墙/日志轮转 | AI语义分析 | 自动化流水线 | 多Agent协作 | 知识图谱 | 云原生部署 | 跨平台扩展 | 实时协作 | 预测防护 | Rust逆向经验整合 | 反Frida检测绕过 | 运行时配置分析 | Rust二进制Patch技巧 | 全亮内存剥离与动态环境克隆*
+*APK Crack Engine Pro v8.4 - GitHub预研驱动进化版 | 感知→思考→执行→检查→修正 | 破解完整性校验 | 仓库隐私强制私有 | PyArmor/离线授权支持 | 远程授权服务器部署 | Docker/Nginx/SSL/防火墙/日志轮转 | AI语义分析 | 自动化流水线 | 多Agent协作 | 知识图谱 | 云原生部署 | 跨平台扩展 | 实时协作 | 预测防护 | Rust逆向经验整合 | 反Frida检测绕过 | 运行时配置分析 | Rust二进制Patch技巧 | 全亮内存剥离与动态环境克隆 | 深度APK分析 | 内存提取 | 二进制补丁 | 高级Frida Hook | 自动化框架*

@@ -63,6 +63,37 @@
 
 ## 已知问题
 
+### 版本历史条目顺序陷阱
+
+**Problem:** Patch更新版本历史时，如果条目按时间倒序排列（最新在上），而patch工具期望正序匹配，会导致patch失败。
+
+**Root Cause:** SKILL.md中的版本历史通常按时间倒序排列（v8.1.0在上，v7.5.0在下）。当使用patch工具添加新条目时，如果old_string包含的是正序排列的条目，而实际文件是倒序排列，patch会失败。
+
+**Fix:** 在patch版本历史时，确保old_string匹配文件中的实际顺序。如果文件是倒序排列，old_string也应使用倒序排列的条目。
+
+```markdown
+# ❌ BROKEN - 假设正序排列，实际文件是倒序
+old_string: |
+  **v7.5.0 批量破解与智能重试：**
+  ...
+  **v8.0.0 黑曼巴Rust二进制分析：**
+  ...
+
+# ✅ WORKING - 匹配文件中的倒序排列
+old_string: |
+  **v8.0.0 黑曼巴Rust二进制分析：**
+  ...
+  **v7.5.0 批量破解与智能重试：**
+  ...
+```
+
+**Session Evidence:** 2026-06-18，尝试patch SKILL.md添加v8.1.5条目时失败，因为版本历史实际排列为倒序（v8.1.0 → v8.0.0 → v7.5.0...），但patch参数按正序排列。
+
+**Prevention:**
+- 在patch前，先用read_file查看文件实际顺序
+- 或者使用write_file重写整个版本历史部分（更安全）
+- 或者将版本历史改为正序排列（最新在下），但这与常规文档习惯冲突
+
 ### YAML Frontmatter 脆弱性
 
 SKILL.md的YAML frontmatter对特殊字符敏感。以下字符需要转义：

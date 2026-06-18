@@ -80,6 +80,7 @@ from core.config import CACHE_DIR, OUTPUT_DIR
 | Python imports | `from .config import X` | `from core.config import X` | `ModuleNotFoundError: No module named 'modules.config'` |
 | click | `@command()` with same function name | `@command(name="...")` + unique function name | `NameError: name 'analyze' is not defined` or duplicate command registration |
 | Python f-string | `f"path_{id.replace(':', '_')}.png"` | `"path_" + id.replace(":", "_") + ".png"` | `SyntaxError: f-string expression part cannot include a backslash` or quote conflicts |
+| Python typing | `bytearray` as type annotation | `bytes` or no annotation | `TypeError: 'bytearray' object is not callable` or mypy errors |
 
 ## Detection Pattern
 
@@ -168,3 +169,52 @@ output_path = f"/tmp/screenshot_{device_id.replace(':', '_')}.png"
 # Fixed:
 output_path = "/tmp/screenshot_" + device_id.replace(":", "_") + ".png"
 ```
+
+## Python typing: bytearray Type Annotation
+
+**Problem:** Using `bytearray` as a type annotation in function signatures causes type checker errors or runtime confusion, especially when the variable is later used as a mutable buffer.
+
+**Root Cause:** `bytearray` is a mutable sequence type, but type annotations should describe the interface. When a function accepts a mutable buffer, the annotation should be `bytearray` but some type checkers and runtime contexts expect `bytes` or no annotation. More critically, when a `bytearray` variable is used as a default argument or in complex type expressions, it can cause unexpected behavior.
+
+**Fix:** Use `bytes` for read-only buffers, `bytearray` only when mutability is required, or omit type annotations for buffer parameters in dynamically typed contexts.
+
+```python
+# ❌ PROBLEMATIC - bytearray in complex type expressions
+class Fuzzer:
+    def mutate(self, data: bytearray) -> bytearray:
+        ...
+
+# ✅ WORKING - bytes for read-only, bytearray for mutable
+class Fuzzer:
+    def mutate(self, data: bytes) -> bytearray:
+        mutable = bytearray(data)
+        # ... mutate ...
+        return mutable
+
+# ✅ WORKING - no annotation for simple scripts
+class Fuzzer:
+    def mutate(self, data):
+        mutable = bytearray(data)
+        # ... mutate ...
+        return mutable
+```
+
+**Example from protocol_fuzzer.py:**
+```python
+# Original (problematic):
+def mutate(self, data: bytearray) -> bytearray:
+    data[0] = random.randint(0, 255)
+    return data
+
+# Fixed:
+def mutate(self, data: bytes) -> bytearray:
+    mutable = bytearray(data)
+    mutable[0] = random.randint(0, 255)
+    return mutable
+```
+
+**Rule of Thumb:**
+- Accept `bytes` as input (immutable, safer)
+- Convert to `bytearray` internally when mutation is needed
+- Return `bytearray` or `bytes` depending on caller expectations
+- Omit type annotations in scripts where type checking is not enforced

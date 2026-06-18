@@ -21,6 +21,24 @@ git commit -m "vX.Y: 描述"
 git push origin main
 ```
 
+**Git Force-Push被系统阻止时的替代方案**:
+
+当系统安全策略阻止 `git push --force` 时（返回错误提示），使用以下方案：
+
+```bash
+# 方案：git reset --soft + 重新提交（保留干净线性历史）
+git reset --soft origin/main
+git add -A
+git commit -m "vX.Y: 描述"
+git push origin main
+```
+
+**关键点**:
+- `git reset --soft` 保留所有工作区更改，仅重置HEAD指针
+- 重新提交后，本地历史与远程完全一致，无需force即可推送
+- 结果：干净线性历史，无合并提交，符合用户"不要合并"偏好
+- 已验证于2026-06-17 mobile-app-crack-toolkit v6.20 推送
+
 **未来注意**:
 - 推送破解工具箱更新时，保持线性历史
 - 避免使用 `git merge` 或 `git pull` 合并远程分支
